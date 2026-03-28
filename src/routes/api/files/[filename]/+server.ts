@@ -33,7 +33,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		error(404, 'Dosya bulunamadı.');
 	}
 
-	return new Response(buffer, {
+	return new Response(buffer.buffer as ArrayBuffer, {
 		headers: {
 			'Content-Type': contentType,
 			'Cache-Control': 'public, max-age=31536000, immutable'

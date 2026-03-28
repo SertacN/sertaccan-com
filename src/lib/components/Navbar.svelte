@@ -29,7 +29,7 @@
 </script>
 
 <nav class="fixed top-0 right-0 left-0 z-50 border-b border-border bg-bg/80 backdrop-blur-sm">
-	<div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+	<div class="mx-auto flex max-w-6xl items-center justify-between py-4">
 		<a href={localizeHref('/')} class="font-mono text-lg font-bold text-accent">Sertaç Can</a>
 
 		<div class="flex items-center gap-6">
