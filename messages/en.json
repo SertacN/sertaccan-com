@@ -1,4 +1,17 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"hello_world": "Hello, {name} from en!"
+	"nav_stack": "Stack",
+	"nav_projects": "Projects",
+	"nav_contact": "Contact",
+	"nav_all_projects": "All Projects",
+	"hero_role": "Software Developer",
+	"hero_tagline": "Clean code, good design.",
+	"section_stack": "Tech Stack",
+	"section_projects": "Featured Projects",
+	"section_contact": "Contact",
+	"projects_view_all": "View all projects →",
+	"project_detail_back": "← All Projects",
+	"project_status_active": "Active",
+	"project_status_wip": "In Progress",
+	"project_status_archived": "Archived"
 }
