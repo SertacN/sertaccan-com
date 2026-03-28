@@ -13,5 +13,7 @@
 	"project_detail_back": "← All Projects",
 	"project_status_active": "Active",
 	"project_status_wip": "In Progress",
-	"project_status_archived": "Archived"
+	"project_status_archived": "Archived",
+	"panel": "Panel",
+	"logout": "Logout"
 }

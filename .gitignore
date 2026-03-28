@@ -25,5 +25,9 @@ vite.config.ts.timestamp-*
 src/lib/paraglide
 project.inlang/cache/
 
+# Uploads
+/uploads/*
+!/uploads/.gitkeep
+
 # AI
 CLAUDE.md

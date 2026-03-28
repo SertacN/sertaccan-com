@@ -30,7 +30,7 @@
 
 <nav class="fixed top-0 right-0 left-0 z-50 border-b border-border bg-bg/80 backdrop-blur-sm">
 	<div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-		<a href={localizeHref('/')} class="font-mono text-lg font-bold text-accent">sertaccan</a>
+		<a href={localizeHref('/')} class="font-mono text-lg font-bold text-accent">Sertaç Can</a>
 
 		<div class="flex items-center gap-6">
 			<a
@@ -92,12 +92,12 @@
 				<a
 					href={localizeHref('/admin')}
 					class="rounded border border-accent px-3 py-1.5 font-mono text-xs text-accent transition-colors duration-150 hover:bg-accent hover:text-bg"
-					>Panel</a
+					>{m.panel()}</a
 				>
 				<button
 					onclick={handleLogout}
 					class="rounded border border-border px-3 py-1.5 font-mono text-xs text-muted transition-colors duration-150 hover:border-accent hover:text-accent"
-					>Çıkış</button
+					>{m.logout()}</button
 				>
 			{/if}
 

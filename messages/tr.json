@@ -13,5 +13,7 @@
 	"project_detail_back": "← Tüm Projeler",
 	"project_status_active": "Aktif",
 	"project_status_wip": "Geliştiriliyor",
-	"project_status_archived": "Arşiv"
+	"project_status_archived": "Arşiv",
+	"panel": "Panel",
+	"logout": "Çıkış"
 }
