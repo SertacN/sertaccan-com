@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-:root {
+@theme {
 	--color-bg: #0a0a0a;
 	--color-surface: #111111;
 	--color-border: #1e1e1e;
@@ -14,4 +14,15 @@ body {
 	background-color: var(--color-bg);
 	color: var(--color-text);
 	font-family: 'Inter', sans-serif;
+	transition: background-color 200ms ease-out, color 200ms ease-out;
+}
+
+html.light {
+	--color-bg: #f8f8f8;
+	--color-surface: #ffffff;
+	--color-border: #e0e0e0;
+	--color-text: #1a1a1a;
+	--color-muted: #888888;
+	--color-accent: #00aa55;
+	--color-accent-dim: #00aa5522;
 }
