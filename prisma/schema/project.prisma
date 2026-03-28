@@ -1,0 +1,27 @@
+model Project {
+  id                String        @id @default(cuid())
+  slug              String        @unique
+  title             String
+  descriptionTr     String
+  descriptionEn     String
+  longDescriptionTr String
+  longDescriptionEn String
+  imageUrl          String?
+  tags              String[]
+  githubUrl         String?
+  liveUrl           String?
+  status            ProjectStatus @default(WIP)
+  featured          Boolean       @default(false)
+  order             Int           @default(0)
+  isActive          Boolean       @default(true)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  isDeleted         Boolean       @default(false)
+  deletedAt         DateTime?
+}
+
+enum ProjectStatus {
+  ACTIVE
+  WIP
+  ARCHIVED
+}
