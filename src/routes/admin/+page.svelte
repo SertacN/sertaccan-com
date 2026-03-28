@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { localizeHref } from '$lib/paraglide/runtime';
 
 	let { data } = $props();
 
 	async function handleLogout() {
 		await authClient.signOut();
+		await invalidateAll();
 		goto(localizeHref('/admin/login'));
 	}
 </script>

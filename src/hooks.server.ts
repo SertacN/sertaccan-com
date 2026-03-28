@@ -23,7 +23,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 		event.locals.user = {
 			id: session.user.id,
 			email: session.user.email,
-			role: (session.user.role as 'ADMIN' | 'USER') ?? 'USER'
+			role: (session.user.role as 'admin' | 'user') ?? 'user'
 		};
 	} else {
 		event.locals.user = null;

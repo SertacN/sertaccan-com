@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { authClient } from '$lib/auth-client';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { localizeHref } from '$lib/paraglide/runtime';
 
 	let email = $state('');
@@ -21,6 +21,7 @@
 			return;
 		}
 
+		await invalidateAll();
 		goto(localizeHref('/admin'));
 	}
 </script>

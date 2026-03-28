@@ -8,7 +8,7 @@ export const load: LayoutServerLoad = ({ locals, url }) => {
 		redirect(303, '/admin/login');
 	}
 
-	if (locals.user && locals.user.role !== 'ADMIN' && !isLoginPage) {
+	if (locals.user && locals.user.role !== 'admin' && !isLoginPage) {
 		redirect(303, '/');
 	}
 
