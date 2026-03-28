@@ -15,5 +15,8 @@
 	"project_status_wip": "Geliştiriliyor",
 	"project_status_archived": "Arşiv",
 	"panel": "Panel",
-	"logout": "Çıkış"
+	"logout": "Çıkış",
+	"project": "Projeler",
+	"details": "Detay",
+	"backToHome": "Ana Sayfaya Dön"
 }

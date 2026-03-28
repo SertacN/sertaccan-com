@@ -15,5 +15,8 @@
 	"project_status_wip": "In Progress",
 	"project_status_archived": "Archived",
 	"panel": "Panel",
-	"logout": "Logout"
+	"logout": "Logout",
+	"project": "Projects",
+	"details": "Details",
+	"backToHome": "Back To Home"
 }

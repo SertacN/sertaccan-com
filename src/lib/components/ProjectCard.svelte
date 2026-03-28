@@ -31,19 +31,16 @@
 	class="flex flex-col rounded border border-border bg-surface transition-colors duration-150 hover:border-accent/40"
 >
 	<!-- Kapak görseli -->
-	{#if project.imageUrl}
-		<img
-			src={project.imageUrl}
-			alt={project.title}
-			class="h-44 w-full rounded-t object-cover"
-		/>
-	{:else}
-		<div
-			class="h-44 w-full rounded-t"
-			style="background: linear-gradient(135deg, var(--color-accent-dim), var(--color-surface))"
-		></div>
-	{/if}
-
+	<a href={`projects/${project.slug}`}>
+		{#if project.imageUrl}
+			<img src={project.imageUrl} alt={project.title} class="h-44 w-full rounded-t object-cover" />
+		{:else}
+			<div
+				class="h-44 w-full rounded-t"
+				style="background: linear-gradient(135deg, var(--color-accent-dim), var(--color-surface))"
+			></div>
+		{/if}
+	</a>
 	<div class="flex flex-1 flex-col gap-3 p-5">
 		<!-- Başlık + status -->
 		<div class="flex items-start justify-between gap-2">
@@ -59,7 +56,9 @@
 		<!-- Tag'ler -->
 		<div class="flex flex-wrap gap-1.5">
 			{#each project.tags as tag (tag)}
-				<span class="flex items-center gap-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs text-muted">
+				<span
+					class="flex items-center gap-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs text-muted"
+				>
 					<TechIcon name={tag} />
 					{tag}
 				</span>
@@ -92,9 +91,9 @@
 
 			<a
 				href={localizeHref(`/projects/${project.slug}`)}
-				class="ml-auto font-mono text-xs text-accent transition-colors duration-150 hover:underline"
+				class="ml-auto rounded border border-accent px-1.5 py-0.5 font-mono text-xs text-accent transition-colors duration-150 hover:underline"
 			>
-				Detay →
+				{m.details()} →
 			</a>
 		</div>
 	</div>
