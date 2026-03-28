@@ -14,12 +14,7 @@ const config = {
 			return isExternalLibrary ? undefined : true;
 		}
 	},
-	kit: {
-		adapter: adapter(),
-		alias: {
-			$generated: './generated'
-		}
-	},
+	kit: { adapter: adapter() },
 	preprocess: [mdsvex({ extensions: ['.svx', '.md'] })],
 	extensions: ['.svelte', '.svx', '.md']
 };

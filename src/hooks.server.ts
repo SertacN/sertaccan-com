@@ -1,6 +1,8 @@
 import type { Handle } from '@sveltejs/kit';
 import { getTextDirection } from '$lib/paraglide/runtime';
 import { paraglideMiddleware } from '$lib/paraglide/server';
+import { auth } from '$lib/server/auth';
+import { sequence } from '@sveltejs/kit/hooks';
 
 const handleParaglide: Handle = ({ event, resolve }) =>
 	paraglideMiddleware(event.request, ({ request, locale }) => {
@@ -14,4 +16,20 @@ const handleParaglide: Handle = ({ event, resolve }) =>
 		});
 	});
 
-export const handle: Handle = handleParaglide;
+const handleAuth: Handle = async ({ event, resolve }) => {
+	const session = await auth.api.getSession({ headers: event.request.headers });
+
+	if (session) {
+		event.locals.user = {
+			id: session.user.id,
+			email: session.user.email,
+			role: (session.user.role as 'ADMIN' | 'USER') ?? 'USER'
+		};
+	} else {
+		event.locals.user = null;
+	}
+
+	return resolve(event);
+};
+
+export const handle: Handle = sequence(handleAuth, handleParaglide);
