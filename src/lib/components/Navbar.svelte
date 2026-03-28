@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { page } from '$app/state';
-	import { localizeHref } from '$lib/paraglide/runtime';
+	import { getLocale, setLocale } from '$lib/paraglide/runtime';
 	import * as m from '$lib/paraglide/messages';
 
 	let isDark = $state(true);
@@ -17,7 +16,7 @@
 		document.documentElement.classList.toggle('light', !isDark);
 	}
 
-	let locale = $derived(page.url.pathname.startsWith('/en') ? 'en' : 'tr');
+	const locale = getLocale();
 </script>
 
 <nav class="fixed top-0 right-0 left-0 z-50 border-b border-border bg-bg/80 backdrop-blur-sm">
@@ -75,21 +74,17 @@
 			</button>
 
 			<div class="flex items-center gap-1 font-mono text-xs">
-				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-				<a
-					href={localizeHref(page.url.pathname, { locale: 'tr' })}
-					data-sveltekit-reload
+				<button
+					onclick={() => setLocale('tr')}
 					class="rounded border px-2 py-1 transition-colors duration-150 {locale === 'tr'
 						? 'border-border text-accent'
-						: 'border-transparent text-muted hover:text-text'}">TR</a
+						: 'border-transparent text-muted hover:text-text'}">TR</button
 				>
-				<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-				<a
-					href={localizeHref(page.url.pathname, { locale: 'en' })}
-					data-sveltekit-reload
+				<button
+					onclick={() => setLocale('en')}
 					class="rounded border px-2 py-1 transition-colors duration-150 {locale === 'en'
 						? 'border-border text-accent'
-						: 'border-transparent text-muted hover:text-text'}">EN</a
+						: 'border-transparent text-muted hover:text-text'}">EN</button
 				>
 			</div>
 		</div>
