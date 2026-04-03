@@ -3,7 +3,7 @@
 	import { Mail } from 'lucide-svelte';
 </script>
 
-<section id="hero" class="flex min-h-[80vh] flex-col items-center justify-center px-4 text-center">
+<section id="hero" class="flex min-h-[80vh] flex-col items-center justify-center text-center">
 	<h1 class="font-mono text-4xl font-bold tracking-tight text-text md:text-7xl">Sertaç Can</h1>
 
 	<p class="mt-4 font-mono text-lg text-accent md:text-2xl">
