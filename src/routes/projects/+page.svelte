@@ -6,6 +6,9 @@
 	let { data }: PageProps = $props();
 </script>
 
+<svelte:head>
+	<title>sertaccan | Project List</title>
+</svelte:head>
 <main class="mx-auto max-w-6xl py-4">
 	<h1 class="mb-10 font-mono text-2xl font-bold text-text">{m.project()}</h1>
 

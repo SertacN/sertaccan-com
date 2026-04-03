@@ -18,5 +18,6 @@
 	"logout": "Logout",
 	"project": "Projects",
 	"details": "Details",
-	"backToHome": "Back To Home"
+	"backToHome": "Back To Home",
+	"liveSite": "Live Site"
 }

@@ -34,7 +34,7 @@
 </script>
 
 <svelte:head>
-	<title>{projectDetails.title} — sertaccan</title>
+	<title>sertaccan | {projectDetails.title}</title>
 	<meta
 		name="description"
 		content={locale === 'tr' ? projectDetails.descriptionTr : projectDetails.descriptionEn}
@@ -96,7 +96,7 @@
 				rel="noopener noreferrer"
 				class="font-mono text-xs text-accent transition-colors duration-150 hover:underline"
 			>
-				Canlı Site →
+				{m.liveSite()} →
 			</a>
 		{/if}
 	</div>
