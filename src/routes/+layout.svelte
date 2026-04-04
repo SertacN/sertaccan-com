@@ -4,7 +4,6 @@
 	import { locales, localizeHref } from '$lib/paraglide/runtime';
 
 	import './layout.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import Navbar from '$lib/components/Navbar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
@@ -26,7 +25,6 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
 	<link rel="canonical" href={canonicalUrl} />
 	{#each locales as l (l)}
 		<link rel="alternate" hreflang={l} href="{base}{localizeHref(page.url.pathname, { locale: l })}" />
