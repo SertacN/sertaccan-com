@@ -349,7 +349,9 @@
 <dialog
 	bind:this={editDialog}
 	class="m-auto w-full max-w-3xl rounded border border-border bg-surface p-0 text-text backdrop:bg-black/60"
-	onclick={(e) => { if (e.target === editDialog) closeEdit(); }}
+	onclick={(e) => {
+		if (e.target === editDialog) closeEdit();
+	}}
 >
 	{#if editData}
 		<div class="p-6">
@@ -397,7 +399,9 @@
 				</div>
 
 				<div>
-					<label for="edit-descriptionTr" class="mb-1 block font-mono text-xs text-muted">Açıklama (TR)</label>
+					<label for="edit-descriptionTr" class="mb-1 block font-mono text-xs text-muted"
+						>Açıklama (TR)</label
+					>
 					<textarea
 						name="descriptionTr"
 						id="edit-descriptionTr"
@@ -409,7 +413,9 @@
 				</div>
 
 				<div>
-					<label for="edit-descriptionEn" class="mb-1 block font-mono text-xs text-muted">Açıklama (EN)</label>
+					<label for="edit-descriptionEn" class="mb-1 block font-mono text-xs text-muted"
+						>Açıklama (EN)</label
+					>
 					<textarea
 						name="descriptionEn"
 						id="edit-descriptionEn"
@@ -421,7 +427,9 @@
 				</div>
 
 				<div>
-					<label for="edit-longDescriptionTr" class="mb-1 block font-mono text-xs text-muted">Uzun Açıklama (TR) - Markdown</label>
+					<label for="edit-longDescriptionTr" class="mb-1 block font-mono text-xs text-muted"
+						>Uzun Açıklama (TR) - Markdown</label
+					>
 					<textarea
 						name="longDescriptionTr"
 						id="edit-longDescriptionTr"
@@ -433,7 +441,9 @@
 				</div>
 
 				<div>
-					<label for="edit-longDescriptionEn" class="mb-1 block font-mono text-xs text-muted">Uzun Açıklama (EN) - Markdown</label>
+					<label for="edit-longDescriptionEn" class="mb-1 block font-mono text-xs text-muted"
+						>Uzun Açıklama (EN) - Markdown</label
+					>
 					<textarea
 						name="longDescriptionEn"
 						id="edit-longDescriptionEn"
@@ -445,7 +455,9 @@
 				</div>
 
 				<div>
-					<label for="edit-tags" class="mb-1 block font-mono text-xs text-muted">Tag'ler (virgülle ayır)</label>
+					<label for="edit-tags" class="mb-1 block font-mono text-xs text-muted"
+						>Tag'ler (virgülle ayır)</label
+					>
 					<input
 						type="text"
 						name="tags"
@@ -457,7 +469,9 @@
 				</div>
 
 				<div>
-					<label for="edit-githubUrl" class="mb-1 block font-mono text-xs text-muted">GitHub URL</label>
+					<label for="edit-githubUrl" class="mb-1 block font-mono text-xs text-muted"
+						>GitHub URL</label
+					>
 					<input
 						type="text"
 						name="githubUrl"
@@ -505,17 +519,29 @@
 					</div>
 
 					<label class="flex items-center gap-2 pt-4 font-mono text-sm text-muted">
-						<input type="checkbox" name="featured" class="accent-accent" checked={editData.featured} />
+						<input
+							type="checkbox"
+							name="featured"
+							class="accent-accent"
+							checked={editData.featured}
+						/>
 						Featured
 					</label>
 					<label class="flex items-center gap-2 pt-4 font-mono text-sm text-muted">
-						<input type="checkbox" name="isActive" class="accent-accent" checked={editData.isActive} />
+						<input
+							type="checkbox"
+							name="isActive"
+							class="accent-accent"
+							checked={editData.isActive}
+						/>
 						Aktif
 					</label>
 				</div>
 
 				<div class="mb-2">
-					<label for="edit-file" class="flex items-center gap-2 pt-4 font-mono text-sm text-muted">Dosya (değiştirmek için)</label>
+					<label for="edit-file" class="flex items-center gap-2 pt-4 font-mono text-sm text-muted"
+						>Dosya (değiştirmek için)</label
+					>
 					<input
 						type="file"
 						name="file"

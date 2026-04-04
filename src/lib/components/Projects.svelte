@@ -3,11 +3,12 @@
 	import * as m from '$lib/paraglide/messages';
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import ProjectCard from './ProjectCard.svelte';
+	import { reveal } from '$lib/actions/reveal';
 
 	let { projects }: { projects: Project[] } = $props();
 </script>
 
-<section id="projects" class="py-24">
+<section id="projects" class="px-4 py-24" use:reveal>
 	<h2 class="mb-12 text-center font-mono text-2xl font-bold text-text md:text-3xl">
 		{m.section_projects()}
 	</h2>

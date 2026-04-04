@@ -1,9 +1,10 @@
 <script lang="ts">
 	import * as m from '$lib/paraglide/messages';
 	import { Mail } from 'lucide-svelte';
+	import { reveal } from '$lib/actions/reveal';
 </script>
 
-<section id="contact" class="py-24">
+<section id="contact" class="px-4 py-24" use:reveal>
 	<h2 class="mb-12 text-center font-mono text-2xl font-bold text-text md:text-3xl">
 		{m.section_contact()}
 	</h2>

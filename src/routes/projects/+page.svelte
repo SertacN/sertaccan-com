@@ -26,7 +26,8 @@
 </script>
 
 <svelte:head>
-	<title>sertaccan | Project List</title>
+	<title>Sertaç Can | {m.project()}</title>
+	<meta name="description" content={m.projects_view_all()} />
 </svelte:head>
 <main class="mx-auto max-w-6xl py-4">
 	<h1 class="mb-2 font-mono text-2xl font-bold text-text">{m.project()}</h1>

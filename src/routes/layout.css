@@ -15,7 +15,9 @@ body {
 	background-color: var(--color-bg);
 	color: var(--color-text);
 	font-family: 'Inter', sans-serif;
-	transition: background-color 200ms ease-out, color 200ms ease-out;
+	transition:
+		background-color 200ms ease-out,
+		color 200ms ease-out;
 }
 
 html.light {
