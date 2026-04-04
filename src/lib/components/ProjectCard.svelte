@@ -32,6 +32,7 @@
 >
 	<!-- Kapak görseli -->
 	<a href={`projects/${project.slug}`}>
+		{console.log(project)}
 		{#if project.imageUrl}
 			<img src={project.imageUrl} alt={project.title} class="h-44 w-full rounded-t object-cover" />
 		{:else}

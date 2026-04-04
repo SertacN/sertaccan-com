@@ -11,7 +11,7 @@ export const projectSchema = z.object({
 	descriptionEn: z.string().min(1).max(500),
 	longDescriptionTr: z.string().min(1),
 	longDescriptionEn: z.string().min(1),
-	imageUrl: z.string().url().optional().or(z.literal('')),
+	imageUrl: z.string().optional().or(z.literal('')),
 	tags: z.array(z.string()).min(1, 'En az bir tag zorunlu'),
 	githubUrl: z.string().url().optional().or(z.literal('')),
 	liveUrl: z.string().url().optional().or(z.literal('')),
