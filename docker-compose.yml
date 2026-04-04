@@ -1,0 +1,40 @@
+services:
+  app:
+    build: .
+    container_name: sertaccan-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+    networks:
+      - traefik-net
+      - internal
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.portfolio.rule=Host(`sertaccan.com`) || Host(`www.sertaccan.com`)'
+      - 'traefik.http.routers.portfolio.entrypoints=websecure'
+      - 'traefik.http.routers.portfolio.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.portfolio.loadbalancer.server.port=3000'
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: sertaccan-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - internal
+
+volumes:
+  postgres_data:
+
+networks:
+  traefik-net:
+    external: true
+  internal:
+    driver: bridge
