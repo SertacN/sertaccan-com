@@ -1,10 +1,9 @@
-import { prisma } from '$lib/server/prisma';
+import { getAllProjects } from '$lib/server/projects';
 import type { PageServerLoad } from './$types';
 
-export const load = (async () => {
-	const projects = await prisma.project.findMany({
-		where: { isDeleted: false, isActive: true },
-		orderBy: { order: 'asc' }
-	});
-	return { projects };
+export const load = (async ({ url }) => {
+	const page = Math.max(1, Number(url.searchParams.get('page') ?? 1));
+	console.log(page);
+	const { projects, pagination } = await getAllProjects({ page, limit: 6 });
+	return { projects, pagination };
 }) satisfies PageServerLoad;

@@ -1,36 +1,16 @@
 import { fail } from '@sveltejs/kit';
-import { prisma } from '$lib/server/prisma';
-import { projectSchema } from '$lib/schemas/project.schema';
+import { getAllProjects, createProject, deleteProject } from '$lib/server/projects';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import type { Actions, PageServerLoad } from './$types';
-import type { z } from 'zod';
-
-type FieldErrors = Record<string, string[]>;
-
-interface ActionFailure {
-	errors: FieldErrors;
-	values?: Record<string, unknown>;
-}
-
-function flattenErrors(error: z.ZodError): FieldErrors {
-	const result: FieldErrors = {};
-	for (const issue of error.issues) {
-		const key = issue.path[0]?.toString() ?? '_root';
-		if (!result[key]) result[key] = [];
-		result[key].push(issue.message);
-	}
-	return result;
-}
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
-export const load = (async () => {
-	const projects = await prisma.project.findMany({
-		orderBy: { order: 'asc' }
-	});
-	return { projects };
+export const load = (async ({ url }) => {
+	const page = Math.max(1, Number(url.searchParams.get('page') ?? 1));
+	const { projects, pagination } = await getAllProjects({ page, limit: 20 });
+	return { projects, pagination };
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
@@ -62,57 +42,43 @@ export const actions: Actions = {
 			isActive: formData.get('isActive') === 'on'
 		};
 
-		// Dosya bilgisini al ama henüz kaydetme
+		// Dosya yükleme kontrolü
 		const file = formData.get('file');
 		let fileExt = '';
 		if (file instanceof File && file.size > 0) {
 			fileExt = file.name.split('.').pop()?.toLowerCase() ?? '';
 			const allowed = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 			if (!allowed.includes(fileExt)) {
-				return fail<ActionFailure>(400, {
+				return fail(400, {
 					errors: { imageUrl: ['Sadece jpg, png, webp, gif yüklenebilir.'] },
 					values: raw
 				});
 			}
 		}
 
-		// Önce validasyon
-		const result = projectSchema.safeParse(raw);
-		if (!result.success) {
-			return fail<ActionFailure>(400, {
-				errors: flattenErrors(result.error),
-				values: raw
-			});
-		}
-
-		// Validasyon geçti, şimdi dosyayı kaydet
+		// Dosyayı kaydet (validasyondan önce imageUrl'i set etmek için)
 		if (file instanceof File && file.size > 0) {
 			try {
 				const filename = `${randomUUID()}.${fileExt}`;
 				await mkdir(UPLOAD_DIR, { recursive: true });
 				const buffer = Buffer.from(await file.arrayBuffer());
 				await writeFile(join(UPLOAD_DIR, filename), buffer);
-				result.data.imageUrl = `/api/files/${filename}`;
+				raw.imageUrl = `/api/files/${filename}`;
 			} catch (err) {
 				console.error('Upload hatası:', err);
-				return fail<ActionFailure>(400, {
+				return fail(400, {
 					errors: { imageUrl: ['Dosya yüklenemedi.'] },
 					values: raw
 				});
 			}
 		}
 
-		try {
-			await prisma.project.create({ data: result.data });
-		} catch (err: unknown) {
-			if (err instanceof Error && err.message.includes('Unique constraint')) {
-				return fail<ActionFailure>(400, {
-					errors: { slug: ['Bu slug zaten kullanılıyor.'] },
-					values: raw
-				});
-			}
-			throw err;
+		// Servis katmanı: validasyon + DB yazma
+		const result = await createProject(raw);
+		if (!result.ok) {
+			return fail(400, { errors: result.errors, values: raw });
 		}
+
 		return { success: true };
 	},
 
@@ -121,11 +87,10 @@ export const actions: Actions = {
 		const id = formData.get('id') as string;
 
 		if (!id) {
-			return fail<ActionFailure>(400, {
-				errors: { id: ['ID gerekli'] }
-			});
+			return fail(400, { errors: { id: ['ID gerekli'] } });
 		}
 
+		const { prisma } = await import('$lib/server/prisma');
 		const project = await prisma.project.findUnique({ where: { id }, select: { imageUrl: true } });
 
 		if (project?.imageUrl?.startsWith('/api/files/')) {
@@ -138,7 +103,7 @@ export const actions: Actions = {
 			}
 		}
 
-		await prisma.project.delete({ where: { id } });
+		await deleteProject(id);
 		return { deleted: true };
 	}
 };
