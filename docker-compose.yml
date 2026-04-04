@@ -18,9 +18,10 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.portfolio.rule=Host(`sertaccan.com`) || Host(`www.sertaccan.com`)'
-      - 'traefik.http.routers.portfolio.entrypoints=websecure'
+      - 'traefik.http.routers.portfolio.entrypoints=https'
       - 'traefik.http.routers.portfolio.tls.certresolver=letsencrypt'
       - 'traefik.http.services.portfolio.loadbalancer.server.port=3000'
+      - 'traefik.docker.network=traefik-net'
 
   postgres:
     image: postgres:16-alpine
