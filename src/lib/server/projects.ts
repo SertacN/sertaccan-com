@@ -11,6 +11,10 @@ type CreateResult =
 	| { ok: true; project: Awaited<ReturnType<typeof prisma.project.create>> }
 	| { ok: false; errors: FieldErrors };
 
+type EditResult =
+	| { ok: true; project: Awaited<ReturnType<typeof prisma.project.update>> }
+	| { ok: false; errors: string }
+	| { ok: false; errors: FieldErrors };
 // ── Helpers ──
 
 function flattenErrors(error: z.ZodError): FieldErrors {
@@ -42,18 +46,28 @@ export function getProjectBySlug(slug: string) {
 	});
 }
 
-export async function getAllProjects(options?: { page?: number; limit?: number }) {
+export async function getAllProjects(options?: {
+	page?: number;
+	limit?: number;
+	isActive?: boolean;
+}) {
 	const page = options?.page ?? 1;
 	const limit = options?.limit ?? 20;
 	const skip = (page - 1) * limit;
 
+	const where: Prisma.ProjectWhereInput = {
+		isDeleted: false,
+		isActive: options?.isActive ?? true
+	};
+
 	const [projects, total] = await prisma.$transaction([
 		prisma.project.findMany({
+			where,
 			orderBy: { order: 'asc' },
 			skip,
 			take: limit
 		}),
-		prisma.project.count()
+		prisma.project.count({ where })
 	]);
 
 	return {
@@ -98,6 +112,38 @@ export async function createProject(raw: Record<string, unknown>): Promise<Creat
 	}
 }
 
+export async function editProject(id: string, raw: Record<string, unknown>): Promise<EditResult> {
+	const result = projectSchema.safeParse(raw);
+	if (!result.success) {
+		return { ok: false, errors: flattenErrors(result.error) };
+	}
+
+	const { imageUrl, githubUrl, liveUrl, ...rest } = result.data;
+
+	try {
+		const project = await prisma.project.update({
+			where: { id },
+			data: {
+				...rest,
+				imageUrl: imageUrl || null,
+				githubUrl: githubUrl || null,
+				liveUrl: liveUrl || null
+			}
+		});
+		return { ok: true, project };
+	} catch (err: unknown) {
+		if ((err as { code?: string }).code === 'P2025') {
+			return { ok: false, errors: `${id} Proje Bulunamadı` };
+		}
+		if (
+			(err instanceof Error && err.message.includes('Unique constraint')) ||
+			(err as { code?: string }).code === 'P2002'
+		) {
+			return { ok: false, errors: { slug: ['Bu slug zaten kullanılıyor.'] } };
+		}
+		throw err;
+	}
+}
 export function deleteProject(id: string) {
 	return prisma.project.delete({ where: { id } });
 }

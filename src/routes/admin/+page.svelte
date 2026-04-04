@@ -4,15 +4,31 @@
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import type { PageProps } from './$types';
 
+	import type { Project } from '@prisma/client';
+
 	interface FormResult {
 		success?: boolean;
 		deleted?: boolean;
+		edited?: boolean;
 		errors?: Record<string, string[]>;
 		values?: Record<string, unknown>;
 	}
 
 	let { data, form: rawForm }: PageProps = $props();
 	const form = $derived(rawForm as FormResult | null);
+
+	let editDialog: HTMLDialogElement;
+	let editData = $state<Project | null>(null);
+
+	function openEdit(project: Project) {
+		editData = { ...project };
+		editDialog.showModal();
+	}
+
+	function closeEdit() {
+		editDialog.close();
+		editData = null;
+	}
 
 	async function handleLogout() {
 		await authClient.signOut();
@@ -56,6 +72,14 @@
 					class="mb-4 rounded border border-accent/30 bg-accent/5 px-4 py-2 font-mono text-sm text-accent"
 				>
 					Proje eklendi.
+				</div>
+			{/if}
+
+			{#if form?.edited}
+				<div
+					class="mb-4 rounded border border-accent/30 bg-accent/5 px-4 py-2 font-mono text-sm text-accent"
+				>
+					Proje güncellendi.
 				</div>
 			{/if}
 
@@ -295,15 +319,24 @@
 									<span class="font-mono text-xs text-accent">featured</span>
 								{/if}
 							</div>
-							<form method="POST" action="?/delete">
-								<input type="hidden" name="id" value={project.id} />
+							<div class="flex items-center gap-3">
 								<button
-									type="submit"
-									class="font-mono text-xs text-red-400 transition-colors duration-150 hover:text-red-300"
+									type="button"
+									onclick={() => openEdit(project)}
+									class="font-mono text-xs text-accent transition-colors duration-150 hover:text-accent/70"
 								>
-									Sil
+									Düzenle
 								</button>
-							</form>
+								<form method="POST" action="?/delete">
+									<input type="hidden" name="id" value={project.id} />
+									<button
+										type="submit"
+										class="font-mono text-xs text-red-400 transition-colors duration-150 hover:text-red-300"
+									>
+										Sil
+									</button>
+								</form>
+							</div>
 						</div>
 					{/each}
 				</div>
@@ -311,3 +344,208 @@
 		</div>
 	</div>
 </div>
+
+<!-- Edit Dialog -->
+<dialog
+	bind:this={editDialog}
+	class="m-auto w-full max-w-3xl rounded border border-border bg-surface p-0 text-text backdrop:bg-black/60"
+	onclick={(e) => { if (e.target === editDialog) closeEdit(); }}
+>
+	{#if editData}
+		<div class="p-6">
+			<div class="mb-6 flex items-center justify-between">
+				<h2 class="font-mono text-lg font-bold text-accent">Proje Düzenle</h2>
+				<button
+					type="button"
+					onclick={closeEdit}
+					class="font-mono text-sm text-muted transition-colors hover:text-text"
+				>
+					✕
+				</button>
+			</div>
+
+			<form
+				method="POST"
+				action="?/edit"
+				enctype="multipart/form-data"
+				class="grid grid-cols-1 gap-4 md:grid-cols-2"
+			>
+				<input type="hidden" name="id" value={editData.id} />
+
+				<div>
+					<label for="edit-slug" class="mb-1 block font-mono text-xs text-muted">Slug</label>
+					<input
+						type="text"
+						name="slug"
+						id="edit-slug"
+						required
+						bind:value={editData.slug}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					/>
+				</div>
+
+				<div>
+					<label for="edit-title" class="mb-1 block font-mono text-xs text-muted">Başlık</label>
+					<input
+						type="text"
+						name="title"
+						id="edit-title"
+						required
+						bind:value={editData.title}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					/>
+				</div>
+
+				<div>
+					<label for="edit-descriptionTr" class="mb-1 block font-mono text-xs text-muted">Açıklama (TR)</label>
+					<textarea
+						name="descriptionTr"
+						id="edit-descriptionTr"
+						required
+						rows="2"
+						bind:value={editData.descriptionTr}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					></textarea>
+				</div>
+
+				<div>
+					<label for="edit-descriptionEn" class="mb-1 block font-mono text-xs text-muted">Açıklama (EN)</label>
+					<textarea
+						name="descriptionEn"
+						id="edit-descriptionEn"
+						required
+						rows="2"
+						bind:value={editData.descriptionEn}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					></textarea>
+				</div>
+
+				<div>
+					<label for="edit-longDescriptionTr" class="mb-1 block font-mono text-xs text-muted">Uzun Açıklama (TR) - Markdown</label>
+					<textarea
+						name="longDescriptionTr"
+						id="edit-longDescriptionTr"
+						required
+						rows="4"
+						bind:value={editData.longDescriptionTr}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					></textarea>
+				</div>
+
+				<div>
+					<label for="edit-longDescriptionEn" class="mb-1 block font-mono text-xs text-muted">Uzun Açıklama (EN) - Markdown</label>
+					<textarea
+						name="longDescriptionEn"
+						id="edit-longDescriptionEn"
+						required
+						rows="4"
+						bind:value={editData.longDescriptionEn}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					></textarea>
+				</div>
+
+				<div>
+					<label for="edit-tags" class="mb-1 block font-mono text-xs text-muted">Tag'ler (virgülle ayır)</label>
+					<input
+						type="text"
+						name="tags"
+						id="edit-tags"
+						required
+						value={editData.tags.join(', ')}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					/>
+				</div>
+
+				<div>
+					<label for="edit-githubUrl" class="mb-1 block font-mono text-xs text-muted">GitHub URL</label>
+					<input
+						type="text"
+						name="githubUrl"
+						id="edit-githubUrl"
+						value={editData.githubUrl ?? ''}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					/>
+				</div>
+
+				<div>
+					<label for="edit-liveUrl" class="mb-1 block font-mono text-xs text-muted">Live URL</label>
+					<input
+						type="text"
+						name="liveUrl"
+						id="edit-liveUrl"
+						value={editData.liveUrl ?? ''}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					/>
+				</div>
+
+				<div>
+					<label for="edit-status" class="mb-1 block font-mono text-xs text-muted">Status</label>
+					<select
+						name="status"
+						id="edit-status"
+						bind:value={editData.status}
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					>
+						<option value="WIP">WIP</option>
+						<option value="ACTIVE">Active</option>
+						<option value="ARCHIVED">Archived</option>
+					</select>
+				</div>
+
+				<div class="flex items-center gap-6">
+					<div>
+						<label for="edit-order" class="mb-1 block font-mono text-xs text-muted">Sıra</label>
+						<input
+							type="number"
+							name="order"
+							id="edit-order"
+							bind:value={editData.order}
+							class="w-20 rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+						/>
+					</div>
+
+					<label class="flex items-center gap-2 pt-4 font-mono text-sm text-muted">
+						<input type="checkbox" name="featured" class="accent-accent" checked={editData.featured} />
+						Featured
+					</label>
+					<label class="flex items-center gap-2 pt-4 font-mono text-sm text-muted">
+						<input type="checkbox" name="isActive" class="accent-accent" checked={editData.isActive} />
+						Aktif
+					</label>
+				</div>
+
+				<div class="mb-2">
+					<label for="edit-file" class="flex items-center gap-2 pt-4 font-mono text-sm text-muted">Dosya (değiştirmek için)</label>
+					<input
+						type="file"
+						name="file"
+						id="edit-file"
+						accept="image/*"
+						class="font-mono text-sm text-muted file:mr-3 file:rounded file:border file:border-border file:bg-surface file:px-3 file:py-1.5 file:font-mono file:text-xs file:text-accent file:transition-colors file:duration-150 hover:file:border-accent"
+					/>
+					{#if editData.imageUrl}
+						<p class="mt-1 font-mono text-xs text-muted">Mevcut: {editData.imageUrl}</p>
+					{/if}
+				</div>
+
+				<input type="hidden" name="imageUrl" value={editData.imageUrl ?? ''} />
+
+				<div class="flex gap-3 md:col-span-2">
+					<button
+						type="submit"
+						class="rounded border border-accent bg-accent/10 px-6 py-2 font-mono text-sm text-accent transition-colors duration-150 hover:bg-accent/20"
+					>
+						Kaydet
+					</button>
+					<button
+						type="button"
+						onclick={closeEdit}
+						class="rounded border border-border px-6 py-2 font-mono text-sm text-muted transition-colors duration-150 hover:border-accent hover:text-text"
+					>
+						İptal
+					</button>
+				</div>
+			</form>
+		</div>
+	{/if}
+</dialog>
