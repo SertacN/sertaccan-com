@@ -4,6 +4,7 @@
 	import TechStack from '$lib/components/TechStack.svelte';
 	import Projects from '$lib/components/Projects.svelte';
 	import Contact from '$lib/components/Contact.svelte';
+	import Divider from '$lib/components/Divider.svelte';
 	import * as m from '$lib/paraglide/messages';
 
 	let { data }: PageProps = $props();
@@ -16,7 +17,10 @@
 
 <div class="mx-auto max-w-6xl py-4">
 	<Hero />
+	<Divider />
 	<TechStack />
+	<Divider />
 	<Projects projects={data.projects} />
+	<Divider />
 	<Contact />
 </div>

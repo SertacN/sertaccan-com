@@ -3,6 +3,6 @@ import type { PageServerLoad } from './$types';
 
 export const load = (async ({ url }) => {
 	const page = Math.max(1, Number(url.searchParams.get('page') ?? 1));
-	const { projects, pagination } = await getAllProjects({ page, limit: 6 });
+	const { projects, pagination } = await getAllProjects({ page, limit: 6, isActive: true });
 	return { projects, pagination };
 }) satisfies PageServerLoad;

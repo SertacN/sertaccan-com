@@ -33,7 +33,7 @@
 		</a>
 
 		<a
-			href="https://linkedin.com/in/sertaccan"
+			href="https://www.linkedin.com/in/sertacn"
 			target="_blank"
 			rel="noopener noreferrer"
 			class="flex items-center gap-2 rounded border border-border px-4 py-2 font-mono text-sm text-muted transition-colors duration-150 hover:border-accent hover:text-accent"

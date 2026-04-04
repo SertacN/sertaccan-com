@@ -1,22 +1,71 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import * as m from '$lib/paraglide/messages';
 	import { Mail } from 'lucide-svelte';
+	import Sparkles from './Sparkles.svelte';
+
+	let typedText = $state('');
+	let showCursor = $state(true);
+
+	onMount(() => {
+		const fullText = m.hero_role();
+		let i = 0;
+
+		const typeInterval = setInterval(() => {
+			if (i < fullText.length) {
+				typedText = fullText.slice(0, i + 1);
+				i++;
+			} else {
+				clearInterval(typeInterval);
+			}
+		}, 80);
+
+		const cursorInterval = setInterval(() => {
+			showCursor = !showCursor;
+		}, 530);
+
+		return () => {
+			clearInterval(typeInterval);
+			clearInterval(cursorInterval);
+		};
+	});
 </script>
 
-<section id="hero" class="flex min-h-[80vh] flex-col items-center justify-center px-4 text-center">
-	<h1 class="font-mono text-4xl font-bold tracking-tight text-text md:text-7xl">Sertaç Can</h1>
+<section
+	id="hero"
+	class="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden px-4 text-center"
+>
+	<!-- Animated gradient background -->
+	<div class="hero-gradient pointer-events-none absolute inset-0"></div>
 
-	<p class="mt-4 font-mono text-lg text-accent md:text-2xl">
-		<span class="inline-block">
-			&gt; {m.hero_role()}<span class="animate-pulse text-accent">_</span>
-		</span>
-	</p>
+	<h1 class="relative z-10 font-mono text-4xl font-bold tracking-tight text-text md:text-7xl">
+		Sertaç Can
+	</h1>
 
-	<p class="mt-3 max-w-md text-sm text-muted md:text-base">
+	<div class="relative mt-4">
+		<p class="relative z-10 font-mono text-lg text-accent md:text-2xl">
+			<span class="inline-block">
+				&gt; {typedText}<span class="transition-opacity duration-100" class:opacity-0={!showCursor}
+					>_</span
+				>
+			</span>
+		</p>
+		<div class="absolute -inset-x-12 -inset-y-6 z-0 md:-inset-x-20 md:-inset-y-8">
+			<Sparkles
+				particleColor="#00ff88"
+				particleDensity={100}
+				minSize={0.6}
+				maxSize={2}
+				speed={0.4}
+			/>
+		</div>
+	</div>
+
+	<p class="relative z-10 mt-3 max-w-md text-sm text-muted md:text-base">
 		{m.hero_tagline()}
 	</p>
 
-	<div class="mt-8 flex gap-5">
+	<div class="relative z-10 mt-8 flex gap-5">
 		<a
 			href="https://github.com/SertacN"
 			target="_blank"
@@ -39,3 +88,26 @@
 		</a>
 	</div>
 </section>
+
+<style>
+	.hero-gradient {
+		background: radial-gradient(
+			ellipse 60% 50% at 50% 50%,
+			var(--color-accent-dim) 0%,
+			transparent 70%
+		);
+		animation: gradient-pulse 6s ease-in-out infinite;
+	}
+
+	@keyframes gradient-pulse {
+		0%,
+		100% {
+			opacity: 0.4;
+			transform: scale(1);
+		}
+		50% {
+			opacity: 0.7;
+			transform: scale(1.1);
+		}
+	}
+</style>

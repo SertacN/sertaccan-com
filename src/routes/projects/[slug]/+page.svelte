@@ -53,7 +53,7 @@
 		<img
 			src={projectDetails.imageUrl}
 			alt={projectDetails.title}
-			class="mb-8 h-64 w-full rounded border border-border object-cover"
+			class="mb-8 h-80 w-full rounded border border-border object-cover"
 		/>
 	{:else}
 		<div

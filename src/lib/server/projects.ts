@@ -55,10 +55,10 @@ export async function getAllProjects(options?: {
 	const limit = options?.limit ?? 20;
 	const skip = (page - 1) * limit;
 
-	const where: Prisma.ProjectWhereInput = {
-		isDeleted: false,
-		isActive: options?.isActive ?? true
-	};
+	const where: Prisma.ProjectWhereInput = { isDeleted: false };
+	if (options?.isActive !== undefined) {
+		where.isActive = options.isActive;
+	}
 
 	const [projects, total] = await prisma.$transaction([
 		prisma.project.findMany({

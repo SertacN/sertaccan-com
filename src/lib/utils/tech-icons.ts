@@ -15,6 +15,7 @@ import {
 	siRust,
 	siGit,
 	siGithub,
+	siGithubactions,
 	siNginx,
 	siRedis,
 	siMongodb,
@@ -23,7 +24,13 @@ import {
 	siLinux,
 	siVercel,
 	siSupabase,
-	siDrizzle
+	siDrizzle,
+	siAngular,
+	siNestjs,
+	siTraefikproxy,
+	siExpo,
+	siHtml5,
+	siCss
 } from 'simple-icons';
 import type { SimpleIcon } from 'simple-icons';
 
@@ -61,9 +68,38 @@ const ICON_MAP: Record<string, SimpleIcon> = {
 	linux: siLinux,
 	vercel: siVercel,
 	supabase: siSupabase,
-	drizzle: siDrizzle
+	drizzle: siDrizzle,
+	angular: siAngular,
+	nestjs: siNestjs,
+	'github actions': siGithubactions,
+	traefik: siTraefikproxy,
+	'react native expo': siExpo,
+	expo: siExpo,
+	'react native': siReact,
+	'html/css': siHtml5,
+	html: siHtml5,
+	css: siCss
+};
+
+// Override colors that are too dark for dark backgrounds
+const DARK_COLOR_OVERRIDES: Record<string, string> = {
+	angular: 'DD0031', // Angular's classic red
+	expo: 'FFFFFF',
+	'github actions': 'FFFFFF',
+	github: 'FFFFFF',
+	'next.js': 'FFFFFF',
+	nextjs: 'FFFFFF',
+	vercel: 'FFFFFF'
 };
 
 export function getTechIcon(name: string): SimpleIcon | null {
-	return ICON_MAP[name.toLowerCase()] ?? null;
+	const key = name.toLowerCase();
+	const icon = ICON_MAP[key];
+	if (!icon) return null;
+
+	const override = DARK_COLOR_OVERRIDES[key];
+	if (override) {
+		return { ...icon, hex: override };
+	}
+	return icon;
 }

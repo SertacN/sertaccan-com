@@ -25,11 +25,39 @@
 				? 'text-yellow-400 border-yellow-400'
 				: 'text-muted border-border'
 	);
+
+	let cardEl: HTMLDivElement;
+	let tiltStyle = $state('');
+
+	function handleMouseMove(e: MouseEvent) {
+		const rect = cardEl.getBoundingClientRect();
+		const x = e.clientX - rect.left;
+		const y = e.clientY - rect.top;
+		const centerX = rect.width / 2;
+		const centerY = rect.height / 2;
+
+		const rotateX = ((y - centerY) / centerY) * -6;
+		const rotateY = ((x - centerX) / centerX) * 6;
+
+		tiltStyle = `transform: perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02); --glow-x: ${x}px; --glow-y: ${y}px;`;
+	}
+
+	function handleMouseLeave() {
+		tiltStyle = '';
+	}
 </script>
 
 <div
-	class="flex flex-col rounded border border-border bg-surface transition-colors duration-150 hover:border-accent/40"
+	bind:this={cardEl}
+	role="article"
+	onmousemove={handleMouseMove}
+	onmouseleave={handleMouseLeave}
+	class="card-tilt relative flex flex-col overflow-hidden rounded border border-border bg-surface transition-all duration-200 ease-out hover:border-accent/40"
+	style={tiltStyle}
 >
+	<!-- Glow overlay -->
+	<div class="card-glow pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-200"></div>
+
 	<!-- Kapak görseli -->
 	<a href={`projects/${project.slug}`}>
 		{#if project.imageUrl}
@@ -98,3 +126,22 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.card-tilt {
+		will-change: transform;
+		transform-style: preserve-3d;
+	}
+
+	.card-tilt:hover .card-glow {
+		opacity: 1;
+	}
+
+	.card-glow {
+		background: radial-gradient(
+			300px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+			var(--color-accent-dim),
+			transparent 70%
+		);
+	}
+</style>
