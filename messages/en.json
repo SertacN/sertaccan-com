@@ -19,5 +19,13 @@
 	"project": "Projects",
 	"details": "Details",
 	"backToHome": "Back To Home",
-	"liveSite": "Live Site"
+	"liveSite": "Live Site",
+	"section_about": "About Me",
+	"about_p1": "Hi! I'm Sertaç, a software developer. I enjoy building clean, maintainable, and well-designed software.",
+	"about_p2": "I primarily develop full-stack projects within the Angular and NestJS ecosystem. TypeScript, PostgreSQL, Docker, and CI/CD pipelines are among my daily tools.",
+	"about_p3": "Exploring new technologies, contributing to open source projects, and sharing what I learn are the things that motivate me.",
+	"nav_about": "About",
+	"footer_built_with": "Built with SvelteKit",
+	"error_title": "Page Not Found",
+	"error_desc": "The page you're looking for doesn't exist or may have been moved."
 }

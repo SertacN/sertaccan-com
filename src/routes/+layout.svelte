@@ -1,17 +1,43 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { onNavigate } from '$app/navigation';
 	import { locales, localizeHref } from '$lib/paraglide/runtime';
 
 	import './layout.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 
 	let { children, data } = $props();
+
+	const base = 'https://sertaccan.com';
+	const canonicalUrl = $derived(`${base}${page.url.pathname}`);
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return;
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await navigation.complete;
+			});
+		});
+	});
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href={favicon} />
+	<link rel="canonical" href={canonicalUrl} />
+	{#each locales as l (l)}
+		<link rel="alternate" hreflang={l} href="{base}{localizeHref(page.url.pathname, { locale: l })}" />
+	{/each}
+	<link rel="alternate" hreflang="x-default" href="{base}{localizeHref(page.url.pathname, { locale: 'tr' })}" />
+</svelte:head>
 <Navbar user={data.user} />
-{@render children()}
+<main>
+	{@render children()}
+</main>
+<Footer />
 
 <div style="display:none">
 	{#each locales as locale (locale)}

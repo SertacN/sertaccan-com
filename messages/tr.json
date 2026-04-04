@@ -19,5 +19,13 @@
 	"project": "Projeler",
 	"details": "Detay",
 	"backToHome": "Ana Sayfaya Dön",
-	"liveSite": "Canlı Site"
+	"liveSite": "Canlı Site",
+	"section_about": "Hakkımda",
+	"about_p1": "Merhaba! Ben Sertaç, yazılım geliştirici. Temiz, sürdürülebilir ve iyi tasarlanmış yazılımlar üretmeyi seviyorum.",
+	"about_p2": "Ağırlıklı olarak Angular ve NestJS ekosisteminde full-stack projeler geliştiriyorum. TypeScript, PostgreSQL, Docker ve CI/CD pipeline'ları günlük araçlarım arasında.",
+	"about_p3": "Yeni teknolojileri keşfetmek, açık kaynak projelere katkıda bulunmak ve öğrendiklerimi paylaşmak beni motive eden şeyler.",
+	"nav_about": "Hakkımda",
+	"footer_built_with": "SvelteKit ile yapıldı",
+	"error_title": "Sayfa Bulunamadı",
+	"error_desc": "Aradığınız sayfa mevcut değil veya taşınmış olabilir."
 }

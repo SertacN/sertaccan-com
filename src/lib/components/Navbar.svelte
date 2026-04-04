@@ -80,6 +80,11 @@
 		<!-- Desktop nav -->
 		<div class="hidden items-center gap-6 md:flex">
 			<a
+				href={localizeHref('/#about')}
+				class="text-sm text-muted transition-colors duration-150 hover:text-text"
+				>{m.nav_about()}</a
+			>
+			<a
 				href={localizeHref('/#techstack')}
 				class="text-sm text-muted transition-colors duration-150 hover:text-text">{m.nav_stack()}</a
 			>
@@ -167,6 +172,12 @@
 	<!-- Mobile menu -->
 	{#if mobileOpen}
 		<div class="flex flex-col gap-4 border-t border-border px-4 py-4 md:hidden">
+			<a
+				href={localizeHref('/#about')}
+				onclick={closeMobile}
+				class="text-sm text-muted transition-colors duration-150 hover:text-text"
+				>{m.nav_about()}</a
+			>
 			<a
 				href={localizeHref('/#techstack')}
 				onclick={closeMobile}

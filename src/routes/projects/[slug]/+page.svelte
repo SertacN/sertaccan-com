@@ -39,6 +39,11 @@
 		name="description"
 		content={locale === 'tr' ? projectDetails.descriptionTr : projectDetails.descriptionEn}
 	/>
+	<meta property="og:title" content="Sertaç Can | {projectDetails.title}" />
+	<meta property="og:description" content={locale === 'tr' ? projectDetails.descriptionTr : projectDetails.descriptionEn} />
+	<meta property="og:type" content="article" />
+	<meta property="og:image" content={projectDetails.imageUrl ?? 'https://sertaccan.com/og-image.png'} />
+	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
 <main class="mx-auto max-w-6xl py-4">

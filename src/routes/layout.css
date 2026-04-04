@@ -20,6 +20,23 @@ body {
 		color 200ms ease-out;
 }
 
+/* Page transition animations */
+@keyframes fade-in {
+	from { opacity: 0; transform: translateY(8px); }
+}
+
+@keyframes fade-out {
+	to { opacity: 0; transform: translateY(-4px); }
+}
+
+::view-transition-old(root) {
+	animation: 150ms ease-out fade-out;
+}
+
+::view-transition-new(root) {
+	animation: 200ms ease-out fade-in;
+}
+
 html.light {
 	--color-bg: #f8f8f8;
 	--color-surface: #ffffff;
