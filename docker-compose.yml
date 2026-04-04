@@ -1,6 +1,9 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        DATABASE_URL: ${DATABASE_URL}
     container_name: sertaccan-app
     restart: unless-stopped
     env_file:

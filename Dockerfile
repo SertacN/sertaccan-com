@@ -4,6 +4,8 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npx prisma generate
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
 RUN npm run build
 
 FROM node:24-alpine AS runner
