@@ -14,9 +14,8 @@
 		error = '';
 
 		const result = await authClient.signIn.email({ email, password });
-
 		if (result.error) {
-			error = 'Email veya şifre hatalı.';
+			error = result.error.message ?? 'Email veya şifre hatalı.';
 			loading = false;
 			return;
 		}
@@ -47,6 +46,7 @@
 				<input
 					id="password"
 					type="password"
+					autocomplete="current-password"
 					bind:value={password}
 					required
 					class="rounded border border-border bg-bg px-3 py-2 text-sm text-text outline-none focus:border-accent"

@@ -108,6 +108,7 @@
 				use:enhance
 				class="grid grid-cols-1 gap-4 md:grid-cols-2"
 			>
+				<input type="text" name="username" value={user?.email ?? ''} autocomplete="username" class="hidden" />
 				<div>
 					<label for="currentPassword" class="mb-1 block font-mono text-xs text-muted"
 						>Mevcut Şifre</label
@@ -115,6 +116,7 @@
 					<input
 						type="password"
 						name="currentPassword"
+						autocomplete="current-password"
 						id="currentPassword"
 						required
 						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
@@ -126,6 +128,7 @@
 					<input
 						type="password"
 						name="newPassword"
+						autocomplete="new-password"
 						id="newPassword"
 						required
 						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
@@ -188,6 +191,7 @@
 							name="email"
 							id="new-email"
 							required
+							autocomplete="username"
 							class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
 						/>
 					</div>
@@ -196,6 +200,7 @@
 						<input
 							type="password"
 							name="password"
+							autocomplete="new-password"
 							id="new-password"
 							required
 							class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
@@ -244,7 +249,6 @@
 				{:else}
 					<div class="space-y-2">
 						{#each users as u (u.id)}
-							{console.log(u)}
 							<div class="flex items-center justify-between rounded border border-border px-4 py-3">
 								<div class="flex min-w-0 flex-col gap-0.5">
 									<span class="font-mono text-sm font-bold text-text" class:line-through={u.banned}
