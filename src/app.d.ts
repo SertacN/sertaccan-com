@@ -8,6 +8,7 @@ declare global {
 				id: string;
 				email: string;
 				name: string;
+				banned: boolean | null;
 				role: 'admin' | 'user';
 			} | null;
 		}

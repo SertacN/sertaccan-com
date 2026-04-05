@@ -1,7 +1,15 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { createUserSchema, passwordSchema, profileSchema } from '$lib/schemas';
-import { listUsers, updateProfile, changePassword, createUser, deleteUser } from '$lib/server';
+import {
+	listUsers,
+	updateProfile,
+	changePassword,
+	createUser,
+	deleteUser,
+	banUser,
+	unBanUser
+} from '$lib/server';
 import { flattenErrors } from '$lib/utils';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -62,5 +70,25 @@ export const actions: Actions = {
 		const res = await deleteUser(request.headers, id);
 		if (!res.success) return fail(500, { action: 'delete', errors: res.errors ?? {} });
 		return { action: 'delete', success: true };
+	},
+	banUser: async ({ request, locals }) => {
+		if (locals.user?.role !== 'admin')
+			return fail(403, { actions: 'ban', errors: { _: ['Yetkisiz işlem'] } });
+		const formData = await request.formData();
+		const id = formData.get('id') as string;
+		if (id === locals.user.id)
+			return fail(400, { action: 'ban', errors: { _: ['Kendinizi engelleyemezsiniz'] } });
+		const res = await banUser(request.headers, id);
+		if (!res.success) return fail(500, { actions: 'ban', errors: res.errors ?? {} });
+		return { actions: 'ban', success: true };
+	},
+	unBanUser: async ({ request, locals }) => {
+		if (locals.user?.role !== 'admin')
+			return fail(403, { actions: 'unBan', errors: { _: ['Yetkisiz işlem'] } });
+		const formData = await request.formData();
+		const id = formData.get('id') as string;
+		const res = await unBanUser(request.headers, id);
+		if (!res.success) return fail(500, { actions: 'unban', errors: res.errors ?? {} });
+		return { actions: 'unban', success: true };
 	}
 };

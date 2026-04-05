@@ -68,6 +68,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 			id: session.user.id,
 			email: session.user.email,
 			name: session.user.name,
+			banned: session.user.banned ?? null,
 			role: (session.user.role as 'admin' | 'user') ?? 'user'
 		};
 	} else {

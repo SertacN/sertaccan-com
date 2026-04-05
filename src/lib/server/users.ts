@@ -9,7 +9,7 @@ import type { z } from 'zod';
 
 export function listUsers() {
 	return prisma.user.findMany({
-		select: { id: true, name: true, email: true, role: true, createdAt: true },
+		select: { id: true, name: true, email: true, banned: true, role: true, createdAt: true },
 		orderBy: { createdAt: 'asc' }
 	});
 }
@@ -78,5 +78,31 @@ export async function deleteUser(headers: Headers, userId: string): Promise<ApiR
 		return apiSuccess(null, 'Kullanıcı silindi');
 	} catch {
 		return apiError('Silme başarısız', { _: ['Silme başarısız'] });
+	}
+}
+
+export async function banUser(headers: Headers, userId: string): Promise<ApiResponse<null>> {
+	try {
+		await auth.api.banUser({
+			body: { userId },
+			headers
+		});
+		return apiSuccess(null, 'Kullanıcı Yasaklandı.');
+	} catch {
+		return apiError('Kullanıcı Yasaklama Sırasında Bir Hata Oluştu', {
+			_: ['Yasaklama Başarısız']
+		});
+	}
+}
+
+export async function unBanUser(headers: Headers, userId: string) {
+	try {
+		await auth.api.unbanUser({
+			body: { userId },
+			headers
+		});
+		return apiSuccess(null, 'Kullanıcı Yasağı Kaldırıldı');
+	} catch {
+		return apiError('Kullanıcı Yasağı Kaldırılamadı', { _: ['Kullanıcı Yasağı Kaldırılamadı'] });
 	}
 }

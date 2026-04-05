@@ -121,7 +121,8 @@
 					/>
 				</div>
 				<div>
-					<label for="newPassword" class="mb-1 block font-mono text-xs text-muted">Yeni Şifre</label>
+					<label for="newPassword" class="mb-1 block font-mono text-xs text-muted">Yeni Şifre</label
+					>
 					<input
 						type="password"
 						name="newPassword"
@@ -243,9 +244,12 @@
 				{:else}
 					<div class="space-y-2">
 						{#each users as u (u.id)}
+							{console.log(u)}
 							<div class="flex items-center justify-between rounded border border-border px-4 py-3">
 								<div class="flex min-w-0 flex-col gap-0.5">
-									<span class="font-mono text-sm font-bold text-text">{u.name}</span>
+									<span class="font-mono text-sm font-bold text-text" class:line-through={u.banned}
+										>{u.name}</span
+									>
 									<span class="font-mono text-xs text-muted">{u.email}</span>
 								</div>
 								<div class="flex shrink-0 items-center gap-4">
@@ -266,6 +270,19 @@
 											>
 												Sil
 											</button>
+										</form>
+										<form
+											method="POST"
+											action={u.banned == false ? '?/banUser' : '?/unBanUser'}
+											use:enhance
+										>
+											<input type="hidden" name="id" value={u.id} />
+											<button
+												class="font-mono text-xs transition-colors duration-150 hover:text-red-300"
+												class:text-accent={u.banned}
+												class:text-red-400={!u.banned}
+												type="submit">{u.banned == false ? 'Yasakla' : 'Yasağı Kaldır'}</button
+											>
 										</form>
 									{:else}
 										<span class="font-mono text-xs text-muted/40">sen</span>
