@@ -37,7 +37,7 @@
 	}
 </script>
 
-<div class="min-h-screen bg-bg p-8">
+<div class="min-h-screen w-full bg-bg px-4 py-2">
 	<div class="mx-auto max-w-6xl">
 		<!-- Header -->
 		<div class="mb-8 flex items-center justify-between">

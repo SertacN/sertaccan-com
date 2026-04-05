@@ -26,7 +26,7 @@
 	}
 </script>
 
-<div class="flex min-h-screen items-center justify-center bg-bg">
+<div class="flex min-h-screen w-full items-center justify-center bg-bg">
 	<div class="w-full max-w-sm rounded border border-border bg-surface p-8">
 		<h1 class="mb-6 font-mono text-xl font-bold text-accent">Admin Girişi</h1>
 

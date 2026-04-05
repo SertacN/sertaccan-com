@@ -9,7 +9,7 @@
 		{m.section_contact()}
 	</h2>
 
-	<div class="flex justify-center gap-6">
+	<div class="flex flex-wrap justify-center gap-4">
 		<a
 			href="mailto:sertac.can1@gmail.com"
 			class="flex items-center gap-2 rounded border border-border px-4 py-2 font-mono text-sm text-muted transition-colors duration-150 hover:border-accent hover:text-accent"

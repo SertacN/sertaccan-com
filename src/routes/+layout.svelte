@@ -27,9 +27,17 @@
 <svelte:head>
 	<link rel="canonical" href={canonicalUrl} />
 	{#each locales as l (l)}
-		<link rel="alternate" hreflang={l} href="{base}{localizeHref(page.url.pathname, { locale: l })}" />
+		<link
+			rel="alternate"
+			hreflang={l}
+			href="{base}{localizeHref(page.url.pathname, { locale: l })}"
+		/>
 	{/each}
-	<link rel="alternate" hreflang="x-default" href="{base}{localizeHref(page.url.pathname, { locale: 'tr' })}" />
+	<link
+		rel="alternate"
+		hreflang="x-default"
+		href="{base}{localizeHref(page.url.pathname, { locale: 'tr' })}"
+	/>
 </svelte:head>
 <Navbar user={data.user} />
 <main>
