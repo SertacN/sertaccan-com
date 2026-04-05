@@ -5,7 +5,7 @@
 	import { authClient } from '$lib/auth-client';
 	import { goto, invalidateAll } from '$app/navigation';
 
-	let { user = null }: { user: { role: string } | null } = $props();
+	let { user = null }: { user: App.Locals['user'] } = $props();
 
 	let isDark = $state(true);
 	let mobileOpen = $state(false);
@@ -81,8 +81,7 @@
 		<div class="hidden items-center gap-6 md:flex">
 			<a
 				href={localizeHref('/#about')}
-				class="text-sm text-muted transition-colors duration-150 hover:text-text"
-				>{m.nav_about()}</a
+				class="text-sm text-muted transition-colors duration-150 hover:text-text">{m.nav_about()}</a
 			>
 			<a
 				href={localizeHref('/#techstack')}
@@ -145,6 +144,8 @@
 					class="rounded border border-accent px-3 py-1.5 font-mono text-xs text-accent transition-colors duration-150 hover:bg-accent hover:text-bg"
 					>{m.panel()}</a
 				>
+			{/if}
+			{#if user !== null}
 				<button
 					onclick={handleLogout}
 					class="rounded border border-border px-3 py-1.5 font-mono text-xs text-muted transition-colors duration-150 hover:border-accent hover:text-accent"
@@ -175,8 +176,7 @@
 			<a
 				href={localizeHref('/#about')}
 				onclick={closeMobile}
-				class="text-sm text-muted transition-colors duration-150 hover:text-text"
-				>{m.nav_about()}</a
+				class="text-sm text-muted transition-colors duration-150 hover:text-text">{m.nav_about()}</a
 			>
 			<a
 				href={localizeHref('/#techstack')}
@@ -245,6 +245,8 @@
 						class="rounded border border-accent px-3 py-1.5 font-mono text-xs text-accent transition-colors duration-150 hover:bg-accent hover:text-bg"
 						>{m.panel()}</a
 					>
+				{/if}
+				{#if user !== null}
 					<button
 						onclick={() => {
 							handleLogout();
@@ -254,7 +256,6 @@
 						>{m.logout()}</button
 					>
 				{/if}
-
 				<div class="ml-auto flex items-center gap-1 font-mono text-xs">
 					<button
 						onclick={() => setLocale('tr')}
