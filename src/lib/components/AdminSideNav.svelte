@@ -6,7 +6,7 @@
 
 	const links = [
 		{ href: '/admin', label: 'Admin' },
-		{ href: '/admin/login', label: 'Login' }
+		{ href: '/admin/users', label: 'Users' }
 	];
 
 	function isActive(href: string) {
@@ -15,14 +15,12 @@
 </script>
 
 {#if user?.role === 'admin'}
-	<nav class="border-b border-border md:w-3xs md:border-b-0 md:border-r">
+	<nav class="border-b border-border md:w-3xs md:border-r md:border-b-0">
 		<div class="flex flex-row gap-4 px-4 py-2 font-mono md:flex-col md:gap-2">
 			{#each links as link (link.href)}
 				<a
 					class="border-b py-1 text-sm transition-colors duration-150 hover:text-text
-						{isActive(link.href)
-						? 'border-accent text-text'
-						: 'border-transparent text-muted'}"
+						{isActive(link.href) ? 'border-accent text-text' : 'border-transparent text-muted'}"
 					href={localizeHref(link.href)}
 				>
 					{link.label}
