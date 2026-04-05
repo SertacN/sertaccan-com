@@ -1,31 +1,9 @@
 import { prisma } from '$lib/server/prisma';
 import { projectSchema } from '$lib/schemas/project.schema';
-import type { z } from 'zod';
+import { apiSuccess, apiError } from '$lib/types/api';
+import type { ApiResponse } from '$lib/types/api';
+import { flattenErrors } from '$lib/utils';
 import type { Prisma } from '@prisma/client';
-
-// ── Types ──
-
-type FieldErrors = Record<string, string[]>;
-
-type CreateResult =
-	| { ok: true; project: Awaited<ReturnType<typeof prisma.project.create>> }
-	| { ok: false; errors: FieldErrors };
-
-type EditResult =
-	| { ok: true; project: Awaited<ReturnType<typeof prisma.project.update>> }
-	| { ok: false; errors: string }
-	| { ok: false; errors: FieldErrors };
-// ── Helpers ──
-
-function flattenErrors(error: z.ZodError): FieldErrors {
-	const result: FieldErrors = {};
-	for (const issue of error.issues) {
-		const key = issue.path[0]?.toString() ?? '_root';
-		if (!result[key]) result[key] = [];
-		result[key].push(issue.message);
-	}
-	return result;
-}
 
 // ── Queries ──
 
@@ -83,10 +61,10 @@ export async function getAllProjects(options?: {
 
 // ── Mutations ──
 
-export async function createProject(raw: Record<string, unknown>): Promise<CreateResult> {
+export async function createProject(raw: Record<string, unknown>): Promise<ApiResponse> {
 	const result = projectSchema.safeParse(raw);
 	if (!result.success) {
-		return { ok: false, errors: flattenErrors(result.error) };
+		return apiError('Validasyon hatası', flattenErrors(result.error));
 	}
 
 	const { imageUrl, githubUrl, liveUrl, ...rest } = result.data;
@@ -100,22 +78,22 @@ export async function createProject(raw: Record<string, unknown>): Promise<Creat
 				liveUrl: liveUrl || null
 			}
 		});
-		return { ok: true, project };
+		return apiSuccess(project);
 	} catch (err: unknown) {
 		if (
 			(err instanceof Error && err.message.includes('Unique constraint')) ||
 			(err as { code?: string }).code === 'P2002'
 		) {
-			return { ok: false, errors: { slug: ['Bu slug zaten kullanılıyor.'] } };
+			return apiError('Slug zaten kullanılıyor', { slug: ['Bu slug zaten kullanılıyor.'] });
 		}
 		throw err;
 	}
 }
 
-export async function editProject(id: string, raw: Record<string, unknown>): Promise<EditResult> {
+export async function editProject(id: string, raw: Record<string, unknown>): Promise<ApiResponse> {
 	const result = projectSchema.safeParse(raw);
 	if (!result.success) {
-		return { ok: false, errors: flattenErrors(result.error) };
+		return apiError('Validasyon hatası', flattenErrors(result.error));
 	}
 
 	const { imageUrl, githubUrl, liveUrl, ...rest } = result.data;
@@ -130,16 +108,16 @@ export async function editProject(id: string, raw: Record<string, unknown>): Pro
 				liveUrl: liveUrl || null
 			}
 		});
-		return { ok: true, project };
+		return apiSuccess(project);
 	} catch (err: unknown) {
 		if ((err as { code?: string }).code === 'P2025') {
-			return { ok: false, errors: `${id} Proje Bulunamadı` };
+			return apiError('Proje bulunamadı', { _root: [`${id} ID'li proje bulunamadı`] });
 		}
 		if (
 			(err instanceof Error && err.message.includes('Unique constraint')) ||
 			(err as { code?: string }).code === 'P2002'
 		) {
-			return { ok: false, errors: { slug: ['Bu slug zaten kullanılıyor.'] } };
+			return apiError('Slug zaten kullanılıyor', { slug: ['Bu slug zaten kullanılıyor.'] });
 		}
 		throw err;
 	}

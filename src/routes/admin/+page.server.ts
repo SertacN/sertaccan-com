@@ -75,8 +75,8 @@ export const actions: Actions = {
 
 		// Servis katmanı: validasyon + DB yazma
 		const result = await createProject(raw);
-		if (!result.ok) {
-			return fail(400, { errors: result.errors, values: raw });
+		if (!result.success) {
+			return fail(400, { errors: result.errors ?? {}, values: raw });
 		}
 
 		return { success: true };
@@ -156,9 +156,8 @@ export const actions: Actions = {
 		}
 
 		const result = await editProject(id, raw);
-		if (!result.ok) {
-			const errors = typeof result.errors === 'string' ? { _root: [result.errors] } : result.errors;
-			return fail(400, { errors, values: raw });
+		if (!result.success) {
+			return fail(400, { errors: result.errors ?? {}, values: raw });
 		}
 
 		return { edited: true };

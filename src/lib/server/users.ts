@@ -1,15 +1,9 @@
 import { auth } from './auth';
 import { prisma } from './prisma';
+import { apiSuccess, apiError } from '$lib/types/api';
+import type { ApiResponse } from '$lib/types/api';
 import type { profileSchema, passwordSchema, createUserSchema } from '$lib/schemas';
 import type { z } from 'zod';
-
-// ── Types ──
-
-type FieldErrors = Record<string, string[]>;
-
-type Result<T = void> =
-	| (T extends void ? { ok: true } : { ok: true; data: T })
-	| { ok: false; errors: FieldErrors };
 
 // ── Queries ──
 
@@ -25,22 +19,22 @@ export function listUsers() {
 export async function updateProfile(
 	userId: string,
 	data: z.infer<typeof profileSchema>
-): Promise<Result> {
+): Promise<ApiResponse<null>> {
 	try {
 		await prisma.user.update({
 			where: { id: userId },
 			data: { name: data.name, email: data.email }
 		});
-		return { ok: true };
+		return apiSuccess(null, 'Profil güncellendi');
 	} catch {
-		return { ok: false, errors: { _: ['Güncelleme başarısız'] } };
+		return apiError('Güncelleme başarısız', { _: ['Güncelleme başarısız'] });
 	}
 }
 
 export async function changePassword(
 	headers: Headers,
 	data: z.infer<typeof passwordSchema>
-): Promise<Result> {
+): Promise<ApiResponse<null>> {
 	try {
 		await auth.api.changePassword({
 			body: {
@@ -50,16 +44,16 @@ export async function changePassword(
 			},
 			headers
 		});
-		return { ok: true };
+		return apiSuccess(null, 'Şifre değiştirildi');
 	} catch {
-		return { ok: false, errors: { _: ['Mevcut şifre yanlış'] } };
+		return apiError('Mevcut şifre yanlış', { _: ['Mevcut şifre yanlış'] });
 	}
 }
 
 export async function createUser(
 	headers: Headers,
 	data: z.infer<typeof createUserSchema>
-): Promise<Result> {
+): Promise<ApiResponse<null>> {
 	try {
 		await auth.api.createUser({
 			body: {
@@ -70,17 +64,19 @@ export async function createUser(
 			},
 			headers
 		});
-		return { ok: true };
+		return apiSuccess(null, 'Kullanıcı oluşturuldu');
 	} catch {
-		return { ok: false, errors: { _: ['Kullanıcı oluşturulamadı (email zaten kullanımda olabilir)'] } };
+		return apiError('Kullanıcı oluşturulamadı', {
+			_: ['Kullanıcı oluşturulamadı (email zaten kullanımda olabilir)']
+		});
 	}
 }
 
-export async function deleteUser(headers: Headers, userId: string): Promise<Result> {
+export async function deleteUser(headers: Headers, userId: string): Promise<ApiResponse<null>> {
 	try {
 		await auth.api.removeUser({ body: { userId }, headers });
-		return { ok: true };
+		return apiSuccess(null, 'Kullanıcı silindi');
 	} catch {
-		return { ok: false, errors: { _: ['Silme başarısız'] } };
+		return apiError('Silme başarısız', { _: ['Silme başarısız'] });
 	}
 }
