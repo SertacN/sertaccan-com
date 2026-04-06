@@ -89,13 +89,13 @@
 		{/each}
 	</div>
 
-	<div class="mb-10 flex gap-4">
+	<div class="mb-10 flex flex-wrap gap-3">
 		{#if projectDetails.githubUrl}
 			<a
 				href={projectDetails.githubUrl}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="font-mono text-xs text-muted transition-colors duration-150 hover:text-text"
+				class="rounded border border-border px-4 py-2 font-mono text-sm text-muted transition-colors duration-150 hover:border-text hover:text-text"
 			>
 				GitHub →
 			</a>
@@ -105,7 +105,7 @@
 				href={projectDetails.liveUrl}
 				target="_blank"
 				rel="noopener noreferrer"
-				class="font-mono text-xs text-accent transition-colors duration-150 hover:underline"
+				class="rounded border border-accent px-4 py-2 font-mono text-sm text-accent transition-colors duration-150 hover:bg-accent-dim"
 			>
 				{m.liveSite()} →
 			</a>

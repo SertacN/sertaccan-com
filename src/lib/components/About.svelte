@@ -12,5 +12,7 @@
 		<p>{m.about_p1()}</p>
 		<p>{m.about_p2()}</p>
 		<p>{m.about_p3()}</p>
+		<p>{m.about_p4()}</p>
+		<p>{m.about_p5()}</p>
 	</div>
 </section>
