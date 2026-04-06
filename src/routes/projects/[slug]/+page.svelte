@@ -40,9 +40,15 @@
 		content={locale === 'tr' ? projectDetails.descriptionTr : projectDetails.descriptionEn}
 	/>
 	<meta property="og:title" content="Sertaç Can | {projectDetails.title}" />
-	<meta property="og:description" content={locale === 'tr' ? projectDetails.descriptionTr : projectDetails.descriptionEn} />
+	<meta
+		property="og:description"
+		content={locale === 'tr' ? projectDetails.descriptionTr : projectDetails.descriptionEn}
+	/>
 	<meta property="og:type" content="article" />
-	<meta property="og:image" content={projectDetails.imageUrl ?? 'https://sertaccan.com/og-image.png'} />
+	<meta
+		property="og:image"
+		content={projectDetails.imageUrl ?? 'https://sertaccan.com/og-image.png'}
+	/>
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
@@ -58,7 +64,7 @@
 		<img
 			src={projectDetails.imageUrl}
 			alt={projectDetails.title}
-			class="mb-8 h-80 w-full rounded border border-border object-cover"
+			class="mb-8 w-full rounded border border-border object-cover"
 		/>
 	{:else}
 		<div
