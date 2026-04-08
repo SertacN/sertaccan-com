@@ -29,5 +29,16 @@
 	"nav_about": "About",
 	"footer_built_with": "Built with SvelteKit",
 	"error_title": "Page Not Found",
-	"error_desc": "The page you're looking for doesn't exist or may have been moved."
+	"error_desc": "The page you're looking for doesn't exist or may have been moved.",
+	"form_contact": "Contact Form",
+	"message_send_success": "Your message has been sent. Thank you!",
+	"name": "Name",
+	"subject": "Subject",
+	"message": "Your message",
+	"send": "Send",
+	"validation_required": "This field is required",
+	"validation_invalid_email": "Enter a valid email address",
+	"validation_max_20": "Maximum 20 characters allowed",
+	"validation_max_50": "Maximum 50 characters allowed",
+	"validation_max_300": "Maximum 300 characters allowed"
 }

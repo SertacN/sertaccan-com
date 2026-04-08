@@ -2,14 +2,28 @@
 	import * as m from '$lib/paraglide/messages';
 	import { Mail } from 'lucide-svelte';
 	import { reveal } from '$lib/actions/reveal';
+	import { enhance } from '$app/forms';
+	import Divider from './Divider.svelte';
+
+	interface FormResult {
+		action?: string;
+		success?: boolean;
+		errors?: Record<string, string[]>;
+	}
+	interface Props {
+		form?: FormResult | null;
+	}
+	const { form }: Props = $props();
+
+	let messageLength = $state(0);
 </script>
 
 <section id="contact" class="px-4 py-24" use:reveal>
-	<h2 class="mb-12 text-center font-mono text-2xl font-bold text-text md:text-3xl">
+	<h2 class="mb-8 text-center font-mono text-2xl font-bold text-text md:text-3xl">
 		{m.section_contact()}
 	</h2>
 
-	<div class="flex flex-wrap justify-center gap-4">
+	<div class="mb-6 flex flex-wrap justify-center gap-4">
 		<a
 			href="mailto:sertac.can1@gmail.com"
 			class="flex items-center gap-2 rounded border border-border px-4 py-2 font-mono text-sm text-muted transition-colors duration-150 hover:border-accent hover:text-accent"
@@ -45,5 +59,99 @@
 			</svg>
 			LinkedIn
 		</a>
+	</div>
+
+	<div class="-mx-4">
+		<Divider />
+	</div>
+
+	<div class="mt-6">
+		<div class="rounded border border-border bg-surface p-6">
+			<h2 class="mb-6 font-mono text-lg font-bold text-text">{m.form_contact()}</h2>
+
+			{#if form?.success}
+				<div
+					class="mb-4 rounded border border-accent/30 bg-accent/5 px-4 py-2 font-mono text-sm text-accent"
+				>
+					{m.message_send_success()}
+				</div>
+			{/if}
+
+			<form
+				action="?/createContactForm"
+				method="POST"
+				use:enhance
+				class="grid grid-cols-1 gap-4 md:grid-cols-2"
+			>
+				<div>
+					<label for="name" class="mb-1 block font-mono text-xs text-muted">{m.name()}</label>
+					<input
+						type="text"
+						name="name"
+						id="name"
+						maxlength="20"
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					/>
+					{#if form?.errors?.name}
+						<p class="mt-1 font-mono text-xs text-red-400">{form.errors.name[0]}</p>
+					{/if}
+				</div>
+				<div>
+					<label for="email" class="mb-1 block font-mono text-xs text-muted">Email</label>
+					<input
+						type="email"
+						name="email"
+						id="email"
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					/>
+					{#if form?.errors?.email}
+						<p class="mt-1 font-mono text-xs text-red-400">{form.errors.email[0]}</p>
+					{/if}
+				</div>
+				<div class="md:col-span-2">
+					<label for="subject" class="mb-1 block font-mono text-xs text-muted">{m.subject()}</label>
+					<input
+						type="text"
+						name="subject"
+						id="subject"
+						maxlength="50"
+						class="w-full rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					/>
+					{#if form?.errors?.subject}
+						<p class="mt-1 font-mono text-xs text-red-400">{form.errors.subject[0]}</p>
+					{/if}
+				</div>
+				<div class="md:col-span-2">
+					<label for="message" class="mb-1 block font-mono text-xs text-muted">{m.message()}</label>
+					<textarea
+						name="message"
+						id="message"
+						maxlength="300"
+						rows="5"
+						oninput={(e) => (messageLength = (e.target as HTMLTextAreaElement).value.length)}
+						class="w-full resize-none rounded border border-border bg-bg px-3 py-2 font-mono text-sm text-text focus:border-accent focus:outline-none"
+					></textarea>
+					<div class="mt-1 flex items-center justify-between">
+						{#if form?.errors?.message}
+							<p class="font-mono text-xs text-red-400">{form.errors.message[0]}</p>
+						{:else}
+							<span></span>
+						{/if}
+						<span
+							class="font-mono text-xs {messageLength >= 270 ? 'text-red-400' : 'text-muted/50'}"
+							>{messageLength}/300</span
+						>
+					</div>
+				</div>
+				<div class="md:col-span-2">
+					<button
+						type="submit"
+						class="rounded border border-accent bg-accent/10 px-6 py-2 font-mono text-sm text-accent transition-colors duration-150 hover:bg-accent/20"
+					>
+						{m.send()}
+					</button>
+				</div>
+			</form>
+		</div>
 	</div>
 </section>

@@ -1,0 +1,11 @@
+model ContactForm{
+    id           String         @id @default(cuid())
+    createdAt    DateTime       @default(now())
+    name         String
+    email        String
+    subject      String
+    message      String          @db.Text
+    isRead       Boolean         @default(false)
+    repliedAt    DateTime?
+    replyMessage String?         @db.Text
+}

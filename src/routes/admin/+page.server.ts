@@ -10,6 +10,7 @@ const UPLOAD_DIR = join(process.cwd(), 'uploads');
 export const load = (async ({ url }) => {
 	const page = Math.max(1, Number(url.searchParams.get('page') ?? 1));
 	const { projects, pagination } = await getAllProjects({ page, limit: 20 });
+
 	return { projects, pagination };
 }) satisfies PageServerLoad;
 

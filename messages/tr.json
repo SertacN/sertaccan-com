@@ -29,5 +29,16 @@
 	"nav_about": "Hakkımda",
 	"footer_built_with": "SvelteKit ile yapıldı",
 	"error_title": "Sayfa Bulunamadı",
-	"error_desc": "Aradığınız sayfa mevcut değil veya taşınmış olabilir."
+	"error_desc": "Aradığınız sayfa mevcut değil veya taşınmış olabilir.",
+	"form_contact": "İletişim Formu",
+	"message_send_success": "Mesajınız iletildi. Teşekkürler!",
+	"name": "İsim",
+	"subject": "Konu",
+	"message": "Mesajınız",
+	"send": "Gönder",
+	"validation_required": "Bu alan zorunludur",
+	"validation_invalid_email": "Geçerli bir email adresi gir",
+	"validation_max_20": "En fazla 20 karakter girilebilir",
+	"validation_max_50": "En fazla 50 karakter girilebilir",
+	"validation_max_300": "En fazla 300 karakter girilebilir"
 }

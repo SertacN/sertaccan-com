@@ -8,7 +8,7 @@
 	import Divider from '$lib/components/Divider.svelte';
 	import * as m from '$lib/paraglide/messages';
 
-	let { data }: PageProps = $props();
+	let { data, form }: PageProps = $props();
 </script>
 
 <svelte:head>
@@ -36,5 +36,5 @@
 	<Divider />
 	<Projects projects={data.projects} />
 	<Divider />
-	<Contact />
+	<Contact {form} />
 </div>
