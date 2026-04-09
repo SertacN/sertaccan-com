@@ -4,12 +4,8 @@
 	import { reveal } from '$lib/actions/reveal';
 	import { enhance } from '$app/forms';
 	import Divider from './Divider.svelte';
+	import type { FormResult } from '$lib/types';
 
-	interface FormResult {
-		action?: string;
-		success?: boolean;
-		errors?: Record<string, string[]>;
-	}
 	interface Props {
 		form?: FormResult | null;
 	}

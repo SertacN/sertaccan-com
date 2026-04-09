@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import type { FormResult } from '$lib/types';
 	import type { PageProps } from './$types';
-
-	interface FormResult {
-		action?: string;
-		success?: boolean;
-		errors?: Record<string, string[]>;
-	}
 
 	let { data, form: rawForm }: PageProps = $props();
 	const form = $derived(rawForm as FormResult | null);
@@ -108,7 +103,13 @@
 				use:enhance
 				class="grid grid-cols-1 gap-4 md:grid-cols-2"
 			>
-				<input type="text" name="username" value={user?.email ?? ''} autocomplete="username" class="hidden" />
+				<input
+					type="text"
+					name="username"
+					value={user?.email ?? ''}
+					autocomplete="username"
+					class="hidden"
+				/>
 				<div>
 					<label for="currentPassword" class="mb-1 block font-mono text-xs text-muted"
 						>Mevcut Şifre</label

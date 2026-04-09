@@ -3,19 +3,17 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import type { PageProps } from './$types';
-
 	import type { Project } from '@prisma/client';
+	import type { FormResult } from '$lib/types';
 
-	interface FormResult {
-		success?: boolean;
+	interface ProjectFormResult extends FormResult {
 		deleted?: boolean;
 		edited?: boolean;
-		errors?: Record<string, string[]>;
 		values?: Record<string, unknown>;
 	}
 
 	let { data, form: rawForm }: PageProps = $props();
-	const form = $derived(rawForm as FormResult | null);
+	const form = $derived(rawForm as ProjectFormResult | null);
 
 	let editDialog: HTMLDialogElement;
 	let editData = $state<Project | null>(null);
