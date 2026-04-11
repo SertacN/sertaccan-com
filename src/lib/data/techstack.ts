@@ -8,7 +8,7 @@ export const techstack: Tech[] = [
 	// Frontend
 	{ name: 'Angular', category: 'Frontend', level: 'advanced' },
 	{ name: 'NextJS', category: 'Frontend', level: 'intermediate' },
-	{ name: 'SvelteKit', category: 'Frontend', level: 'beginner' },
+	{ name: 'SvelteKit', category: 'Frontend', level: 'advanced' },
 	{ name: 'TypeScript', category: 'Frontend', level: 'advanced' },
 	{ name: 'HTML/CSS', category: 'Frontend', level: 'advanced' },
 
@@ -24,7 +24,6 @@ export const techstack: Tech[] = [
 	{ name: 'Docker', category: 'DevOps', level: 'advanced' },
 	{ name: 'GitHub Actions', category: 'DevOps', level: 'intermediate' },
 	{ name: 'Traefik', category: 'DevOps', level: 'intermediate' },
-	{ name: 'Linux', category: 'DevOps', level: 'intermediate' },
 
 	// Mobile
 	{ name: 'React Native Expo', category: 'Mobile', level: 'intermediate' }

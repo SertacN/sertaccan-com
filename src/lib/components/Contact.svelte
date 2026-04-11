@@ -65,6 +65,14 @@
 		<div class="rounded border border-border bg-surface p-6">
 			<h2 class="mb-6 font-mono text-lg font-bold text-text">{m.form_contact()}</h2>
 
+			{#if form?.errors?._form}
+				<div
+					class="mb-4 rounded border border-red-400/30 bg-red-400/5 px-4 py-2 font-mono text-sm text-red-400"
+				>
+					{form.errors._form[0]}
+				</div>
+			{/if}
+
 			{#if form?.success}
 				<div
 					class="mb-4 rounded border border-accent/30 bg-accent/5 px-4 py-2 font-mono text-sm text-accent"

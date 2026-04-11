@@ -6,6 +6,8 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
+// Not: SvelteKit form action'ları (use:enhance) hook seviyesinde her zaman
+// HTTP 200 döner. Bu yüzden form action'ları için rate limit action içinde yapılmalı.
 const rateLimitConfig: Record<string, { limit: number; windowMs: number }> = {
 	'/api': { limit: 60, windowMs: 60_000 },
 	'/admin/login': { limit: 10, windowMs: 60_000 }
@@ -39,7 +41,7 @@ setInterval(() => {
 
 const handleRateLimit: Handle = async ({ event, resolve }) => {
 	const ip = event.getClientAddress();
-	const path = event.url.pathname;
+	const path = event.url.pathname + event.url.search;
 
 	if (isRateLimited(ip, path)) {
 		return new Response('Too many requests', { status: 429 });
