@@ -6,7 +6,7 @@
 </script>
 
 <section class="mx-auto flex max-w-6xl flex-col md:flex-row">
-	<AdminSideNav user={data.user} />
+	<AdminSideNav user={data.user} unreadContactCount={data.unreadContactCount} />
 	<div class="min-w-0 flex-1">
 		{@render children()}
 	</div>

@@ -1,4 +1,4 @@
-import { getContactFormSchema } from '$lib/schemas';
+import { createContactFormSchema } from '$lib/schemas';
 import { getProjects } from '$lib/server/projects';
 import type { Actions, PageServerLoad } from './$types';
 import { flattenErrors } from '$lib/utils';
@@ -13,7 +13,7 @@ export const load = (async () => {
 export const actions: Actions = {
 	createContactForm: async ({ request }) => {
 		const formData = await request.formData();
-		const result = getContactFormSchema().safeParse(Object.fromEntries(formData));
+		const result = createContactFormSchema().safeParse(Object.fromEntries(formData));
 
 		if (!result.success)
 			return fail(400, { action: 'createContactForm', errors: flattenErrors(result.error) });

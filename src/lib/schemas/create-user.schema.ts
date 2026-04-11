@@ -6,3 +6,5 @@ export const createUserSchema = z.object({
 	password: z.string().min(8, 'En az 8 karakter olmalı'),
 	role: z.enum(['admin', 'user'])
 });
+
+export type CreateUserInput = z.infer<typeof createUserSchema>;

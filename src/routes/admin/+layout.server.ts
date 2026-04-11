@@ -1,4 +1,5 @@
 import { redirect } from '@sveltejs/kit';
+import { getUnreadContactFormCount } from '$lib/server';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals, url }) => {
@@ -15,5 +16,8 @@ export const load = (async ({ locals, url }) => {
 	if (locals.user && locals.user.role === 'admin' && isLoginPage) {
 		redirect(303, '/admin');
 	}
-	return { user: locals.user };
+
+	const unreadContactCount = locals.user?.role === 'admin' ? await getUnreadContactFormCount() : 0;
+
+	return { user: locals.user, unreadContactCount };
 }) satisfies LayoutServerLoad;

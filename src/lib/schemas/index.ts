@@ -3,3 +3,4 @@ export * from './password.schema';
 export * from './profile.schema';
 export * from './project.schema';
 export * from './contact-form.schema';
+export * from './edit-contact-form.schema';

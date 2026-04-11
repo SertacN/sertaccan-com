@@ -2,8 +2,7 @@ import { auth } from './auth';
 import { prisma } from './prisma';
 import { apiSuccess, apiError } from '$lib/types/api';
 import type { ApiResponse } from '$lib/types/api';
-import type { profileSchema, passwordSchema, createUserSchema } from '$lib/schemas';
-import type { z } from 'zod';
+import type { ProfileInput, PasswordInput, CreateUserInput } from '$lib/schemas';
 
 // ── Queries ──
 
@@ -18,7 +17,7 @@ export function listUsers() {
 
 export async function updateProfile(
 	userId: string,
-	data: z.infer<typeof profileSchema>
+	data: ProfileInput
 ): Promise<ApiResponse<null>> {
 	try {
 		await prisma.user.update({
@@ -33,7 +32,7 @@ export async function updateProfile(
 
 export async function changePassword(
 	headers: Headers,
-	data: z.infer<typeof passwordSchema>
+	data: PasswordInput
 ): Promise<ApiResponse<null>> {
 	try {
 		await auth.api.changePassword({
@@ -52,7 +51,7 @@ export async function changePassword(
 
 export async function createUser(
 	headers: Headers,
-	data: z.infer<typeof createUserSchema>
+	data: CreateUserInput
 ): Promise<ApiResponse<null>> {
 	try {
 		await auth.api.createUser({

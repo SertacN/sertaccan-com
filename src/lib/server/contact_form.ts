@@ -1,4 +1,4 @@
-import { getContactFormSchema } from '$lib/schemas';
+import { createContactFormSchema, editContactFormSchema } from '$lib/schemas';
 import { prisma } from '$lib/server/prisma';
 import { apiError, apiSuccess, type ApiResponse } from '$lib/types/api';
 import { flattenErrors } from '$lib/utils';
@@ -29,10 +29,33 @@ export async function getAllContactForm(options?: { page?: number; limit?: numbe
 	};
 }
 
+export async function getUnreadContactFormCount(): Promise<number> {
+	return prisma.contactForm.count({ where: { isRead: false } });
+}
+
 // ── Mutations ──
 
+export async function editContactForm(
+	contactId: string,
+	raw: Record<string, unknown>
+): Promise<ApiResponse> {
+	const result = editContactFormSchema.safeParse(raw);
+	if (!result.success) {
+		return apiError('Validasyon hatası', flattenErrors(result.error));
+	}
+	try {
+		const updated = await prisma.contactForm.update({
+			where: { id: contactId },
+			data: result.data
+		});
+		return apiSuccess(updated);
+	} catch {
+		return apiError('Güncelleme başarısız');
+	}
+}
+
 export async function createContactForm(raw: Record<string, unknown>): Promise<ApiResponse> {
-	const formResult = getContactFormSchema().safeParse(raw);
+	const formResult = createContactFormSchema().safeParse(raw);
 	if (!formResult.success) {
 		return apiError('Validasyon hatası', flattenErrors(formResult.error));
 	}
