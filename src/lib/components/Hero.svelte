@@ -80,7 +80,7 @@
 			</svg>
 		</a>
 		<a
-			href="mailto:sertac.can1@gmail.com"
+			href="mailto:contact@sertaccan.com"
 			class="text-muted transition-colors duration-150 hover:text-accent"
 			aria-label="Email"
 		>

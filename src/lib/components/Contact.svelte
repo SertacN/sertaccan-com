@@ -21,7 +21,7 @@
 
 	<div class="mb-6 flex flex-wrap justify-center gap-4">
 		<a
-			href="mailto:sertac.can1@gmail.com"
+			href="mailto:contact@sertaccan.com"
 			class="flex items-center gap-2 rounded border border-border px-4 py-2 font-mono text-sm text-muted transition-colors duration-150 hover:border-accent hover:text-accent"
 		>
 			<Mail size={18} />
