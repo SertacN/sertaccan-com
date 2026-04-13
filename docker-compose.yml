@@ -10,6 +10,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    volumes:
+      - uploads_data:/app/uploads
     depends_on:
       - postgres
     networks:
@@ -38,6 +40,7 @@ services:
 
 volumes:
   postgres_data:
+  uploads_data:
 
 networks:
   traefik-net:
