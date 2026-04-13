@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getTechIcon } from '$lib/utils';
+	import { getTechIcon } from '$lib/utils/tech-icons';
 
 	let { name, size = 12 }: { name: string; size?: number } = $props();
 
