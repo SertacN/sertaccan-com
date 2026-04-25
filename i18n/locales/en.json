@@ -1,0 +1,14 @@
+{
+    "meta": {
+        "title": "Sertaç Can | Software Developer",
+        "description": "Clean code, good design."
+    },
+    "home": {
+        "title": "Sertaç Can",
+        "subtitle": "Software Developer"
+    },
+    "common": {
+        "lang_tr": "TR",
+        "lang_en": "EN"
+    }
+}
