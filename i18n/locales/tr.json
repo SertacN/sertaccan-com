@@ -5,5 +5,13 @@
     },
     "footer": {
         "develop_tech": "NextJS İle Yapıldı"
+    },
+    "error": {
+        "not_found_title": "Sayfa Bulunamadı",
+        "not_found_desc": "Aradığın sayfa mevcut değil veya taşınmış olabilir.",
+        "generic_title": "Bir Hata Oluştu",
+        "generic_desc": "Beklenmedik bir hata oluştu. Lütfen tekrar dene.",
+        "back_home": "← Ana Sayfaya Dön",
+        "try_again": "Tekrar Dene"
     }
 }

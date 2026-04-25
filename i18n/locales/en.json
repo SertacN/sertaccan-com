@@ -5,5 +5,13 @@
     },
     "footer": {
         "develop_tech": "Built with NextJS"
+    },
+    "error": {
+        "not_found_title": "Page Not Found",
+        "not_found_desc": "The page you're looking for doesn't exist or has been moved.",
+        "generic_title": "Something Went Wrong",
+        "generic_desc": "An unexpected error occurred. Please try again.",
+        "back_home": "← Back to Home",
+        "try_again": "Try Again"
     }
 }
