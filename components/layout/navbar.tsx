@@ -9,7 +9,7 @@ import i18n from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { useSession, signOut } from "@/lib/auth-client";
+import { useSession, signOut } from "@/lib/server/auth-client";
 
 const NAV_LINKS = [
     { href: "#about", labelKey: "nav.about" },
@@ -95,7 +95,9 @@ export default function Navbar() {
                     {langSwitcher}
                     {isAdmin && (
                         <Link href="/admin">
-                            <Button variant="outline" size="sm">Panel</Button>
+                            <Button variant="outline" size="sm">
+                                Panel
+                            </Button>
                         </Link>
                     )}
                     {session && (
@@ -134,7 +136,9 @@ export default function Navbar() {
                                     {langSwitcher}
                                     {isAdmin && (
                                         <Link href="/admin">
-                                            <Button variant="outline" size="sm" className="w-full">Panel</Button>
+                                            <Button variant="outline" size="sm" className="w-full">
+                                                Panel
+                                            </Button>
                                         </Link>
                                     )}
                                     {session && (

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { signIn } from "@/lib/auth-client";
+import { signIn } from "@/lib/server/auth-client";
 import { loginSchema, type LoginSchema } from "@/lib/schemas/auth-schemas";
 
 export default function LoginForm() {
@@ -32,6 +32,7 @@ export default function LoginForm() {
             return;
         }
 
+        router.refresh();
         router.push("/admin");
     };
 
