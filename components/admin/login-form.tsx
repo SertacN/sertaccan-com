@@ -6,18 +6,23 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { authClient } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth-client";
 import { loginSchema, type LoginSchema } from "@/lib/schemas/auth-schemas";
 
 export default function LoginForm() {
     const router = useRouter();
-    const { control, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<LoginSchema>({
+    const {
+        control,
+        handleSubmit,
+        setError,
+        formState: { errors, isSubmitting },
+    } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
         defaultValues: { email: "", password: "" },
     });
 
     const onSubmit = async (values: LoginSchema) => {
-        const result = await authClient.signIn.email({
+        const result = await signIn.email({
             email: values.email,
             password: values.password,
         });
@@ -77,9 +82,7 @@ export default function LoginForm() {
                         <FieldError errors={[errors.password]} />
                     </Field>
 
-                    {errors.root && (
-                        <FieldError>{errors.root.message}</FieldError>
-                    )}
+                    {errors.root && <FieldError>{errors.root.message}</FieldError>}
 
                     <Field orientation="horizontal" className="justify-end">
                         {!isSubmitting && (

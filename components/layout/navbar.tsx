@@ -3,11 +3,13 @@
 import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useSession, signOut } from "@/lib/auth-client";
 
 const NAV_LINKS = [
     { href: "#about", labelKey: "nav.about" },
@@ -20,6 +22,15 @@ const NAV_LINKS = [
 export default function Navbar() {
     const { t } = useTranslation();
     const { theme, setTheme } = useTheme();
+    const router = useRouter();
+    const { data: session } = useSession();
+
+    const isAdmin = session?.user.role === "admin";
+
+    const handleSignOut = async () => {
+        await signOut();
+        router.push("/");
+    };
 
     const cycleTheme = () => {
         setTheme(theme === "light" ? "dark" : "light");
@@ -82,6 +93,16 @@ export default function Navbar() {
                         </Link>
                     ))}
                     {langSwitcher}
+                    {isAdmin && (
+                        <Link href="/admin">
+                            <Button variant="outline" size="sm">Panel</Button>
+                        </Link>
+                    )}
+                    {session && (
+                        <Button variant="outline" size="sm" onClick={handleSignOut}>
+                            Çıkış Yap
+                        </Button>
+                    )}
                     {themeButton}
                 </div>
 
@@ -109,8 +130,18 @@ export default function Navbar() {
                                         {t(labelKey)}
                                     </Link>
                                 ))}
-                                <div className="pt-2 border-t border-border">
+                                <div className="flex flex-col gap-2 pt-2 border-t border-border">
                                     {langSwitcher}
+                                    {isAdmin && (
+                                        <Link href="/admin">
+                                            <Button variant="outline" size="sm" className="w-full">Panel</Button>
+                                        </Link>
+                                    )}
+                                    {session && (
+                                        <Button variant="outline" size="sm" className="w-full" onClick={handleSignOut}>
+                                            Çıkış Yap
+                                        </Button>
+                                    )}
                                 </div>
                             </nav>
                         </SheetContent>
