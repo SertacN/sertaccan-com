@@ -17,7 +17,7 @@ export default function GlobalError({
     return (
         <html lang="tr" suppressHydrationWarning>
             <body>
-                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                <ThemeProvider attribute="class" value={{ dark: "dark", light: "light" }} defaultTheme="dark" enableSystem>
                     <I18nProvider>
                         <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-4 text-center">
                             <div className="font-mono text-8xl font-bold text-primary md:text-9xl">

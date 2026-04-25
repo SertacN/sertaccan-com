@@ -3,6 +3,14 @@
         "title": "Sertaç Can | Yazılım Geliştirici",
         "description": "Temiz kod, iyi tasarım."
     },
+    "nav": {
+        "about": "Hakkımda",
+        "stack": "Stack",
+        "projects": "Projeler",
+        "contact": "İletişim",
+        "all_projects": "Tüm Projeler",
+        "change_theme": "Tema Değiştir"
+    },
     "footer": {
         "develop_tech": "NextJS İle Yapıldı"
     },

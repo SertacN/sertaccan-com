@@ -14,12 +14,14 @@ export default function Footer() {
                 <Link
                     href={"https://github.com/SertacN"}
                     target="_blank"
+                    aria-label="Github Link"
                     className="text-muted-foreground transition-colors hover:text-primary"
                 >
                     <Github size={16} />
                 </Link>
                 <Link
                     href={"mailto:contact@sertaccan.com"}
+                    aria-label="Mail"
                     className="text-muted-foreground transition-colors hover:text-primary"
                 >
                     <Mail size={16} />
@@ -27,6 +29,7 @@ export default function Footer() {
                 <Link
                     href={"https://www.linkedin.com/in/sertacn/"}
                     target="_blank"
+                    aria-label="Linkedin Link"
                     className="text-muted-foreground transition-colors hover:text-primary"
                 >
                     <Linkedin size={16} />

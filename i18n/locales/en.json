@@ -3,6 +3,14 @@
         "title": "Sertaç Can | Software Developer",
         "description": "Clean code, good design."
     },
+    "nav": {
+        "about": "About",
+        "stack": "Stack",
+        "projects": "Projects",
+        "contact": "Contact",
+        "all_projects": "All Projects",
+        "change_theme": "Tema Değiştir"
+    },
     "footer": {
         "develop_tech": "Built with NextJS"
     },
