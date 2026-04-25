@@ -11,6 +11,9 @@
         "all_projects": "All Projects",
         "change_theme": "Tema Değiştir"
     },
+    "hero": {
+        "role": "Software Developer"
+    },
     "footer": {
         "develop_tech": "Built with NextJS"
     },
