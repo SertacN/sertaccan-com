@@ -7,12 +7,16 @@ import { apiError, apiSuccess } from "@/types";
 
 // ── Queries ──
 // -- Get All --
-export async function getAllProjects(options?: { page?: number; limit?: number; take?: number }) {
+export async function getAllProjects(options?: { page?: number; limit?: number; take?: number; isActive?: boolean }) {
     const page = options?.page ?? 1;
     const limit = options?.take ?? options?.limit ?? 20;
     const offset = (page - 1) * limit;
 
-    const where = eq(project.isDeleted, false);
+    const conditions = [
+        eq(project.isDeleted, false),
+        ...(options?.isActive !== undefined ? [eq(project.isActive, options.isActive)] : []),
+    ];
+    const where = and(...conditions)!
 
     const [projects, [{ total }]] = await Promise.all([
         db

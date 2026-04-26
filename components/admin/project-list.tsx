@@ -8,7 +8,7 @@ import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { editProjectAction, deleteProjectAction } from "@/app/admin/actions";
 import type { InferSelectModel } from "drizzle-orm";
-import type { project } from "@/db/schema";
+import { project } from "@/db/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
 
@@ -150,7 +150,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="edit-status">Status</FieldLabel>
-                                <Select name="status" defaultValue="WIP">
+                                <Select name="status" defaultValue={editData.status}>
                                     <SelectTrigger id="edit-status">
                                         <SelectValue />
                                     </SelectTrigger>
@@ -174,13 +174,21 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 </Field>
                                 <FieldGroup className="flex-row">
                                     <Field orientation="horizontal">
-                                        <Checkbox id="edit-featured" name="featured" />
+                                        <Checkbox
+                                            id="edit-featured"
+                                            name="featured"
+                                            defaultChecked={editData.featured}
+                                        />
                                         <FieldLabel htmlFor="edit-featured" className="font-normal">
                                             Featured
                                         </FieldLabel>
                                     </Field>
                                     <Field orientation="horizontal">
-                                        <Checkbox id="edit-isActive" name="isActive" />
+                                        <Checkbox
+                                            id="edit-isActive"
+                                            name="isActive"
+                                            defaultChecked={editData.isActive}
+                                        />
                                         <FieldLabel htmlFor="edit-isActive" className="font-normal">
                                             Aktif
                                         </FieldLabel>
@@ -191,6 +199,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <Field>
                                     <FieldLabel htmlFor="edit-file">Görsel</FieldLabel>
                                     <Input type="file" id="edit-file" name="file" accept="image/*" />
+                                    {editData.imageUrl && <span>{editData.imageUrl}</span>}
                                     <FieldError>{err("imageUrl")}</FieldError>
                                 </Field>
                                 <FieldError>{err("imageUrl")}</FieldError>
