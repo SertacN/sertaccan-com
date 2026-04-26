@@ -41,20 +41,18 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                     {!p.isActive && <span className="text-xs text-muted-foreground">pasif</span>}
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <button
+                                    <Button
                                         onClick={() => setEditData(p)}
-                                        className="text-xs text-primary transition-colors hover:text-primary/70"
+                                        className="text-xs border-primary dark:border-primary hover:text-primary transition-colors"
+                                        variant="outline"
                                     >
                                         Düzenle
-                                    </button>
+                                    </Button>
                                     <form action={deleteProjectAction}>
                                         <input type="hidden" name="id" value={p.id} />
-                                        <button
-                                            type="submit"
-                                            className="text-xs text-destructive transition-colors hover:text-destructive/70"
-                                        >
+                                        <Button type="submit" className="text-xs" variant="destructive">
                                             Sil
-                                        </button>
+                                        </Button>
                                     </form>
                                 </div>
                             </div>
@@ -64,7 +62,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             </div>
 
             <Dialog open={!!editData} onOpenChange={(open) => !open && setEditData(null)}>
-                <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+                <DialogContent className="max-h-[90vh] min-w-3xl overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle className="font-mono text-primary">Proje Düzenle</DialogTitle>
                     </DialogHeader>
@@ -76,10 +74,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                     )}
 
                     {editData && (
-                        <form
-                            action={editAction}
-                            className="grid grid-cols-1 gap-4 md:grid-cols-2"
-                        >
+                        <form action={editAction} className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <input type="hidden" name="id" value={editData.id} />
                             <input type="hidden" name="imageUrl" value={editData.imageUrl ?? ""} />
 
