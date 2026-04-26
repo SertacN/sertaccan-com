@@ -11,6 +11,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import { project } from "@/db/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
+import TagSelector from "./tag-selector";
 
 type Project = InferSelectModel<typeof project>;
 type ActionState = { edited?: boolean; errors?: Record<string, string[]> } | null;
@@ -64,7 +65,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
             </div>
 
             <Dialog open={!!editData} onOpenChange={(open) => !open && setEditData(null)}>
-                <DialogContent className="max-h-[90vh] min-w-3xl overflow-y-auto">
+                <DialogContent className="max-h-[90vh] min-w-6xl overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle className="font-mono text-primary">Proje Düzenle</DialogTitle>
                         <DialogDescription className="sr-only">Proje bilgilerini düzenleyin.</DialogDescription>
@@ -135,10 +136,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 />
                                 <FieldError>{err("longDescriptionEn")}</FieldError>
                             </Field>
-                            <Field data-invalid={!!err("tags")}>
-                                <FieldLabel htmlFor="edit-tags">Tagler (virgülle ayır)</FieldLabel>
-                                <Input id="edit-tags" name="tags" defaultValue={editData.tags.join(", ")} />
-                                <FieldError>{err("tags")}</FieldError>
+                            <Field data-invalid={!!err("tags")} className="md:col-span-2">
+                                <FieldLabel>Tagler</FieldLabel>
+                                <TagSelector key={editData.id} defaultValue={editData.tags} error={err("tags")} />
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="edit-githubUrl">GitHub URL</FieldLabel>

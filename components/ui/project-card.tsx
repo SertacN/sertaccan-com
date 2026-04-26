@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "./button";
 import Github from "../icons/github";
 import Link from "next/link";
+import { getTechIcon } from "@/utils/tech-icon";
 import {
     Pagination,
     PaginationContent,
@@ -77,14 +78,29 @@ export default function ProjectCard({ projects, pagination }: { projects: Projec
                                 {/*TAG*/}
                                 {project.tags.length > 0 && (
                                     <div className="flex flex-wrap gap-1.5">
-                                        {project.tags.map((tag) => (
-                                            <span
-                                                className="flex items-center gap-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs text-muted-foreground"
-                                                key={tag}
-                                            >
-                                                {tag}
-                                            </span>
-                                        ))}
+                                        {project.tags.map((tag) => {
+                                            const icon = getTechIcon(tag);
+                                            return (
+                                                <span
+                                                    className="flex items-center gap-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs text-muted-foreground capitalize"
+                                                    key={tag}
+                                                >
+                                                    {icon && (
+                                                        <svg
+                                                            role="img"
+                                                            viewBox="0 0 24 24"
+                                                            width="10"
+                                                            height="10"
+                                                            fill={`#${icon.hex}`}
+                                                            aria-label={icon.title}
+                                                        >
+                                                            <path d={icon.path} />
+                                                        </svg>
+                                                    )}
+                                                    {tag}
+                                                </span>
+                                            );
+                                        })}
                                     </div>
                                 )}
                                 {/*LINKS*/}

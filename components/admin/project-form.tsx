@@ -8,6 +8,7 @@ import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field
 import { createProjectAction } from "@/app/admin/actions";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
+import TagSelector from "./tag-selector";
 
 type ActionState = { success?: boolean; errors?: Record<string, string[]> } | null;
 
@@ -95,10 +96,9 @@ export default function ProjectForm() {
                     />
                     <FieldError>{err("longDescriptionEn")}</FieldError>
                 </Field>
-                <Field data-invalid={!!err("tags")}>
-                    <FieldLabel htmlFor="tags">Tagler (virgülle ayır)</FieldLabel>
-                    <Input id="tags" name="tags" placeholder="Next.js, TypeScript, Drizzle" />
-                    <FieldError>{err("tags")}</FieldError>
+                <Field data-invalid={!!err("tags")} className="md:col-span-2">
+                    <FieldLabel>Tagler</FieldLabel>
+                    <TagSelector error={err("tags")} />
                 </Field>
                 <Field data-invalid={!!err("githubUrl")}>
                     <FieldLabel htmlFor="githubUrl">GitHub URL</FieldLabel>

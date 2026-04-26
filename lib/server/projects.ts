@@ -16,7 +16,7 @@ export async function getAllProjects(options?: { page?: number; limit?: number; 
         eq(project.isDeleted, false),
         ...(options?.isActive !== undefined ? [eq(project.isActive, options.isActive)] : []),
     ];
-    const where = and(...conditions)!
+    const where = and(...conditions)!;
 
     const [projects, [{ total }]] = await Promise.all([
         db
