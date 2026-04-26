@@ -20,11 +20,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <html lang="tr" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
-            <body className="antialiased mx-auto max-w-7xl px-4 pt-20">
+            <body className="antialiased">
                 <Providers>
-                    <Navbar />
-                    <main className="pb-4">{children}</main>
-                    <Footer />
+                    <div className="mx-auto max-w-7xl px-4 pt-20">
+                        <Navbar />
+                        <main className="pb-4">{children}</main>
+                        <Footer />
+                    </div>
                 </Providers>
             </body>
         </html>

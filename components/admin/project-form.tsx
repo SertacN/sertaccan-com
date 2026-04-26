@@ -4,8 +4,10 @@ import { useRef, useEffect, useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 import { createProjectAction } from "@/app/admin/actions";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Checkbox } from "../ui/checkbox";
 
 type ActionState = { success?: boolean; errors?: Record<string, string[]> } | null;
 
@@ -38,39 +40,54 @@ export default function ProjectForm() {
                 </div>
             )}
 
-            <form
-                ref={formRef}
-                action={action}
-                className="grid grid-cols-1 gap-4 md:grid-cols-2"
-            >
+            <form ref={formRef} action={action} className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <Field data-invalid={!!err("slug")}>
-                    <FieldLabel>Slug</FieldLabel>
-                    <Input name="slug" placeholder="my-project" required />
+                    <FieldLabel htmlFor="slug">Slug</FieldLabel>
+                    <Input id="slug" name="slug" placeholder="my-project" required />
                     <FieldError>{err("slug")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("title")}>
-                    <FieldLabel>Başlık</FieldLabel>
-                    <Input name="title" placeholder="Proje Adı" required />
+                    <FieldLabel htmlFor="title">Başlık</FieldLabel>
+                    <Input id="title" name="title" placeholder="Proje Adı" required />
                     <FieldError>{err("title")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("descriptionTr")}>
-                    <FieldLabel>Açıklama (TR)</FieldLabel>
-                    <Textarea name="descriptionTr" rows={2} placeholder="Kısa açıklama..." required />
+                    <FieldLabel htmlFor="descriptionTr">Açıklama (TR)</FieldLabel>
+                    <Textarea
+                        id="descriptionTr"
+                        name="descriptionTr"
+                        rows={2}
+                        placeholder="Kısa açıklama..."
+                        required
+                    />
                     <FieldError>{err("descriptionTr")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("descriptionEn")}>
-                    <FieldLabel>Açıklama (EN)</FieldLabel>
-                    <Textarea name="descriptionEn" rows={2} placeholder="Short description..." required />
+                    <FieldLabel htmlFor="descriptionEn">Açıklama (EN)</FieldLabel>
+                    <Textarea
+                        id="descriptionEn"
+                        name="descriptionEn"
+                        rows={2}
+                        placeholder="Short description..."
+                        required
+                    />
                     <FieldError>{err("descriptionEn")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("longDescriptionTr")}>
-                    <FieldLabel>Uzun Açıklama (TR) — Markdown</FieldLabel>
-                    <Textarea name="longDescriptionTr" rows={4} placeholder="Detaylı açıklama (markdown)..." required />
+                    <FieldLabel htmlFor="longDescriptionTr">Uzun Açıklama (TR) — Markdown</FieldLabel>
+                    <Textarea
+                        id="longDescriptionTr"
+                        name="longDescriptionTr"
+                        rows={4}
+                        placeholder="Detaylı açıklama (markdown)..."
+                        required
+                    />
                     <FieldError>{err("longDescriptionTr")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("longDescriptionEn")}>
-                    <FieldLabel>Uzun Açıklama (EN) — Markdown</FieldLabel>
+                    <FieldLabel htmlFor="longDescriptionEn">Uzun Açıklama (EN) — Markdown</FieldLabel>
                     <Textarea
+                        id="longDescriptionEn"
                         name="longDescriptionEn"
                         rows={4}
                         placeholder="Detailed description (markdown)..."
@@ -79,52 +96,59 @@ export default function ProjectForm() {
                     <FieldError>{err("longDescriptionEn")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("tags")}>
-                    <FieldLabel>Tagler (virgülle ayır)</FieldLabel>
-                    <Input name="tags" placeholder="Next.js, TypeScript, Drizzle" />
+                    <FieldLabel htmlFor="tags">Tagler (virgülle ayır)</FieldLabel>
+                    <Input id="tags" name="tags" placeholder="Next.js, TypeScript, Drizzle" />
                     <FieldError>{err("tags")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("githubUrl")}>
-                    <FieldLabel>GitHub URL</FieldLabel>
-                    <Input name="githubUrl" placeholder="https://github.com/..." />
+                    <FieldLabel htmlFor="githubUrl">GitHub URL</FieldLabel>
+                    <Input id="githubUrl" name="githubUrl" placeholder="https://github.com/..." />
                     <FieldError>{err("githubUrl")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("liveUrl")}>
-                    <FieldLabel>Live URL</FieldLabel>
-                    <Input name="liveUrl" placeholder="https://..." />
+                    <FieldLabel htmlFor="liveUrl">Live URL</FieldLabel>
+                    <Input id="liveUrl" name="liveUrl" placeholder="https://..." />
                     <FieldError>{err("liveUrl")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("status")}>
-                    <FieldLabel>Status</FieldLabel>
-                    <select
-                        name="status"
-                        className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
-                    >
-                        <option value="WIP">WIP</option>
-                        <option value="ACTIVE">Active</option>
-                        <option value="ARCHIVED">Archived</option>
-                    </select>
+                    <FieldLabel htmlFor="status">Status</FieldLabel>
+                    <Select name="status" defaultValue="WIP">
+                        <SelectTrigger id="status">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent position="popper">
+                            <SelectItem value="WIP">WIP</SelectItem>
+                            <SelectItem value="ACTIVE">Active</SelectItem>
+                            <SelectItem value="ARCHIVED">Archived</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </Field>
                 <div className="flex items-end gap-6">
                     <Field data-invalid={!!err("order")}>
-                        <FieldLabel>Sıra</FieldLabel>
-                        <Input name="order" type="number" defaultValue={0} className="w-20" />
+                        <FieldLabel htmlFor="order">Sıra</FieldLabel>
+                        <Input id="order" name="order" type="number" defaultValue={0} className="w-20" />
                     </Field>
-                    <label className="flex items-center gap-2 pb-1 text-sm text-muted-foreground">
-                        <input type="checkbox" name="featured" className="accent-primary" /> Featured
-                    </label>
-                    <label className="flex items-center gap-2 pb-1 text-sm text-muted-foreground">
-                        <input type="checkbox" name="isActive" defaultChecked className="accent-primary" /> Aktif
-                    </label>
+                    <FieldGroup className="flex-row">
+                        <Field orientation="horizontal">
+                            <Checkbox id="featured" name="featured" />
+                            <FieldLabel htmlFor="featured" className="font-normal">
+                                Featured
+                            </FieldLabel>
+                        </Field>
+                        <Field orientation="horizontal">
+                            <Checkbox id="isActive" name="isActive" />
+                            <FieldLabel htmlFor="isActive" className="font-normal">
+                                Aktif
+                            </FieldLabel>
+                        </Field>
+                    </FieldGroup>
                 </div>
                 <Field data-invalid={!!err("imageUrl")}>
-                    <FieldLabel>Görsel</FieldLabel>
-                    <input
-                        type="file"
-                        name="file"
-                        accept="image/*"
-                        className="text-sm text-muted-foreground file:mr-3 file:rounded file:border file:border-border file:bg-card file:px-3 file:py-1 file:text-xs file:text-primary file:transition-colors hover:file:border-primary"
-                    />
-                    <FieldError>{err("imageUrl")}</FieldError>
+                    <Field>
+                        <FieldLabel htmlFor="file">Görsel</FieldLabel>
+                        <Input type="file" id="file" name="file" accept="image/*" />
+                        <FieldError>{err("imageUrl")}</FieldError>
+                    </Field>
                 </Field>
                 <div className="md:col-span-2">
                     <Button type="submit" disabled={pending}>

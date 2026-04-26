@@ -4,11 +4,13 @@ import { useState, useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { editProjectAction, deleteProjectAction } from "@/app/admin/actions";
 import type { InferSelectModel } from "drizzle-orm";
 import type { project } from "@/db/schema";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Checkbox } from "../ui/checkbox";
 
 type Project = InferSelectModel<typeof project>;
 type ActionState = { edited?: boolean; errors?: Record<string, string[]> } | null;
@@ -65,6 +67,7 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                 <DialogContent className="max-h-[90vh] min-w-3xl overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle className="font-mono text-primary">Proje Düzenle</DialogTitle>
+                        <DialogDescription className="sr-only">Proje bilgilerini düzenleyin.</DialogDescription>
                     </DialogHeader>
 
                     {editState?.edited && (
@@ -79,18 +82,19 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             <input type="hidden" name="imageUrl" value={editData.imageUrl ?? ""} />
 
                             <Field data-invalid={!!err("slug")}>
-                                <FieldLabel>Slug</FieldLabel>
-                                <Input name="slug" defaultValue={editData.slug} required />
+                                <FieldLabel htmlFor="edit-slug">Slug</FieldLabel>
+                                <Input id="edit-slug" name="slug" defaultValue={editData.slug} required />
                                 <FieldError>{err("slug")}</FieldError>
                             </Field>
                             <Field data-invalid={!!err("title")}>
-                                <FieldLabel>Başlık</FieldLabel>
-                                <Input name="title" defaultValue={editData.title} required />
+                                <FieldLabel htmlFor="edit-title">Başlık</FieldLabel>
+                                <Input id="edit-title" name="title" defaultValue={editData.title} required />
                                 <FieldError>{err("title")}</FieldError>
                             </Field>
                             <Field data-invalid={!!err("descriptionTr")}>
-                                <FieldLabel>Açıklama (TR)</FieldLabel>
+                                <FieldLabel htmlFor="edit-descriptionTr">Açıklama (TR)</FieldLabel>
                                 <Textarea
+                                    id="edit-descriptionTr"
                                     name="descriptionTr"
                                     rows={2}
                                     defaultValue={editData.descriptionTr}
@@ -99,8 +103,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <FieldError>{err("descriptionTr")}</FieldError>
                             </Field>
                             <Field data-invalid={!!err("descriptionEn")}>
-                                <FieldLabel>Açıklama (EN)</FieldLabel>
+                                <FieldLabel htmlFor="edit-descriptionEn">Açıklama (EN)</FieldLabel>
                                 <Textarea
+                                    id="edit-descriptionEn"
                                     name="descriptionEn"
                                     rows={2}
                                     defaultValue={editData.descriptionEn}
@@ -109,8 +114,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <FieldError>{err("descriptionEn")}</FieldError>
                             </Field>
                             <Field data-invalid={!!err("longDescriptionTr")}>
-                                <FieldLabel>Uzun Açıklama (TR) — Markdown</FieldLabel>
+                                <FieldLabel htmlFor="edit-longDescriptionTr">Uzun Açıklama (TR) — Markdown</FieldLabel>
                                 <Textarea
+                                    id="edit-longDescriptionTr"
                                     name="longDescriptionTr"
                                     rows={4}
                                     defaultValue={editData.longDescriptionTr}
@@ -119,8 +125,9 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <FieldError>{err("longDescriptionTr")}</FieldError>
                             </Field>
                             <Field data-invalid={!!err("longDescriptionEn")}>
-                                <FieldLabel>Uzun Açıklama (EN) — Markdown</FieldLabel>
+                                <FieldLabel htmlFor="edit-longDescriptionEn">Uzun Açıklama (EN) — Markdown</FieldLabel>
                                 <Textarea
+                                    id="edit-longDescriptionEn"
                                     name="longDescriptionEn"
                                     rows={4}
                                     defaultValue={editData.longDescriptionEn}
@@ -129,65 +136,63 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <FieldError>{err("longDescriptionEn")}</FieldError>
                             </Field>
                             <Field data-invalid={!!err("tags")}>
-                                <FieldLabel>Tagler (virgülle ayır)</FieldLabel>
-                                <Input name="tags" defaultValue={editData.tags.join(", ")} />
+                                <FieldLabel htmlFor="edit-tags">Tagler (virgülle ayır)</FieldLabel>
+                                <Input id="edit-tags" name="tags" defaultValue={editData.tags.join(", ")} />
                                 <FieldError>{err("tags")}</FieldError>
                             </Field>
                             <Field>
-                                <FieldLabel>GitHub URL</FieldLabel>
-                                <Input name="githubUrl" defaultValue={editData.githubUrl ?? ""} />
+                                <FieldLabel htmlFor="edit-githubUrl">GitHub URL</FieldLabel>
+                                <Input id="edit-githubUrl" name="githubUrl" defaultValue={editData.githubUrl ?? ""} />
                             </Field>
                             <Field>
-                                <FieldLabel>Live URL</FieldLabel>
-                                <Input name="liveUrl" defaultValue={editData.liveUrl ?? ""} />
+                                <FieldLabel htmlFor="edit-liveUrl">Live URL</FieldLabel>
+                                <Input id="edit-liveUrl" name="liveUrl" defaultValue={editData.liveUrl ?? ""} />
                             </Field>
                             <Field>
-                                <FieldLabel>Status</FieldLabel>
-                                <select
-                                    name="status"
-                                    defaultValue={editData.status}
-                                    className="w-full rounded border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none"
-                                >
-                                    <option value="WIP">WIP</option>
-                                    <option value="ACTIVE">Active</option>
-                                    <option value="ARCHIVED">Archived</option>
-                                </select>
+                                <FieldLabel htmlFor="edit-status">Status</FieldLabel>
+                                <Select name="status" defaultValue="WIP">
+                                    <SelectTrigger id="edit-status">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent position="popper">
+                                        <SelectItem value="WIP">WIP</SelectItem>
+                                        <SelectItem value="ACTIVE">Active</SelectItem>
+                                        <SelectItem value="ARCHIVED">Archived</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </Field>
                             <div className="flex items-end gap-6">
                                 <Field>
-                                    <FieldLabel>Sıra</FieldLabel>
-                                    <Input name="order" type="number" defaultValue={editData.order} className="w-20" />
+                                    <FieldLabel htmlFor="edit-order">Sıra</FieldLabel>
+                                    <Input
+                                        id="edit-order"
+                                        name="order"
+                                        type="number"
+                                        defaultValue={editData.order}
+                                        className="w-20"
+                                    />
                                 </Field>
-                                <label className="flex items-center gap-2 pb-1 text-sm text-muted-foreground">
-                                    <input
-                                        type="checkbox"
-                                        name="featured"
-                                        defaultChecked={editData.featured}
-                                        className="accent-primary"
-                                    />{" "}
-                                    Featured
-                                </label>
-                                <label className="flex items-center gap-2 pb-1 text-sm text-muted-foreground">
-                                    <input
-                                        type="checkbox"
-                                        name="isActive"
-                                        defaultChecked={editData.isActive}
-                                        className="accent-primary"
-                                    />{" "}
-                                    Aktif
-                                </label>
+                                <FieldGroup className="flex-row">
+                                    <Field orientation="horizontal">
+                                        <Checkbox id="edit-featured" name="featured" />
+                                        <FieldLabel htmlFor="edit-featured" className="font-normal">
+                                            Featured
+                                        </FieldLabel>
+                                    </Field>
+                                    <Field orientation="horizontal">
+                                        <Checkbox id="edit-isActive" name="isActive" />
+                                        <FieldLabel htmlFor="edit-isActive" className="font-normal">
+                                            Aktif
+                                        </FieldLabel>
+                                    </Field>
+                                </FieldGroup>
                             </div>
                             <Field data-invalid={!!err("imageUrl")}>
-                                <FieldLabel>Görsel (değiştirmek için)</FieldLabel>
-                                <input
-                                    type="file"
-                                    name="file"
-                                    accept="image/*"
-                                    className="text-sm text-muted-foreground file:mr-3 file:rounded file:border file:border-border file:bg-card file:px-3 file:py-1 file:text-xs file:text-primary hover:file:border-primary"
-                                />
-                                {editData.imageUrl && (
-                                    <p className="text-xs text-muted-foreground">Mevcut: {editData.imageUrl}</p>
-                                )}
+                                <Field>
+                                    <FieldLabel htmlFor="edit-file">Görsel</FieldLabel>
+                                    <Input type="file" id="edit-file" name="file" accept="image/*" />
+                                    <FieldError>{err("imageUrl")}</FieldError>
+                                </Field>
                                 <FieldError>{err("imageUrl")}</FieldError>
                             </Field>
                             <div className="flex gap-3 md:col-span-2">
