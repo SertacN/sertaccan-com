@@ -45,7 +45,7 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    /* sveltekit aliases — çakışmayan kısa isimler */
+    /* çakışmayan kısa isimler */
     --color-bg: var(--background);
     --color-surface: var(--card);
     --color-text: var(--foreground);
