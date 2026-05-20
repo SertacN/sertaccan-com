@@ -17,6 +17,17 @@
     "footer": {
         "develop_tech": "NextJS İle Yapıldı"
     },
+    "about": {
+        "title": "Hakkımda",
+        "about_p1": "Merhaba! Ben Sertaç, İstanbul'da yaşayan bir yazılım geliştiricisiyim.",
+        "about_p2": "Profesyonel olarak full-stack projeler geliştiriyorum. Ama işin güzel yanı, işi bitince ekranı kapatmıyorum — kendi projelerimde farklı şeyler keşfetmek, sıfırdan bir şeyler inşa etmek benim için ayrı bir tutku.",
+        "about_p3": "Bu merakın arkasında basit bir his var: kafanda dönen soyut bir fikrin, zamanla çalışan bir ürüne dönüşmesini izlemek. Birisinin onu ilk kez açtığı anı hayal etmek. Bu his, beni her seferinde yeniden masaya oturtuyor.",
+        "about_p4": "Kişisel projelerimde her şeyi baştan sona tek başıma yönetmek — her kararı kendin vermek, her hatayı kendin bulmak — bana yazılımın sadece kod yazmaktan ibaret olmadığını öğretti. Profesyonel hayatta ise iyi bir ekiple neler yapılabileceğini de yakından biliyorum.",
+        "about_p5": "Temeli sağlam atmak benim için çok önemli — iyi düşünülmüş bir mimari, ilerleyen süreçte her şeyi kolaylaştırıyor. Temiz, sürdürülebilir ve kullanıcısına saygı gösteren şeyler yapmak; her projede önceliğim bu."
+    },
+    "tech_stack": {
+        "title": "Teknolojiler"
+    },
     "error": {
         "not_found_title": "Sayfa Bulunamadı",
         "not_found_desc": "Aradığın sayfa mevcut değil veya taşınmış olabilir.",

@@ -17,6 +17,17 @@
     "footer": {
         "develop_tech": "Built with NextJS"
     },
+    "about": {
+        "title": "About",
+        "about_p1": "Hi! I'm Sertaç, a software developer based in Istanbul.",
+        "about_p2": "Professionally, I build full-stack projects. But the best part is, I don't close the screen when work is done — exploring new things through my own projects, building something from scratch, that's a passion of its own.",
+        "about_p3": "Behind that curiosity is a simple feeling: watching an abstract idea in your head slowly turn into something that actually works. Imagining the moment someone opens it for the first time. That feeling is what keeps bringing me back to the desk.",
+        "about_p4": "Managing everything from start to finish on my own projects — making every decision yourself, finding every bug yourself — taught me that software is about more than just writing code. Professionally, I know firsthand what a great team can accomplish together.",
+        "about_p5": "Getting the foundation right matters a lot to me — a well-thought-out architecture makes everything easier down the road. Building clean, sustainable things that respect both the code and the user; that's my priority in every project."
+    },
+    "tech_stack": {
+        "title": "Tech Stack"
+    },
     "error": {
         "not_found_title": "Page Not Found",
         "not_found_desc": "The page you're looking for doesn't exist or has been moved.",

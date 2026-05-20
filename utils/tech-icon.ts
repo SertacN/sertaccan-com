@@ -15,6 +15,7 @@ import {
     siNestjs,
     siTraefikproxy,
     siExpo,
+    siHtml5,
 } from "simple-icons";
 import type { SimpleIcon } from "simple-icons";
 
@@ -35,6 +36,8 @@ const ICON_MAP: Record<string, SimpleIcon> = {
     traefik: siTraefikproxy,
     "github actions": siGithubactions,
     expo: siExpo,
+    "react native expo": siExpo,
+    "html/css": siHtml5,
 };
 
 const DARK_COLOR_OVERRIDES: Record<string, string> = {
