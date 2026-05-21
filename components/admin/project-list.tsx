@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { editProjectAction, deleteProjectAction } from "@/app/admin/actions";
+import { editProjectAction, deleteProjectAction } from "@/app/[locale]/admin/actions";
 import type { InferSelectModel } from "drizzle-orm";
 import { project } from "@/db/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";

@@ -1,21 +1,22 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
-export default function NotFound() {
+export default async function NotFound() {
+    const t = await getTranslations("error");
+
     return (
         <div className="flex min-h-[70vh] flex-col items-center justify-center gap-6 px-4 text-center">
             <div className="font-mono text-8xl font-bold text-primary md:text-9xl">404</div>
 
-            <h1 className="font-mono text-xl font-bold md:text-2xl">Page Not Found</h1>
+            <h1 className="font-mono text-xl font-bold md:text-2xl">{t("not_found_title")}</h1>
 
-            <p className="max-w-md text-sm text-muted-foreground">
-                The page you&apos;re looking for doesn&apos;t exist or has been moved.
-            </p>
+            <p className="max-w-md text-sm text-muted-foreground">{t("not_found_desc")}</p>
 
             <Link
                 href="/"
                 className="mt-4 rounded border border-primary px-4 py-2 font-mono text-sm text-primary transition-colors duration-150 hover:bg-primary hover:text-primary-foreground"
             >
-                ← Back to Home
+                {t("back_home")}
             </Link>
         </div>
     );

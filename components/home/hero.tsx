@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { Mail } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 import { Sparkles } from "@/components/home/sparkles";
 import Github from "../icons/github";
 
 export default function Hero() {
-    const { t } = useTranslation();
+    const t = useTranslations("hero");
     const [typedText, setTypedText] = useState("");
     const [showCursor, setShowCursor] = useState(true);
 
     useEffect(() => {
-        const fullText = t("hero.role");
+        const fullText = t("role");
         let i = 0;
 
         const typeInterval = setInterval(() => {

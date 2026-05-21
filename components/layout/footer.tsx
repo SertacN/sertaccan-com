@@ -1,12 +1,11 @@
-"use client";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 import Github from "../icons/github";
 import Linkedin from "../icons/linkedin";
-import { useTranslation } from "react-i18next";
+import { getTranslations } from "next-intl/server";
 
-export default function Footer() {
-    const { t } = useTranslation();
+export default async function Footer() {
+    const t = await getTranslations("footer");
     return (
         <footer className="flex justify-between border-t border-border py-8">
             <p className="font-mono text-xs text-muted-foreground">© 2026 Sertaç Can</p>
@@ -35,7 +34,7 @@ export default function Footer() {
                     <Linkedin size={16} />
                 </Link>
             </div>
-            <p className="font-mono text-xs text-muted-foreground">{t("footer.develop_tech")}</p>
+            <p className="font-mono text-xs text-muted-foreground">{t("develop_tech")}</p>
         </footer>
     );
 }

@@ -2,27 +2,27 @@
 
 import { Menu, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter, usePathname, Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useSession, signOut } from "@/lib/server/auth-client";
 
 const NAV_LINKS = [
-    { href: "#about", labelKey: "nav.about" },
-    { href: "#techstack", labelKey: "nav.stack" },
-    { href: "#projects", labelKey: "nav.projects" },
-    { href: "#contact", labelKey: "nav.contact" },
-    { href: "/projects", labelKey: "nav.all_projects" },
-];
+    { href: "#about", labelKey: "about" },
+    { href: "#techstack", labelKey: "stack" },
+    { href: "#projects", labelKey: "projects" },
+    { href: "#contact", labelKey: "contact" },
+    { href: "/projects", labelKey: "all_projects" },
+] as const;
 
 export default function Navbar() {
-    const { t } = useTranslation();
+    const t = useTranslations("nav");
     const { theme, setTheme } = useTheme();
     const router = useRouter();
+    const pathname = usePathname();
+    const locale = useLocale();
     const { data: session } = useSession();
 
     const isAdmin = session?.user.role === "admin";
@@ -36,12 +36,9 @@ export default function Navbar() {
         setTheme(theme === "light" ? "dark" : "light");
     };
 
-    const currentLang = i18n.language?.startsWith("en") ? "en" : "tr";
-
     const toggleLang = (lang: "tr" | "en") => {
-        if (currentLang === lang) return;
-        void i18n.changeLanguage(lang);
-        localStorage.setItem("language", lang);
+        if (locale === lang) return;
+        router.replace(pathname, { locale: lang });
     };
 
     const langSwitcher = (
@@ -51,7 +48,7 @@ export default function Navbar() {
                     key={lang}
                     onClick={() => toggleLang(lang)}
                     className={`cursor-pointer px-2.5 py-1.5 transition-colors ${
-                        currentLang === lang
+                        locale === lang
                             ? "bg-primary text-primary-foreground"
                             : "text-muted-foreground hover:text-foreground"
                     }`}
@@ -63,7 +60,7 @@ export default function Navbar() {
     );
 
     const themeButton = (
-        <Button onClick={cycleTheme} aria-label={t("nav.change_theme")} variant="outline" size="icon">
+        <Button onClick={cycleTheme} aria-label={t("change_theme")} variant="outline" size="icon">
             <span suppressHydrationWarning className={theme === "light" ? "hidden" : "block"}>
                 <Sun size={16} />
             </span>

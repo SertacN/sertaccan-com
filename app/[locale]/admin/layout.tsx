@@ -6,7 +6,7 @@ import AdminSidebar from "@/components/admin/sidebar";
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
     const h = await headers();
     const pathname = h.get("x-pathname") ?? "";
-    const isLoginPage = pathname === "/admin/login";
+    const isLoginPage = pathname.endsWith("/admin/login");
 
     const session = await auth.api.getSession({ headers: h });
 

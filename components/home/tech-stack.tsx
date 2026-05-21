@@ -1,5 +1,6 @@
 import { Tech, techstack } from "@/lib/tech-stack";
 import { getTechIcon } from "@/utils/tech-icon";
+import { getTranslations } from "next-intl/server";
 
 const categories = ["Frontend", "Backend", "Database", "DevOps", "Mobile"] as const;
 const grouped = categories.reduce(
@@ -15,10 +16,11 @@ const levelBg: Record<Tech["level"], string> = {
     beginner: "bg-accent-foreground/2 border-accent-foreground/10 text-accent-foreground/50",
 };
 
-export default function TechStack() {
+export default async function TechStack() {
+    const t = await getTranslations("tech_stack");
     return (
         <section id="techstack" className="px-4 py-24">
-            <h2 className="mb-12 text-center font-mono text-2xl font-bold text-text md:text-3xl">başlık</h2>
+            <h2 className="mb-12 text-center font-mono text-2xl font-bold text-text md:text-3xl">{t("title")}</h2>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {categories.map((category) => {

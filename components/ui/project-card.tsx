@@ -2,7 +2,7 @@
 import { project } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import Image from "next/image";
-import { useTranslation } from "react-i18next";
+import { useLocale } from "next-intl";
 import { Button } from "./button";
 import Github from "../icons/github";
 import Link from "next/link";
@@ -33,8 +33,7 @@ const statusConfig: Record<Project["status"], { label: string; className: string
 };
 
 export default function ProjectCard({ projects, pagination }: { projects: Project[]; pagination?: PaginationData }) {
-    const { i18n } = useTranslation();
-    const currentLang = i18n.language?.startsWith("en") ? "en" : "tr";
+    const currentLang = useLocale() === "en" ? "en" : "tr";
     const pages = pagination ? buildPages(pagination.page, pagination.totalPages) : [];
     return (
         <div className="flex flex-col gap-8">

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
-import { createProjectAction } from "@/app/admin/actions";
+import { createProjectAction } from "@/app/[locale]/admin/actions";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
 import TagSelector from "./tag-selector";
