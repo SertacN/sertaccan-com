@@ -3,6 +3,8 @@ import { db } from "@/db";
 import { project } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 
+export const dynamic = "force-dynamic";
+
 const BASE_URL = "https://sertaccan.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
