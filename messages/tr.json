@@ -35,6 +35,18 @@
         "see_all": "Tüm Projeleri Gör →"
     },
     "contact_form": {
+        "title": "İletişim",
+        "name_label": "İsim",
+        "name_placeholder": "Adın Soyadın",
+        "email_label": "E-posta",
+        "email_placeholder": "ornek@mail.com",
+        "subject_label": "Konu",
+        "subject_placeholder": "Konu başlığı",
+        "message_label": "Mesaj",
+        "message_placeholder": "Mesajını buraya yaz...",
+        "submit": "Gönder",
+        "submitting": "Gönderiliyor...",
+        "success": "Mesajın iletildi, en kısa sürede geri döneceğim.",
         "name": {
             "min": "İsim en az {min} karakter olmalı",
             "max": "İsim en fazla {max} karakter olabilir"

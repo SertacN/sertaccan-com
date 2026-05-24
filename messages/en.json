@@ -35,6 +35,18 @@
         "see_all": "View all projects →"
     },
     "contact_form": {
+        "title": "Contact",
+        "name_label": "Name",
+        "name_placeholder": "Your Name",
+        "email_label": "Email",
+        "email_placeholder": "example@mail.com",
+        "subject_label": "Subject",
+        "subject_placeholder": "Subject line",
+        "message_label": "Message",
+        "message_placeholder": "Write your message here...",
+        "submit": "Send",
+        "submitting": "Sending...",
+        "success": "Your message has been sent, I'll get back to you soon.",
         "name": {
             "min": "Name must be at least {min} characters",
             "max": "Name can be at most {max} characters"
