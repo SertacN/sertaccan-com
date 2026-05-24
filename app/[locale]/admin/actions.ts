@@ -8,6 +8,7 @@ import { createProject, editProject, deleteProject } from "@/lib/server/projects
 import { db } from "@/db";
 import { project } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { requireAdmin } from "@/lib/server/auth";
 
 const UPLOAD_DIR = join(process.cwd(), "uploads");
 const ALLOWED_EXT = ["jpg", "jpeg", "png", "webp", "gif"];
@@ -25,6 +26,7 @@ async function saveFile(file: File): Promise<{ url: string } | { error: string }
 }
 
 export async function createProjectAction(_state: unknown, formData: FormData) {
+    await requireAdmin();
     const raw = parseFormData(formData);
 
     const file = formData.get("file");
@@ -42,6 +44,7 @@ export async function createProjectAction(_state: unknown, formData: FormData) {
 }
 
 export async function editProjectAction(_state: unknown, formData: FormData) {
+    await requireAdmin();
     const id = formData.get("id") as string;
     if (!id) return { errors: { id: ["ID gerekli"] } };
 
@@ -69,6 +72,7 @@ export async function editProjectAction(_state: unknown, formData: FormData) {
 }
 
 export async function deleteProjectAction(formData: FormData): Promise<void> {
+    await requireAdmin();
     const id = formData.get("id") as string;
     if (!id) return;
 

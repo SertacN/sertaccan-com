@@ -10,10 +10,10 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useSession, signOut } from "@/lib/server/auth-client";
 
 const NAV_LINKS = [
-    { href: "#about", labelKey: "about" },
-    { href: "#techstack", labelKey: "stack" },
-    { href: "#projects", labelKey: "projects" },
-    { href: "#contact", labelKey: "contact" },
+    { href: "/#about", labelKey: "about" },
+    { href: "/#techstack", labelKey: "stack" },
+    { href: "/#projects", labelKey: "projects" },
+    { href: "/#contact", labelKey: "contact" },
     { href: "/projects", labelKey: "all_projects" },
 ] as const;
 
@@ -93,13 +93,13 @@ export default function Navbar() {
                     {isAdmin && (
                         <Link href="/admin">
                             <Button variant="outline" size="sm">
-                                Panel
+                                {t("dashboard")}
                             </Button>
                         </Link>
                     )}
                     {session && (
                         <Button variant="outline" size="sm" onClick={handleSignOut}>
-                            Çıkış Yap
+                            {t("logout")}
                         </Button>
                     )}
                     {themeButton}
@@ -134,13 +134,13 @@ export default function Navbar() {
                                     {isAdmin && (
                                         <Link href="/admin">
                                             <Button variant="outline" size="sm" className="w-full">
-                                                Panel
+                                                {t("dashboard")}
                                             </Button>
                                         </Link>
                                     )}
                                     {session && (
                                         <Button variant="outline" size="sm" className="w-full" onClick={handleSignOut}>
-                                            Çıkış Yap
+                                            {t("logout")}
                                         </Button>
                                     )}
                                 </div>

@@ -1,8 +1,7 @@
-"use client";
 import { project } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { getLocale } from "next-intl/server";
 import { Button } from "./button";
 import Github from "../icons/github";
 import Link from "next/link";
@@ -16,24 +15,20 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "./pagination";
+import buildPages from "@/utils/build-pages";
 
 type Project = InferSelectModel<typeof project>;
 type PaginationData = { page: number; totalPages: number };
 
-function buildPages(current: number, total: number): (number | "ellipsis")[] {
-    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-    if (current <= 4) return [1, 2, 3, 4, 5, "ellipsis", total];
-    if (current >= total - 3) return [1, "ellipsis", total - 4, total - 3, total - 2, total - 1, total];
-    return [1, "ellipsis", current - 1, current, current + 1, "ellipsis", total];
-}
 const statusConfig: Record<Project["status"], { label: string; className: string }> = {
     ACTIVE: { label: "Active", className: "border-primary text-primary" },
     WIP: { label: "WIP", className: "border-yellow-500 text-yellow-500" },
     ARCHIVED: { label: "Archived", className: "border-muted-foreground text-muted-foreground" },
 };
 
-export default function ProjectCard({ projects, pagination }: { projects: Project[]; pagination?: PaginationData }) {
-    const currentLang = useLocale() === "en" ? "en" : "tr";
+export default async function ProjectCard({ projects, pagination }: { projects: Project[]; pagination?: PaginationData }) {
+    const locale = await getLocale();
+    const currentLang = locale === "en" ? "en" : "tr";
     const pages = pagination ? buildPages(pagination.page, pagination.totalPages) : [];
     return (
         <div className="flex flex-col gap-8">

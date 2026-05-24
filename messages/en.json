@@ -9,7 +9,9 @@
         "projects": "Projects",
         "contact": "Contact",
         "all_projects": "All Projects",
-        "change_theme": "Change Theme"
+        "change_theme": "Change Theme",
+        "logout": "Logout",
+        "dashboard": "Dashboard"
     },
     "hero": {
         "role": "Software Developer"
@@ -27,6 +29,10 @@
     },
     "tech_stack": {
         "title": "Tech Stack"
+    },
+    "home_projects": {
+        "title": "Featured Projects",
+        "see_all": "View all projects →"
     },
     "error": {
         "not_found_title": "Page Not Found",

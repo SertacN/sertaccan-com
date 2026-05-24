@@ -1,15 +1,38 @@
 import createMiddleware from "next-intl/middleware";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./i18n/routing";
+import { auth } from "./lib/server/auth";
 
 const intlMiddleware = createMiddleware(routing);
 
+const ADMIN_LOGIN_PATHS = ["/admin/login", "/en/admin/login"];
+
+function isAdminRoute(pathname: string) {
+    return (
+        pathname === "/admin" ||
+        pathname.startsWith("/admin/") ||
+        pathname === "/en/admin" ||
+        pathname.startsWith("/en/admin/")
+    );
+}
+
 export async function proxy(request: NextRequest) {
-    // intlMiddleware tüm route'lar için çalışır — URL rewriting, locale detection
-    // Admin auth kontrolü admin layout server component'ta yapılır
+    const { pathname } = request.nextUrl;
+
+    if (isAdminRoute(pathname) && !ADMIN_LOGIN_PATHS.includes(pathname)) {
+        const session = await auth.api.getSession({ headers: request.headers });
+
+        if (!session) {
+            return NextResponse.redirect(new URL("/admin/login", request.url));
+        }
+
+        if (session.user.role !== "admin") {
+            return NextResponse.redirect(new URL("/", request.url));
+        }
+    }
+
     const response = intlMiddleware(request);
-    // Admin layout'taki x-pathname kontrolü için orijinal pathname'i aktar
-    response.headers.set("x-pathname", request.nextUrl.pathname);
+    response.headers.set("x-pathname", pathname);
     return response;
 }
 

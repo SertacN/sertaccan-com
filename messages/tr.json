@@ -9,7 +9,9 @@
         "projects": "Projeler",
         "contact": "İletişim",
         "all_projects": "Tüm Projeler",
-        "change_theme": "Tema Değiştir"
+        "change_theme": "Tema Değiştir",
+        "logout": "Çıkış Yap",
+        "dashboard": "Panel"
     },
     "hero": {
         "role": "Software Developer"
@@ -27,6 +29,10 @@
     },
     "tech_stack": {
         "title": "Teknolojiler"
+    },
+    "home_projects": {
+        "title": "Öne Çıkan Projeler",
+        "see_all": "Tüm Projeleri Gör →"
     },
     "error": {
         "not_found_title": "Sayfa Bulunamadı",
