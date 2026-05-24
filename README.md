@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sertaccan.com
+
+Personal portfolio website of Sertac Can. Dark-themed, terminal-inspired design with TR/EN language support.
+
+**Live:** [sertaccan.com](https://sertaccan.com)
+
+[Türkçe](docs/README.tr.md)
+
+## Tech Stack
+
+| Layer      | Technology              |
+| ---------- | ----------------------- |
+| Framework  | Next.js 15 (TypeScript) |
+| Styling    | Tailwind CSS v4         |
+| i18n       | next-intl (TR / EN)     |
+| ORM        | Drizzle ORM             |
+| Database   | PostgreSQL              |
+| Auth       | Better Auth             |
+| Validation | Zod                     |
+| Deploy     | Docker + VPS (Traefik)  |
+| CI/CD      | GitHub Actions          |
+
+## Features
+
+- Single-page landing with smooth scroll sections (Hero, About, Tech Stack, Projects, Contact)
+- Project listing with detail pages and markdown rendering
+- Admin panel with authentication (CRUD for projects, contact form management, user management)
+- Contact form with rate limiting
+- Responsive design with mobile menu
+- Dark/light theme toggle
+- SEO optimized (canonical, hreflang, OG/Twitter meta tags, sitemap.xml)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 22+
+- Docker & Docker Compose
+
+### Local Development (with Docker)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repo
+git clone https://github.com/sertaccan/sertaccan-next.git
+cd sertaccan-next
+
+# Create .env from example
+cp .env.example .env
+# Fill in the values (use localhost for DATABASE_URL in local dev)
+
+# Start dev environment
+docker compose -f docker-compose.dev.yml up -d
+
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Local Development (without Docker)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run db:migrate
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Useful Commands
 
-## Learn More
+```bash
+# Run database migrations
+npm run db:migrate
 
-To learn more about Next.js, take a look at the following resources:
+# Open Drizzle Studio (DB GUI)
+npm run db:studio
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Generate migration files after schema changes
+npm run db:generate
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Build for production
+npm run build
 
-## Deploy on Vercel
+# Lint
+npm run lint
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project auto-deploys on push to `main` via GitHub Actions. The workflow SSHs into the VPS and runs:
+
+```bash
+cd /opt/sertaccan-com
+git pull origin main
+docker compose --env-file .env up -d --build
+docker image prune -f
+```
+
+Database migrations run automatically during the Docker build step.
+
+### Required GitHub Secrets
+
+| Secret        | Description                        |
+| ------------- | ---------------------------------- |
+| `VPS_HOST`    | VPS IP address or hostname         |
+| `VPS_SSH_KEY` | Private SSH key for VPS access     |
+
+### Environment Variables
+
+See [.env.example](.env.example) for all required variables.
+
+> **Note:** On the VPS, `DATABASE_URL` must use `postgres` as the host (the container name), and `BETTER_AUTH_URL` must be the production URL (`https://sertaccan.com`).
+
+## License
+
+MIT
