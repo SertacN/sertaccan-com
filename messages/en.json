@@ -34,6 +34,23 @@
         "title": "Featured Projects",
         "see_all": "View all projects →"
     },
+    "contact_form": {
+        "name": {
+            "min": "Name must be at least {min} characters",
+            "max": "Name can be at most {max} characters"
+        },
+        "email": {
+            "invalid": "Enter a valid email address"
+        },
+        "subject": {
+            "min": "Subject must be at least {min} characters",
+            "max": "Subject can be at most {max} characters"
+        },
+        "message": {
+            "min": "Message must be at least {min} characters",
+            "max": "Message can be at most {max} characters"
+        }
+    },
     "error": {
         "not_found_title": "Page Not Found",
         "not_found_desc": "The page you're looking for doesn't exist or has been moved.",

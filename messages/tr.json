@@ -34,6 +34,23 @@
         "title": "Öne Çıkan Projeler",
         "see_all": "Tüm Projeleri Gör →"
     },
+    "contact_form": {
+        "name": {
+            "min": "İsim en az {min} karakter olmalı",
+            "max": "İsim en fazla {max} karakter olabilir"
+        },
+        "email": {
+            "invalid": "Geçerli bir e-posta adresi girin"
+        },
+        "subject": {
+            "min": "Konu en az {min} karakter olmalı",
+            "max": "Konu en fazla {max} karakter olabilir"
+        },
+        "message": {
+            "min": "Mesaj en az {min} karakter olmalı",
+            "max": "Mesaj en fazla {max} karakter olabilir"
+        }
+    },
     "error": {
         "not_found_title": "Sayfa Bulunamadı",
         "not_found_desc": "Aradığın sayfa mevcut değil veya taşınmış olabilir.",
