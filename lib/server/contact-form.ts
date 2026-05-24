@@ -33,6 +33,16 @@ export async function getUnreadContactFormCount(): Promise<number> {
     return total;
 }
 
+// -- Mark As Read --
+export async function markContactAsRead(id: string) {
+    try {
+        await db.update(contactForm).set({ isRead: true }).where(eq(contactForm.id, id));
+        return apiSuccess(null);
+    } catch {
+        return apiError("Güncelleme başarısız");
+    }
+}
+
 // ── Mutations ──
 // -- Create --
 export async function createContactForm(raw: unknown) {

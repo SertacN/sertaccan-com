@@ -11,7 +11,14 @@ import type { ProfileInput, PasswordInput, CreateUserInput } from "@/lib/schemas
 
 export async function listUser() {
     const users = await db
-        .select({ id: user.id, name: user.name, email: user.email, banned: user.banned, role: user.role, createdAt: user.createdAt })
+        .select({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            banned: user.banned,
+            role: user.role,
+            createdAt: user.createdAt,
+        })
         .from(user)
         .orderBy(desc(user.createdAt));
     return apiSuccess({ users });
@@ -48,7 +55,9 @@ export async function createUser(data: CreateUserInput): Promise<ApiResponse<nul
         });
         return apiSuccess(null, "Kullanıcı oluşturuldu");
     } catch {
-        return apiError("Kullanıcı oluşturulamadı", { _: ["Kullanıcı oluşturulamadı (email zaten kullanımda olabilir)"] });
+        return apiError("Kullanıcı oluşturulamadı", {
+            _: ["Kullanıcı oluşturulamadı (email zaten kullanımda olabilir)"],
+        });
     }
 }
 
