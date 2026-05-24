@@ -10,7 +10,7 @@ Personal portfolio website of Sertac Can. Dark-themed, terminal-inspired design 
 
 | Layer      | Technology              |
 | ---------- | ----------------------- |
-| Framework  | Next.js 15 (TypeScript) |
+| Framework  | Next.js 16 (TypeScript) |
 | Styling    | Tailwind CSS v4         |
 | i18n       | next-intl (TR / EN)     |
 | ORM        | Drizzle ORM             |
@@ -96,10 +96,10 @@ Database migrations run automatically during the Docker build step.
 
 ### Required GitHub Secrets
 
-| Secret        | Description                        |
-| ------------- | ---------------------------------- |
-| `VPS_HOST`    | VPS IP address or hostname         |
-| `VPS_SSH_KEY` | Private SSH key for VPS access     |
+| Secret        | Description                    |
+| ------------- | ------------------------------ |
+| `VPS_HOST`    | VPS IP address or hostname     |
+| `VPS_SSH_KEY` | Private SSH key for VPS access |
 
 ### Environment Variables
 

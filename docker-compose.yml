@@ -10,8 +10,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      migrate:
-        condition: service_completed_successfully
     networks:
       - traefik-net
       - internal
@@ -22,20 +20,6 @@ services:
       - "traefik.http.routers.portfolio.tls.certresolver=letsencrypt"
       - "traefik.http.services.portfolio.loadbalancer.server.port=3000"
       - "traefik.docker.network=traefik-net"
-
-  migrate:
-    build:
-      context: .
-      target: builder
-    command: npx drizzle-kit migrate
-    env_file:
-      - .env
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - internal
-    restart: "no"
 
   postgres:
     image: postgres:16-alpine

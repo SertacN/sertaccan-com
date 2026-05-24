@@ -8,17 +8,17 @@ Sertaç Can'ın kişisel portföy web sitesi. Karanlık tema, terminal esinli ta
 
 ## Teknoloji Yığını
 
-| Katman      | Teknoloji               |
-| ----------- | ----------------------- |
-| Framework   | Next.js 15 (TypeScript) |
-| Stil        | Tailwind CSS v4         |
-| i18n        | next-intl (TR / EN)     |
-| ORM         | Drizzle ORM             |
-| Veritabanı  | PostgreSQL              |
-| Auth        | Better Auth             |
-| Validasyon  | Zod                     |
-| Deploy      | Docker + VPS (Traefik)  |
-| CI/CD       | GitHub Actions          |
+| Katman     | Teknoloji               |
+| ---------- | ----------------------- |
+| Framework  | Next.js 16 (TypeScript) |
+| Stil       | Tailwind CSS v4         |
+| i18n       | next-intl (TR / EN)     |
+| ORM        | Drizzle ORM             |
+| Veritabanı | PostgreSQL              |
+| Auth       | Better Auth             |
+| Validasyon | Zod                     |
+| Deploy     | Docker + VPS (Traefik)  |
+| CI/CD      | GitHub Actions          |
 
 ## Özellikler
 
@@ -96,9 +96,9 @@ Veritabanı migrasyonları Docker build adımında otomatik olarak uygulanır.
 
 ### Gerekli GitHub Secrets
 
-| Secret        | Açıklama                        |
-| ------------- | ------------------------------- |
-| `VPS_HOST`    | VPS IP adresi veya host adı     |
+| Secret        | Açıklama                           |
+| ------------- | ---------------------------------- |
+| `VPS_HOST`    | VPS IP adresi veya host adı        |
 | `VPS_SSH_KEY` | VPS erişimi için özel SSH anahtarı |
 
 ### Ortam Değişkenleri

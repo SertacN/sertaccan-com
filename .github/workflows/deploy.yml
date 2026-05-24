@@ -20,4 +20,5 @@ jobs:
             cd /opt/sertaccan-com
             git pull origin main
             docker compose --env-file .env up -d --build
+            docker compose exec -T app npx drizzle-kit migrate
             docker image prune -f
