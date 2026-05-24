@@ -63,6 +63,14 @@
             "max": "Message can be at most {max} characters"
         }
     },
+    "project_detail": {
+        "back": "← Back to Projects",
+        "live_site": "Live Site →",
+        "github": "GitHub →",
+        "status_active": "Active",
+        "status_wip": "WIP",
+        "status_archived": "Archived"
+    },
     "error": {
         "not_found_title": "Page Not Found",
         "not_found_desc": "The page you're looking for doesn't exist or has been moved.",

@@ -63,6 +63,14 @@
             "max": "Mesaj en fazla {max} karakter olabilir"
         }
     },
+    "project_detail": {
+        "back": "← Projelere Dön",
+        "live_site": "Canlı Site →",
+        "github": "GitHub →",
+        "status_active": "Aktif",
+        "status_wip": "Yapım Aşamasında",
+        "status_archived": "Arşivlendi"
+    },
     "error": {
         "not_found_title": "Sayfa Bulunamadı",
         "not_found_desc": "Aradığın sayfa mevcut değil veya taşınmış olabilir.",
