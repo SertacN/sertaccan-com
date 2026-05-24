@@ -1,11 +1,6 @@
 services:
   app:
-    build:
-      context: .
-      args:
-        DATABASE_URL: ${DATABASE_URL}
-        BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
-        BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+    build: .
     container_name: sertaccan-app
     restart: unless-stopped
     env_file:
@@ -13,7 +8,10 @@ services:
     volumes:
       - uploads_data:/app/uploads
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     networks:
       - traefik-net
       - internal
@@ -24,6 +22,20 @@ services:
       - "traefik.http.routers.portfolio.tls.certresolver=letsencrypt"
       - "traefik.http.services.portfolio.loadbalancer.server.port=3000"
       - "traefik.docker.network=traefik-net"
+
+  migrate:
+    build:
+      context: .
+      target: builder
+    command: npx drizzle-kit migrate
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+    restart: "no"
 
   postgres:
     image: postgres:16-alpine
@@ -37,6 +49,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   postgres_data:
