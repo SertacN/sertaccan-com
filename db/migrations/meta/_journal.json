@@ -29,6 +29,13 @@
       "when": 1779626750819,
       "tag": "0003_chilly_fenris",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1779798261076,
+      "tag": "0004_flat_crusher_hogan",
+      "breakpoints": true
     }
   ]
 }

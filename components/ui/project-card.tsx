@@ -1,7 +1,7 @@
 import { project } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import Image from "next/image";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Button } from "./button";
 import Github from "../icons/github";
 import Link from "next/link";
@@ -16,6 +16,7 @@ import {
     PaginationPrevious,
 } from "./pagination";
 import buildPages from "@/utils/build-pages";
+import StoreButtons from "./store-buttons";
 
 type Project = InferSelectModel<typeof project>;
 type PaginationData = { page: number; totalPages: number };
@@ -26,9 +27,16 @@ const statusConfig: Record<Project["status"], { label: string; className: string
     ARCHIVED: { label: "Archived", className: "border-muted-foreground text-muted-foreground" },
 };
 
-export default async function ProjectCard({ projects, pagination }: { projects: Project[]; pagination?: PaginationData }) {
+export default async function ProjectCard({
+    projects,
+    pagination,
+}: {
+    projects: Project[];
+    pagination?: PaginationData;
+}) {
     const locale = await getLocale();
     const currentLang = locale === "en" ? "en" : "tr";
+    const t = await getTranslations("home_projects");
     const pages = pagination ? buildPages(pagination.page, pagination.totalPages) : [];
     return (
         <div className="flex flex-col gap-8">
@@ -58,7 +66,9 @@ export default async function ProjectCard({ projects, pagination }: { projects: 
                             {/*TITLE + STATUS*/}
                             <div className="flex flex-1 flex-col gap-3 p-5">
                                 <div className="flex items-start justify-between gap-2">
-                                    <h3 className="font-mono text-sm font-bold text-text">{project.title}</h3>
+                                    <h3 className="font-mono text-sm font-bold text-text">
+                                        {currentLang === "en" && project.titleEn ? project.titleEn : project.title}
+                                    </h3>
                                     <span
                                         className={`shrink-0 rounded border px-1.5 py-0.5 font-mono text-xs ${className}`}
                                     >
@@ -112,6 +122,7 @@ export default async function ProjectCard({ projects, pagination }: { projects: 
                                             </Link>
                                         </Button>
                                     )}
+                                    <StoreButtons appStoreUrl={project.appStoreUrl} googlePlayUrl={project.googlePlayUrl} />
                                     <Button
                                         size="sm"
                                         variant="outline"
@@ -119,7 +130,7 @@ export default async function ProjectCard({ projects, pagination }: { projects: 
                                         aria-label="Project Details"
                                         asChild
                                     >
-                                        <Link href={`projects/${project.slug}`}>Detay →</Link>
+                                        <Link href={`projects/${project.slug}`}>{t("details")}</Link>
                                     </Button>
                                 </div>
                             </div>

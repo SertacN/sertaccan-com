@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { getLocale, getTranslations } from "next-intl/server";
 import { getDetails } from "@/lib/server/projects";
 import { getTechIcon } from "@/utils/tech-icon";
 import { notFound } from "next/navigation";
+import StoreButtons from "@/components/ui/store-buttons";
 
 const statusConfig = {
     ACTIVE: { key: "status_active" as const, className: "border-primary text-primary" },
@@ -13,16 +15,13 @@ const statusConfig = {
 };
 
 export default async function ProjectDetail({ slug }: { slug: string }) {
-    const [result, locale, t] = await Promise.all([
-        getDetails(slug),
-        getLocale(),
-        getTranslations("project_detail"),
-    ]);
+    const [result, locale, t] = await Promise.all([getDetails(slug), getLocale(), getTranslations("project_detail")]);
 
     if (!result.success || !result.data) notFound();
 
     const p = result.data;
     const longDescription = locale === "en" ? p.longDescriptionEn : p.longDescriptionTr;
+    const displayTitle = locale === "en" && p.titleEn ? p.titleEn : p.title;
     const { key: statusKey, className: statusClassName } = statusConfig[p.status];
 
     return (
@@ -49,7 +48,7 @@ export default async function ProjectDetail({ slug }: { slug: string }) {
             )}
 
             <div className="mb-4 flex flex-wrap items-center gap-3">
-                <h1 className="font-mono text-3xl font-bold text-text">{p.title}</h1>
+                <h1 className="font-mono text-3xl font-bold text-text">{displayTitle}</h1>
                 <span className={`rounded border px-2 py-0.5 font-mono text-xs ${statusClassName}`}>
                     {t(statusKey)}
                 </span>
@@ -104,11 +103,12 @@ export default async function ProjectDetail({ slug }: { slug: string }) {
                         {t("live_site")}
                     </a>
                 )}
+                <StoreButtons appStoreUrl={p.appStoreUrl} googlePlayUrl={p.googlePlayUrl} size="md" />
             </div>
 
             {longDescription && (
                 <article className="prose prose-invert dark:prose-invert max-w-none prose-headings:font-mono prose-headings:text-text prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-text prose-code:text-accent-foreground prose-pre:border prose-pre:border-border prose-pre:bg-surface prose-th:text-text prose-td:text-muted-foreground">
-                    <ReactMarkdown>{longDescription}</ReactMarkdown>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{longDescription}</ReactMarkdown>
                 </article>
             )}
         </main>

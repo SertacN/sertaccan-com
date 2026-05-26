@@ -140,6 +140,15 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 <FieldLabel>Tagler</FieldLabel>
                                 <TagSelector key={editData.id} defaultValue={editData.tags} error={err("tags")} />
                             </Field>
+                            <Field className="md:col-span-2">
+                                <FieldLabel htmlFor="edit-titleEn">Başlık (EN) — opsiyonel</FieldLabel>
+                                <Input
+                                    id="edit-titleEn"
+                                    name="titleEn"
+                                    defaultValue={editData.titleEn ?? ""}
+                                    placeholder="Project Name"
+                                />
+                            </Field>
                             <Field>
                                 <FieldLabel htmlFor="edit-githubUrl">GitHub URL</FieldLabel>
                                 <Input id="edit-githubUrl" name="githubUrl" defaultValue={editData.githubUrl ?? ""} />
@@ -147,6 +156,24 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             <Field>
                                 <FieldLabel htmlFor="edit-liveUrl">Live URL</FieldLabel>
                                 <Input id="edit-liveUrl" name="liveUrl" defaultValue={editData.liveUrl ?? ""} />
+                            </Field>
+                            <Field>
+                                <FieldLabel htmlFor="edit-appStoreUrl">App Store URL — opsiyonel</FieldLabel>
+                                <Input
+                                    id="edit-appStoreUrl"
+                                    name="appStoreUrl"
+                                    defaultValue={editData.appStoreUrl ?? ""}
+                                    placeholder="https://apps.apple.com/..."
+                                />
+                            </Field>
+                            <Field>
+                                <FieldLabel htmlFor="edit-googlePlayUrl">Google Play URL — opsiyonel</FieldLabel>
+                                <Input
+                                    id="edit-googlePlayUrl"
+                                    name="googlePlayUrl"
+                                    defaultValue={editData.googlePlayUrl ?? ""}
+                                    placeholder="https://play.google.com/..."
+                                />
                             </Field>
                             <Field>
                                 <FieldLabel htmlFor="edit-status">Status</FieldLabel>

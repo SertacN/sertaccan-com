@@ -3,6 +3,7 @@ import { z } from "zod";
 export const projectSchema = z.object({
     slug: z.string().min(1, "Slug zorunlu"),
     title: z.string().min(1, "Başlık zorunlu"),
+    titleEn: z.string().default(""),
     descriptionTr: z.string().min(1, "Açıklama (TR) zorunlu"),
     descriptionEn: z.string().min(1, "Açıklama (EN) zorunlu"),
     longDescriptionTr: z.string().min(1, "Uzun açıklama (TR) zorunlu"),
@@ -11,6 +12,8 @@ export const projectSchema = z.object({
     tags: z.array(z.string()).default([]),
     githubUrl: z.string().default(""),
     liveUrl: z.string().default(""),
+    appStoreUrl: z.string().default(""),
+    googlePlayUrl: z.string().default(""),
     status: z.enum(["ACTIVE", "WIP", "ARCHIVED"]).default("WIP"),
     featured: z.boolean().default(false),
     order: z.number().default(0),

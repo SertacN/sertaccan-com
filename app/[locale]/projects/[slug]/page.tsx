@@ -19,19 +19,20 @@ export async function generateMetadata({
     const p = result.data;
     const description = locale === "en" ? p.descriptionEn : p.descriptionTr;
     const image = p.imageUrl ?? "/og-image.png";
+    const displayTitle = locale === "en" && p.titleEn ? p.titleEn : p.title;
 
     return {
-        title: p.title,
+        title: displayTitle,
         description,
         openGraph: {
-            title: `Sertaç Can | ${p.title}`,
+            title: `Sertaç Can | ${displayTitle}`,
             description,
             type: "article",
-            images: [{ url: image, width: 1200, height: 630, alt: p.title }],
+            images: [{ url: image, width: 1200, height: 630, alt: displayTitle }],
         },
         twitter: {
             card: "summary_large_image",
-            title: `Sertaç Can | ${p.title}`,
+            title: `Sertaç Can | ${displayTitle}`,
             description,
             images: [image],
         },

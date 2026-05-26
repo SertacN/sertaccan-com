@@ -100,6 +100,11 @@ export default function ProjectForm() {
                     <FieldLabel>Tagler</FieldLabel>
                     <TagSelector error={err("tags")} />
                 </Field>
+                <Field data-invalid={!!err("titleEn")} className="md:col-span-2">
+                    <FieldLabel htmlFor="titleEn">Başlık (EN) — opsiyonel</FieldLabel>
+                    <Input id="titleEn" name="titleEn" placeholder="Project Name" />
+                    <FieldError>{err("titleEn")}</FieldError>
+                </Field>
                 <Field data-invalid={!!err("githubUrl")}>
                     <FieldLabel htmlFor="githubUrl">GitHub URL</FieldLabel>
                     <Input id="githubUrl" name="githubUrl" placeholder="https://github.com/..." />
@@ -109,6 +114,16 @@ export default function ProjectForm() {
                     <FieldLabel htmlFor="liveUrl">Live URL</FieldLabel>
                     <Input id="liveUrl" name="liveUrl" placeholder="https://..." />
                     <FieldError>{err("liveUrl")}</FieldError>
+                </Field>
+                <Field data-invalid={!!err("appStoreUrl")}>
+                    <FieldLabel htmlFor="appStoreUrl">App Store URL — opsiyonel</FieldLabel>
+                    <Input id="appStoreUrl" name="appStoreUrl" placeholder="https://apps.apple.com/..." />
+                    <FieldError>{err("appStoreUrl")}</FieldError>
+                </Field>
+                <Field data-invalid={!!err("googlePlayUrl")}>
+                    <FieldLabel htmlFor="googlePlayUrl">Google Play URL — opsiyonel</FieldLabel>
+                    <Input id="googlePlayUrl" name="googlePlayUrl" placeholder="https://play.google.com/..." />
+                    <FieldError>{err("googlePlayUrl")}</FieldError>
                 </Field>
                 <Field data-invalid={!!err("status")}>
                     <FieldLabel htmlFor="status">Status</FieldLabel>

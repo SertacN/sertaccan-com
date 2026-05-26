@@ -98,11 +98,19 @@ function parseFormData(formData: FormData): Record<string, unknown> {
         imageUrl: "",
         tags: [
             ...new Set(
-                formData.get("tags")?.toString().split(",").map((t) => t.trim()).filter(Boolean) ?? []
+                formData
+                    .get("tags")
+                    ?.toString()
+                    .split(",")
+                    .map((t) => t.trim())
+                    .filter(Boolean) ?? [],
             ),
         ],
+        titleEn: formData.get("titleEn") ?? "",
         githubUrl: formData.get("githubUrl") ?? "",
         liveUrl: formData.get("liveUrl") ?? "",
+        appStoreUrl: formData.get("appStoreUrl") ?? "",
+        googlePlayUrl: formData.get("googlePlayUrl") ?? "",
         status: formData.get("status") ?? "WIP",
         featured: formData.get("featured") === "on",
         order: Number(formData.get("order")) || 0,

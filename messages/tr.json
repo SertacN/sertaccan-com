@@ -32,7 +32,8 @@
     },
     "home_projects": {
         "title": "Öne Çıkan Projeler",
-        "see_all": "Tüm Projeleri Gör →"
+        "see_all": "Tüm Projeleri Gör →",
+        "details": "Detay →"
     },
     "contact_form": {
         "title": "İletişim",
