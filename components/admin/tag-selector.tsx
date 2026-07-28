@@ -21,6 +21,10 @@ const TAGS = [
     "traefik",
     "github actions",
     "expo",
+    "expressjs",
+    "python",
+    "rabbitmq",
+    "bullmq",
 ];
 
 export default function TagSelector({ error, defaultValue }: { error?: string; defaultValue?: string[] }) {

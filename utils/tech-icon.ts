@@ -16,10 +16,13 @@ import {
     siTraefikproxy,
     siExpo,
     siHtml5,
+    siExpress,
+    siPython,
+    siRabbitmq,
 } from "simple-icons";
-import type { SimpleIcon } from "simple-icons";
+import { bullmqIcon, type TechIcon } from "./custom-tech-icons";
 
-const ICON_MAP: Record<string, SimpleIcon> = {
+const ICON_MAP: Record<string, TechIcon> = {
     sveltekit: siSvelte,
     typescript: siTypescript,
     javascript: siJavascript,
@@ -38,6 +41,10 @@ const ICON_MAP: Record<string, SimpleIcon> = {
     expo: siExpo,
     "react native expo": siExpo,
     "html/css": siHtml5,
+    expressjs: siExpress,
+    python: siPython,
+    rabbitmq: siRabbitmq,
+    bullmq: bullmqIcon,
 };
 
 const DARK_COLOR_OVERRIDES: Record<string, string> = {
@@ -45,9 +52,10 @@ const DARK_COLOR_OVERRIDES: Record<string, string> = {
     expo: "FFFFFF",
     "github actions": "FFFFFF",
     nextjs: "FFFFFF",
+    expressjs: "FFFFFF",
 };
 
-export function getTechIcon(name: string): SimpleIcon | null {
+export function getTechIcon(name: string): TechIcon | null {
     const key = name.toLowerCase();
     const icon = ICON_MAP[key];
     if (!icon) return null;
