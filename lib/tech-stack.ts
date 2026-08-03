@@ -14,7 +14,9 @@ export const techstack: Tech[] = [
 
     // Backend
     { name: "NestJS", category: "Backend", level: "advanced" },
+    { name: "ExpressJS", category: "Backend", level: "advanced" },
     { name: "Prisma", category: "Backend", level: "intermediate" },
+    { name: "Drizzle", category: "Backend", level: "advanced" },
 
     // Database
     { name: "PostgreSQL", category: "Database", level: "advanced" },
