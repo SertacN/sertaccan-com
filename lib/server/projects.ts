@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/db";
 import { project } from "@/db/schema";
 import { eq, desc, count, and } from "drizzle-orm";
@@ -40,7 +41,8 @@ export async function getAllProjects(options?: { page?: number; limit?: number; 
     });
 }
 // -- Get Details --
-export async function getDetails(slug: string) {
+// Memoized per request: metadata, JSON-LD and the detail view all read the same project.
+export const getDetails = cache(async (slug: string) => {
     const [found] = await db
         .select()
         .from(project)
@@ -48,7 +50,7 @@ export async function getDetails(slug: string) {
         .limit(1);
     if (!found) return apiError("Proje bulunamadı");
     return apiSuccess(found);
-}
+});
 
 // ── Mutations ──
 // -- Create --
