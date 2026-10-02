@@ -10,7 +10,7 @@ import StoreButtons from "@/components/ui/store-buttons";
 
 const statusConfig = {
     ACTIVE: { key: "status_active" as const, className: "border-primary text-primary" },
-    WIP: { key: "status_wip" as const, className: "border-yellow-500 text-yellow-500" },
+    WIP: { key: "status_wip" as const, className: "border-yellow-500 text-yellow-500 light:border-yellow-800 light:text-yellow-800" },
     ARCHIVED: { key: "status_archived" as const, className: "border-muted-foreground text-muted-foreground" },
 };
 

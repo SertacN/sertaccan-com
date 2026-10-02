@@ -10,10 +10,12 @@ const grouped = categories.reduce(
     },
     {} as Record<string, Tech[]>,
 );
+// Dark theme dims the text per level; in light theme dimmed green cannot reach 4.5:1 contrast,
+// so text stays solid there and levels differ only by background and border.
 const levelBg: Record<Tech["level"], string> = {
     advanced: "bg-accent-foreground/8 border-accent-foreground/25 text-accent-foreground",
-    intermediate: "bg-accent-foreground/4 border-accent-foreground/15 text-accent-foreground/70",
-    beginner: "bg-accent-foreground/2 border-accent-foreground/10 text-accent-foreground/50",
+    intermediate: "bg-accent-foreground/4 border-accent-foreground/15 text-accent-foreground/70 light:text-accent-foreground",
+    beginner: "bg-accent-foreground/2 border-accent-foreground/10 text-accent-foreground/60 light:text-accent-foreground",
 };
 
 export default async function TechStack() {
@@ -35,7 +37,7 @@ export default async function TechStack() {
                                     return (
                                         <span
                                             key={tech.name}
-                                            className={`inline-flex items-center gap-1.5 rounded border px-3 py-1.5 font-mono text-xs font-bold transition-all duration-200 hover:-translate-y-px hover:border-accent${levelBg[tech.level]}`}
+                                            className={`inline-flex items-center gap-1.5 rounded border px-3 py-1.5 font-mono text-xs font-bold transition-all duration-200 hover:-translate-y-px hover:border-accent ${levelBg[tech.level]}`}
                                         >
                                             {icon && (
                                                 <svg
