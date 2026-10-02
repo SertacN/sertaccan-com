@@ -33,7 +33,10 @@
     "home_projects": {
         "title": "Öne Çıkan Projeler",
         "see_all": "Tüm Projeleri Gör →",
-        "details": "Detay →"
+        "details": "Detay →",
+        "previous": "Önceki proje",
+        "next": "Sonraki proje",
+        "slide_label": "{current} / {total}"
     },
     "contact_form": {
         "title": "İletişim",

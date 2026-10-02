@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { db } from "@/db";
 import { project } from "@/db/schema";
-import { eq, desc, count, and } from "drizzle-orm";
+import { eq, desc, count, and, notInArray } from "drizzle-orm";
 import { z } from "zod";
 import { projectSchema } from "@/lib/schemas/project-schemas";
 import { apiError, apiSuccess } from "@/types";
@@ -39,6 +39,41 @@ export async function getAllProjects(options?: { page?: number; limit?: number; 
             totalPages: Math.ceil(total / limit),
         },
     });
+}
+// -- Get Featured --
+// Featured projects for the home page; topped up with the highest-ordered
+// projects when fewer than `min` are featured so the section never looks empty.
+export async function getFeaturedProjects({ limit = 8, min = 3 }: { limit?: number; min?: number } = {}) {
+    const visible = and(eq(project.isDeleted, false), eq(project.isActive, true));
+    const ordering = [desc(project.order), desc(project.createdAt)];
+
+    const featured = await db
+        .select()
+        .from(project)
+        .where(and(visible, eq(project.featured, true)))
+        .orderBy(...ordering)
+        .limit(limit);
+
+    if (featured.length >= min) return apiSuccess(featured);
+
+    const filler = await db
+        .select()
+        .from(project)
+        .where(
+            and(
+                visible,
+                featured.length > 0
+                    ? notInArray(
+                          project.id,
+                          featured.map((p) => p.id),
+                      )
+                    : undefined,
+            ),
+        )
+        .orderBy(...ordering)
+        .limit(min - featured.length);
+
+    return apiSuccess([...featured, ...filler]);
 }
 // -- Get Details --
 // Memoized per request: metadata, JSON-LD and the detail view all read the same project.

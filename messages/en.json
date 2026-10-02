@@ -33,7 +33,10 @@
     "home_projects": {
         "title": "Featured Projects",
         "see_all": "View all projects →",
-        "details": "Details →"
+        "details": "Details →",
+        "previous": "Previous project",
+        "next": "Next project",
+        "slide_label": "{current} of {total}"
     },
     "contact_form": {
         "title": "Contact",
