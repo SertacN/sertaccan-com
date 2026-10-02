@@ -10,6 +10,8 @@ export const projectSchema = z.object({
     longDescriptionEn: z.string().min(1, "Uzun açıklama (EN) zorunlu"),
     imageUrl: z.string().default(""),
     tags: z.array(z.string()).default([]),
+    keywordsTr: z.array(z.string()).default([]),
+    keywordsEn: z.array(z.string()).default([]),
     githubUrl: z.string().default(""),
     liveUrl: z.string().default(""),
     appStoreUrl: z.string().default(""),

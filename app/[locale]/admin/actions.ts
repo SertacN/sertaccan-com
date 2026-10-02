@@ -96,16 +96,9 @@ function parseFormData(formData: FormData): Record<string, unknown> {
         longDescriptionTr: formData.get("longDescriptionTr"),
         longDescriptionEn: formData.get("longDescriptionEn"),
         imageUrl: "",
-        tags: [
-            ...new Set(
-                formData
-                    .get("tags")
-                    ?.toString()
-                    .split(",")
-                    .map((t) => t.trim())
-                    .filter(Boolean) ?? [],
-            ),
-        ],
+        tags: parseList(formData.get("tags")),
+        keywordsTr: parseList(formData.get("keywordsTr")),
+        keywordsEn: parseList(formData.get("keywordsEn")),
         titleEn: formData.get("titleEn") ?? "",
         githubUrl: formData.get("githubUrl") ?? "",
         liveUrl: formData.get("liveUrl") ?? "",
@@ -116,4 +109,16 @@ function parseFormData(formData: FormData): Record<string, unknown> {
         order: Number(formData.get("order")) || 0,
         isActive: formData.get("isActive") === "on",
     };
+}
+
+function parseList(value: FormDataEntryValue | null): string[] {
+    return [
+        ...new Set(
+            value
+                ?.toString()
+                .split(",")
+                .map((t) => t.trim())
+                .filter(Boolean) ?? [],
+        ),
+    ];
 }

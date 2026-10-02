@@ -4,7 +4,7 @@ import { useRef, useEffect, useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError, FieldGroup, FieldDescription } from "@/components/ui/field";
 import { createProjectAction } from "@/app/[locale]/admin/actions";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Checkbox } from "../ui/checkbox";
@@ -100,6 +100,18 @@ export default function ProjectForm() {
                     <FieldLabel>Tagler</FieldLabel>
                     <TagSelector error={err("tags")} />
                 </Field>
+                <Field data-invalid={!!err("keywordsTr")}>
+                    <FieldLabel htmlFor="keywordsTr">SEO Keywords (TR)</FieldLabel>
+                    <Input id="keywordsTr" name="keywordsTr" placeholder="mobil uygulama, randevu sistemi, ..." />
+                    <FieldDescription>Virgülle ayırın. Tagler otomatik eklenir.</FieldDescription>
+                    <FieldError>{err("keywordsTr")}</FieldError>
+                </Field>
+                <Field data-invalid={!!err("keywordsEn")}>
+                    <FieldLabel htmlFor="keywordsEn">SEO Keywords (EN)</FieldLabel>
+                    <Input id="keywordsEn" name="keywordsEn" placeholder="mobile app, booking system, ..." />
+                    <FieldDescription>Comma separated. Tags are added automatically.</FieldDescription>
+                    <FieldError>{err("keywordsEn")}</FieldError>
+                </Field>
                 <Field data-invalid={!!err("titleEn")} className="md:col-span-2">
                     <FieldLabel htmlFor="titleEn">Başlık (EN) — opsiyonel</FieldLabel>
                     <Input id="titleEn" name="titleEn" placeholder="Project Name" />
@@ -142,6 +154,7 @@ export default function ProjectForm() {
                     <Field data-invalid={!!err("order")}>
                         <FieldLabel htmlFor="order">Sıra</FieldLabel>
                         <Input id="order" name="order" type="number" defaultValue={0} className="w-20" />
+                        <FieldDescription>Büyük sayı önce</FieldDescription>
                     </Field>
                     <FieldGroup className="flex-row">
                         <Field orientation="horizontal">

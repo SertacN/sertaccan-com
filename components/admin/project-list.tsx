@@ -37,6 +37,12 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                                 className="flex items-center justify-between rounded border border-border px-4 py-3"
                             >
                                 <div className="flex flex-wrap items-center gap-3">
+                                    <span
+                                        title="Sıra"
+                                        className="min-w-8 rounded border border-border px-1.5 py-0.5 text-center font-mono text-xs text-muted-foreground"
+                                    >
+                                        #{p.order}
+                                    </span>
                                     <span className="font-mono text-sm font-bold">{p.title}</span>
                                     <span className="font-mono text-xs text-muted-foreground">/{p.slug}</span>
                                     <StatusBadge status={p.status} />
@@ -139,6 +145,26 @@ export default function ProjectList({ projects }: { projects: Project[] }) {
                             <Field data-invalid={!!err("tags")} className="md:col-span-2">
                                 <FieldLabel>Tagler</FieldLabel>
                                 <TagSelector key={editData.id} defaultValue={editData.tags} error={err("tags")} />
+                            </Field>
+                            <Field data-invalid={!!err("keywordsTr")}>
+                                <FieldLabel htmlFor="edit-keywordsTr">SEO Keywords (TR)</FieldLabel>
+                                <Input
+                                    id="edit-keywordsTr"
+                                    name="keywordsTr"
+                                    defaultValue={editData.keywordsTr.join(", ")}
+                                    placeholder="mobil uygulama, randevu sistemi, ..."
+                                />
+                                <FieldError>{err("keywordsTr")}</FieldError>
+                            </Field>
+                            <Field data-invalid={!!err("keywordsEn")}>
+                                <FieldLabel htmlFor="edit-keywordsEn">SEO Keywords (EN)</FieldLabel>
+                                <Input
+                                    id="edit-keywordsEn"
+                                    name="keywordsEn"
+                                    defaultValue={editData.keywordsEn.join(", ")}
+                                    placeholder="mobile app, booking system, ..."
+                                />
+                                <FieldError>{err("keywordsEn")}</FieldError>
                             </Field>
                             <Field className="md:col-span-2">
                                 <FieldLabel htmlFor="edit-titleEn">Başlık (EN) — opsiyonel</FieldLabel>

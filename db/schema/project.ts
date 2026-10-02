@@ -12,6 +12,8 @@ export const project = pgTable("project", {
     longDescriptionEn: text("long_description_en").notNull(),
     imageUrl: text("image_url"),
     tags: text("tags").array().notNull().default([]),
+    keywordsTr: text("keywords_tr").array().notNull().default([]),
+    keywordsEn: text("keywords_en").array().notNull().default([]),
     titleEn: text("title_en"),
     githubUrl: text("github_url"),
     liveUrl: text("live_url"),
