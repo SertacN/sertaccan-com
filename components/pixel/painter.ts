@@ -429,6 +429,8 @@ export type SceneInfo = {
     chX: number;
     chY: number;
     stars: { x: number; y: number; p: number; ph: number }[];
+    // Static faint stars [x, y, color]; generated for both themes so night and day layouts match.
+    dim: [number, number, string][];
     cross: { x: number; y: number; p: number; ph: number }[];
     clouds: { x0: number; y: number; w: number }[];
     ripples: { x: number; y: number; w: number }[];
@@ -476,6 +478,7 @@ export function paintStatic(cf: {
         chX: cx - 31,
         chY: campY - 27,
         stars: [],
+        dim: [],
         cross: [],
         clouds: [],
         ripples: [],
@@ -491,9 +494,9 @@ export function paintStatic(cf: {
     for (let i = 1; i < 4; i++) sky.r(0, b[i] - 3, W, 3, sky.dz(T.sky[i - 1], T.sky[i]));
     const bandAt = (y: number) => T.sky[y < b[1] ? 0 : y < b[2] ? 1 : y < b[3] ? 2 : 3];
 
-    if (night) {
+    const RS = rng(991 + (mob ? 5 : 0));
+    {
         const n = Math.round((W * gy) / 85);
-        sky.grp();
         for (let i = 0; i < n; i++) {
             const x = Math.floor(R() * W);
             const y = 2 + Math.floor(Math.pow(R(), 1.5) * (gy - 14));
@@ -502,7 +505,7 @@ export function paintStatic(cf: {
                 I.stars.push({ x, y, p: 20 + Math.floor(R() * 30), ph: Math.floor(R() * 50) });
                 continue;
             }
-            sky.r(x, y, 1, 1, R() < 0.3 ? "#9aa4d4" : "#4e5890");
+            I.dim.push([x, y, R() < 0.3 ? "#9aa4d4" : "#4e5890"]);
         }
         for (let i = 0, tries = 0; i < (mob ? 4 : 8) && tries < 200; tries++) {
             const x = 4 + Math.floor(R() * (W - 8));
@@ -511,6 +514,10 @@ export function paintStatic(cf: {
             I.cross.push({ x, y, p: 24 + Math.floor(R() * 24), ph: Math.floor(R() * 40) });
             i++;
         }
+    }
+    if (night) {
+        sky.grp();
+        I.dim.forEach(([x, y, c]) => sky.r(x, y, 1, 1, c));
         sky.grp();
         sky.circ(moon.x, moon.y, moon.r + 4, sky.dz(bandAt(moon.y), "#26306a"));
         sky.circ(moon.x, moon.y, moon.r + 1, "#3a4478");
@@ -541,9 +548,9 @@ export function paintStatic(cf: {
         const nc = mob ? 3 : 6;
         for (let i = 0; i < nc; i++)
             I.clouds.push({
-                x0: Math.floor(R() * (W + 50)),
-                y: 8 + Math.floor(R() * (gy * 0.42)),
-                w: 14 + Math.floor(R() * 20),
+                x0: Math.floor(RS() * (W + 50)),
+                y: 8 + Math.floor(RS() * (gy * 0.42)),
+                w: 14 + Math.floor(RS() * 20),
             });
     }
 
@@ -575,9 +582,9 @@ export function paintStatic(cf: {
     }
     if (!night)
         for (let i = 0; i < W / 10; i++) {
-            const x = Math.floor(R() * W);
-            const y = gy + 6 + Math.floor(R() * (H - gy - 9));
-            land.r(x, y, 1, 1, R() < 0.5 ? T.gDot : "#ffffff");
+            const x = Math.floor(RS() * W);
+            const y = gy + 6 + Math.floor(RS() * (H - gy - 9));
+            land.r(x, y, 1, 1, RS() < 0.5 ? T.gDot : "#ffffff");
         }
     // Lake.
     if (lake != null) {
@@ -989,6 +996,269 @@ export function paintDyn(I: SceneInfo, t: number, th: Theme, frozen: boolean) {
         F.spr(o, OWLP, I.owl.x, I.owl.y);
     }
     return { S, L, F };
+}
+
+// ── Night ↔ day transition (sunrise / sunset) ──
+
+// Sky band colors along the transition; p = 0 is night, p = 1 is day.
+const SKY_KEYS: [number, string[]][] = [
+    [0, ["#0b1026", "#10173a", "#172050", "#222e5c"]],
+    [0.3, ["#171a4a", "#2a2262", "#4a2d74", "#74407e"]],
+    [0.5, ["#2e3274", "#5a438a", "#a8558a", "#ec7a84"]],
+    [0.72, ["#4a7cbc", "#8c94c0", "#eaa07e", "#f8bc6c"]],
+    [1, ["#56b4ec", "#6ec3f2", "#8dd0f5", "#b6e2f7"]],
+];
+const hex3 = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+export function mix(a: string, b: string, k: number) {
+    const A = hex3(a);
+    const B = hex3(b);
+    return (
+        "#" +
+        A.map((v, i) =>
+            Math.round(v + (B[i] - v) * k)
+                .toString(16)
+                .padStart(2, "0"),
+        ).join("")
+    );
+}
+function skyAt(p: number) {
+    let i = 0;
+    while (i < SKY_KEYS.length - 2 && p > SKY_KEYS[i + 1][0]) i++;
+    const [p0, a] = SKY_KEYS[i];
+    const [p1, b] = SKY_KEYS[i + 1];
+    const k = Math.max(0, Math.min(1, (p - p0) / (p1 - p0)));
+    return a.map((c, j) => mix(c, b[j], k));
+}
+const smoothstep = (a: number, b: number, x: number) => {
+    const k = Math.max(0, Math.min(1, (x - a) / (b - a)));
+    return k * k * (3 - 2 * k);
+};
+// 4x4 ordered-dither matrix: a pixel is shown when its value is below the level (0-16).
+export const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+
+// Layers of one transition frame, drawn in this order. `day`/`night` masked layers are blended
+// in with a Bayer dither at `kl` (daylight) and `kn` (night-only details, fading with the fire).
+export function paintTrans(I: SceneInfo, Id: SceneInfo, p: number, t: number) {
+    const S = new Pt(); // sky, stars, moon, sun
+    const C = new Pt(); // clouds (day mask)
+    const N = new Pt(); // fire light pool, laptop glow, owl (night mask)
+    const D = new Pt(); // day scorch and moon reflection (day mask)
+    const RP = new Pt(); // lake ripples
+    const CN = new Pt(); // character, night palette
+    const CD = new Pt(); // character, day palette (day mask)
+    const F = new Pt(); // fire, sparks, smoke, stones
+    const { W, H, gy, cx, campY, moon, lake } = I;
+    const fy = campY - 1;
+    const Tn = TH.night;
+    const Td = TH.day;
+    const kl = smoothstep(0.15, 0.85, p);
+    const b = [0, Math.round(gy * 0.36), Math.round(gy * 0.6), Math.round(gy * 0.8), gy];
+    const sk = skyAt(p);
+    S.grp();
+    for (let i = 0; i < 4; i++) S.r(0, b[i], W, b[i + 1] - b[i], sk[i]);
+    for (let i = 1; i < 4; i++) S.r(0, b[i] - 3, W, 3, S.dz(sk[i - 1], sk[i]));
+    const band = (y: number) => sk[y < b[1] ? 0 : y < b[2] ? 1 : y < b[3] ? 2 : 3];
+    // Stars go out one by one; brighter ones hold on longer.
+    S.grp();
+    I.dim.forEach(([x, y, c]) => {
+        if (p < 0.04 + hh(x * 7 + y, 311) * 0.4) S.r(x, y, 1, 1, c);
+    });
+    I.stars.forEach((s) => {
+        const o = 0.08 + hh(s.x * 7 + s.y, 313) * 0.45;
+        if (p < o) S.r(s.x, s.y, 1, 1, p > o - 0.05 ? "#7e88c0" : (t + s.ph) % s.p > 1 ? "#e6eaff" : "#3e4880");
+    });
+    I.cross.forEach((s) => {
+        const o = 0.3 + hh(s.x * 7 + s.y, 317) * 0.3;
+        if (p >= o) return;
+        S.r(s.x, s.y, 1, 1, "#ffffff");
+        if (p < o - 0.1)
+            (
+                [
+                    [-1, 0],
+                    [1, 0],
+                    [0, -1],
+                    [0, 1],
+                ] as const
+            ).forEach(([dx, dy]) => S.r(s.x + dx, s.y + dy, 1, 1, "#9aa6e0"));
+    });
+    // The moon sets.
+    const km = smoothstep(0, 0.6, p);
+    if (km < 1) {
+        const mx = moon.x + Math.round(km * moon.r * 1.5);
+        const my = moon.y + Math.round(km * (gy - moon.y + moon.r + 2));
+        const q = moon.r / 10;
+        S.grp();
+        S.circ(mx, my, moon.r + 2, S.dz(band(my), mix("#3a4478", band(my), km)));
+        S.grp();
+        S.circ(mx, my, moon.r, mix("#efe8c8", "#f6d8a8", km));
+        S.r(
+            mx - Math.round(5 * q),
+            my - Math.round(3 * q),
+            Math.max(2, Math.round(3 * q)),
+            Math.max(1, Math.round(2 * q)),
+            "#d4caa0",
+        );
+        S.r(mx + Math.round(2 * q), my + Math.round(q), 2, 2, "#d4caa0");
+    }
+    // The sun rises.
+    const ks = smoothstep(0.3, 1, p);
+    if (ks > 0) {
+        const sx = Math.round(moon.x - moon.r * 3 * (1 - ks));
+        const sy0 = gy + moon.r + 3;
+        const sy = Math.round(sy0 + (moon.y - sy0) * ks);
+        const kc = smoothstep(0.45, 0.95, p);
+        S.grp();
+        S.circ(sx, sy, moon.r + 4, S.dz(band(sy), mix("#f6a86a", "#d6f0fb", kc)));
+        S.grp();
+        S.circ(sx, sy, moon.r, mix("#ff6a2a", "#ffd84a", kc));
+        S.circ(sx - 1, sy - 1, moon.r - 3, mix("#ff9a4a", "#ffe88a", kc));
+        S.r(sx - 3, sy - 4, 2, 1, "#fff6c8");
+        if (p > 0.86) {
+            S.grp();
+            (
+                [
+                    [1, 0],
+                    [-1, 0],
+                    [0, 1],
+                    [0, -1],
+                    [0.7, 0.7],
+                    [-0.7, 0.7],
+                    [0.7, -0.7],
+                    [-0.7, -0.7],
+                ] as const
+            ).forEach(([dx, dy], i) => {
+                const len = 2 + (i % 2);
+                for (let j = 0; j < len; j++)
+                    S.r(
+                        sx + Math.round(dx * (moon.r + 3 + j)),
+                        sy + Math.round(dy * (moon.r + 3 + j)),
+                        1,
+                        1,
+                        "#ffd84a",
+                    );
+            });
+        }
+    }
+    Id.clouds.forEach((c) => {
+        C.grp();
+        const x = ((c.x0 + Math.floor(t / 5)) % (W + 50)) - 25;
+        C.r(x, c.y, c.w, 3, "#ffffff");
+        C.circ(x + 4, c.y, 3, "#ffffff");
+        C.circ(x + Math.round(c.w * 0.45), c.y - 1, 4, "#ffffff");
+        C.circ(x + c.w - 5, c.y, 3, "#ffffff");
+        C.r(x + 1, c.y + 3, c.w - 2, 1, "#cfe8f7");
+    });
+    // Fire light pool (fades with the fire) and the day scorch mark.
+    const f6 = t % 6;
+    const k4 = t >> 2;
+    const xm = lake != null && I.lakeRow ? (y: number) => I.lakeRow!(y) - 1 : null;
+    N.grp();
+    N.ell(cx, campY + 1, 36, 9, N.dz(Tn.ground, "#2c2a1c"), null, xm);
+    N.grp();
+    N.ell(cx, campY + 1, 25, 6, "#2c2a1c", null, xm);
+    I.tufts.forEach((q) => N.r(q.x, q.y, 1, 1, "#3e3622"));
+    N.grp();
+    N.ell(cx, campY + 1, 15, 4, "#43361f");
+    N.ell(cx, campY + 1, 8, 2, "#5e4524");
+    N.grp();
+    N.r(I.chX - 4, campY + 1, 16, 1, "#1a1a12");
+    N.r(I.chX - 2, campY + 2, 10, 1, "#1a1a12");
+    N.grp();
+    N.r(I.chX + 16, I.chY + 19, 1, 1, "#7affc0");
+    if (I.owl) {
+        const o = OWL.slice();
+        if (t % 70 < 2) {
+            o[2] = "ooooooo";
+            o[3] = "oddoddo";
+        }
+        N.grp();
+        N.spr(o, OWLP, I.owl.x, I.owl.y);
+    }
+    D.grp();
+    D.ell(cx, campY + 1, 10, 2, "#4a6a34");
+    D.ell(cx, campY + 1, 5, 1, "#5a5a4a");
+    if (lake != null && I.lakeRow) {
+        RP.grp();
+        const rc = mix(Tn.ripple, Td.ripple, kl);
+        I.ripples.forEach((r, i) => RP.r(r.x + ((k4 + i) % 3) - 1, r.y, r.w, 1, rc));
+        if (moon.x > lake - 10)
+            (
+                [
+                    [N, Tn],
+                    [D, Td],
+                ] as const
+            ).forEach(([P, T]) => {
+                P.grp();
+                for (let y = gy + 2; y < H - 4; y += 2) {
+                    const xl = I.lakeRow!(y);
+                    const w = 1 + Math.floor(hh(y, k4) * 4);
+                    const mx = moon.x + Math.floor(hh(y + 99, k4) * 3) - 1;
+                    if (mx - w > xl) P.r(mx - w, y, 2 * w, 1, y - gy < (H - gy) * 0.5 ? T.refl : T.refl2);
+                }
+            });
+    }
+    // Character: the night palette dithers into the day palette.
+    const tf = Math.floor(t / 2) % 10;
+    const fk = tf < 8 && tf % 2 ? "B" : "A";
+    const rows = CH.slice();
+    Object.entries(FR[fk]).forEach(([k, row]) => {
+        rows[Number(k)] = row;
+    });
+    if (t % 45 === 0) rows[6] = rows[6].replace(/E/g, "s");
+    CN.grp();
+    CN.spr(rows, CP.night, I.chX, I.chY);
+    CD.grp();
+    CD.spr(rows, CP.day, I.chX, I.chY);
+    // The fire shrinks down to the small day flame and smoke takes over.
+    const kf = smoothstep(0, 0.6, p);
+    const Hf = Math.round((I.mob ? 13 : 15) * (1 - kf) + 5 * kf);
+    flame(F, cx, fy - 1, Hf, Math.round(6 - 3 * kf), f6);
+    F.grp();
+    for (let j = 0; j < 5; j++)
+        F.r(
+            cx - 5 + j * 2 + (hh(j, t >> 1) > 0.5 ? 1 : 0),
+            fy - 1,
+            1,
+            1,
+            hh(j + 9, t >> 1) > 0.4 ? "#ff6a1a" : "#c74707",
+        );
+    F.grp();
+    for (let i = 0, n = Math.round(10 * (1 - kf)); i < n; i++) {
+        const per = 18 + (i % 5) * 2;
+        const cyc = Math.floor((t + i * 7) / per);
+        const age = (t + i * 7) % per;
+        if (age > per - 2) continue;
+        F.r(
+            cx + Math.round((hh(i, cyc) - 0.5) * 8) + Math.round(Math.sin((age + i) * 0.6) * 1.5),
+            fy - Hf + 4 - Math.round(age * 1.6),
+            1,
+            1,
+            age < 5 ? "#ffe9a0" : age < 10 ? "#ff9a3c" : "#c74707",
+        );
+    }
+    const ksm = smoothstep(0.2, 0.7, p);
+    const smA = mix("#4a505c", "#8f98a3", kl);
+    const smB = mix("#3a3f4c", "#b7bfc8", kl);
+    for (let i = 0; i < Math.round(4 * ksm); i++) {
+        F.grp();
+        const age = (t + i * 8) % 32;
+        const s = 1 + (age > 10 ? 1 : 0) + (age > 22 ? 1 : 0);
+        F.r(
+            cx + Math.round(Math.sin(age / 5 + i) * 2) + (age >> 3),
+            fy - 6 - Math.round(age * 1.3),
+            s,
+            s,
+            age < 16 ? smA : smB,
+        );
+    }
+    F.grp();
+    const sh = mix(Tn.stoneHi, Td.stoneHi, kl);
+    const so = mix(Tn.stone, Td.stone, kl);
+    [-10, -6, -2, 2, 6, 10].forEach((i) => {
+        F.r(cx + i - 1, fy + 1, 3, 1, sh);
+        F.r(cx + i - 1, fy + 2, 3, 1, so);
+    });
+    return { S, C, N, D, RP, CN, CD, F, kl, kn: 1 - kf };
 }
 
 // ── Footer strip: the camp after everyone went to sleep ──
