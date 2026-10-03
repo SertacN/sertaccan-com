@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
 import LocaleHtmlUpdater from "@/components/providers/locale-html-updater";
+import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 
 export async function generateMetadata({
@@ -52,7 +53,18 @@ export async function generateMetadata({
     };
 }
 
-export default async function LocaleLayout({ children }: { children: React.ReactNode }) {
+export default async function LocaleLayout({
+    children,
+    params,
+}: {
+    children: React.ReactNode;
+    params: Promise<{ locale: string }>;
+}) {
+    // Paths with a dot (e.g. /ads.txt) skip the i18n middleware and land here as the "locale";
+    // without this check they would render the home page with a 200 instead of a 404.
+    const { locale } = await params;
+    if (!hasLocale(routing.locales, locale)) notFound();
+
     const messages = await getMessages();
 
     return (
