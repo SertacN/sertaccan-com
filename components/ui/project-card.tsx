@@ -3,10 +3,8 @@ import { InferSelectModel } from "drizzle-orm";
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link as LocaleLink } from "@/i18n/navigation";
-import { Button } from "./button";
 import Github from "../icons/github";
 import Link from "next/link";
-import { getTechIcon } from "@/utils/tech-icon";
 import {
     Pagination,
     PaginationContent,
@@ -18,15 +16,20 @@ import {
 } from "./pagination";
 import buildPages from "@/utils/build-pages";
 import StoreButtons from "./store-buttons";
+import { STATUS_ICONS } from "@/components/pixel/icons";
 
 export type Project = InferSelectModel<typeof project>;
 type PaginationData = { page: number; totalPages: number };
 
-const statusConfig: Record<Project["status"], { label: string; className: string }> = {
-    ACTIVE: { label: "Active", className: "border-primary text-primary" },
-    WIP: { label: "WIP", className: "border-yellow-500 text-yellow-500 light:border-yellow-800 light:text-yellow-800" },
-    ARCHIVED: { label: "Archived", className: "border-muted-foreground text-muted-foreground" },
+// Quest-style status badge colors; labels come from the "project_status" messages.
+const statusClass: Record<Project["status"], string> = {
+    ACTIVE: "text-primary [--frame:var(--primary)]",
+    WIP: "text-warn [--frame:var(--warn)]",
+    ARCHIVED: "text-muted-foreground [--frame:var(--muted-foreground)]",
 };
+
+export const framedButton =
+    "frame-2 m-0.5 flex h-8 items-center gap-2 bg-card px-2.5 font-mono text-xs font-bold text-foreground hover:bg-btn-hover hover:text-foreground";
 
 export default async function ProjectCard({
     projects,
@@ -88,105 +91,98 @@ export default async function ProjectCard({
 export async function ProjectCardItem({ project, eagerImage = true }: { project: Project; eagerImage?: boolean }) {
     const locale = await getLocale();
     const currentLang = locale === "en" ? "en" : "tr";
-    const t = await getTranslations("home_projects");
-    const { label, className } = statusConfig[project.status];
+    const [t, ts] = await Promise.all([getTranslations("home_projects"), getTranslations("project_status")]);
     const displayTitle = currentLang === "en" && project.titleEn ? project.titleEn : project.title;
+    const StatusIcon = STATUS_ICONS[project.status];
 
     return (
-        <div className="flex h-full flex-col border border-border bg-surface">
-            {/*IMAGE*/}
+        <article className="frame-4 m-1 flex h-full flex-col bg-card [--frame:var(--pixel-line)] hover:[--frame:var(--primary)]">
             {/* Mouse-only shortcut; the "details" link below is the accessible link to the same page. */}
-            <LocaleLink href={`/projects/${project.slug}`} tabIndex={-1} aria-hidden="true">
+            <LocaleLink
+                href={`/projects/${project.slug}`}
+                tabIndex={-1}
+                aria-hidden="true"
+                className="relative block aspect-video border-b-4 border-pixel-line bg-card"
+            >
                 {project.imageUrl ? (
-                    <div className="relative h-44 w-full rounded-t overflow-hidden">
-                        <Image
-                            loading={eagerImage ? "eager" : "lazy"}
-                            sizes="2xl"
-                            className="object-cover"
-                            src={project.imageUrl}
-                            alt={project.title}
-                            fill
-                        ></Image>
-                    </div>
+                    <Image
+                        loading={eagerImage ? "eager" : "lazy"}
+                        sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 90vw"
+                        className="object-cover"
+                        src={project.imageUrl}
+                        alt=""
+                        fill
+                    />
                 ) : (
-                    <div className="h-44 w-full rounded-t bg-muted" />
+                    <span
+                        className="flex size-full items-center justify-center bg-size-[8px_8px]"
+                        style={{
+                            backgroundImage: "repeating-conic-gradient(var(--pixel-line) 0 25%, transparent 0 50%)",
+                        }}
+                    >
+                        <span className="bg-card px-2 py-1 font-mono text-xs text-muted-foreground">
+                            {t("image_placeholder")}
+                        </span>
+                    </span>
                 )}
             </LocaleLink>
 
-            {/*TITLE + STATUS*/}
             <div className="flex flex-1 flex-col gap-3 p-5">
-                <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-mono text-sm font-bold text-text">
-                        {displayTitle}
-                    </h3>
-                    <span className={`shrink-0 rounded border px-1.5 py-0.5 font-mono text-xs ${className}`}>
-                        {label}
+                <div className="flex">
+                    <span
+                        className={`frame-2 m-0.5 flex h-6.5 items-center gap-1.5 bg-background px-2 font-mono text-xs font-bold tracking-[0.06em] uppercase ${statusClass[project.status]}`}
+                    >
+                        <StatusIcon />
+                        <span>{ts(project.status)}</span>
                     </span>
                 </div>
-                {/*DESCRIPTION*/}
-                <p className="text-xs leading-relaxed text-muted-foreground">
+                {/* Title and description are clamped and keep their full height even when short, so every
+                    card in a row lines up; the full text stays in the DOM and on the detail page. */}
+                <h3 className="m-0 line-clamp-2 min-h-[2lh] font-sans text-lg leading-[1.35] font-semibold text-pretty text-foreground">
+                    {displayTitle}
+                </h3>
+                <p className="m-0 line-clamp-3 min-h-[3lh] text-sm leading-[1.6] text-pretty text-muted-foreground">
                     {currentLang === "tr" ? project.descriptionTr : project.descriptionEn}
                 </p>
-                {/*TAG*/}
                 {project.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5">
-                        {project.tags.map((tag) => {
-                            const icon = getTechIcon(tag);
-                            return (
-                                <span
-                                    className="flex items-center gap-1 rounded border border-border px-1.5 py-0.5 font-mono text-xs text-muted-foreground capitalize"
-                                    key={tag}
-                                >
-                                    {icon && (
-                                        <svg
-                                            role="img"
-                                            viewBox="0 0 24 24"
-                                            width="10"
-                                            height="10"
-                                            fill={`#${icon.hex}`}
-                                            aria-label={icon.title}
-                                        >
-                                            <path d={icon.path} />
-                                        </svg>
-                                    )}
-                                    {tag}
-                                </span>
-                            );
-                        })}
-                    </div>
+                    <ul className="flex flex-wrap gap-1.5">
+                        {project.tags.map((tag) => (
+                            <li
+                                key={tag}
+                                className="border border-pixel-line px-1.5 py-0.5 font-mono text-xs text-muted-foreground"
+                            >
+                                {tag}
+                            </li>
+                        ))}
+                    </ul>
                 )}
-                {/*LINKS*/}
-                <div className="mt-auto flex items-center gap-2 pt-2">
+                <div className="mt-auto flex flex-wrap items-center gap-2.5 pt-2">
                     {project.githubUrl && (
-                        <Button
-                            size="icon"
-                            variant="secondary"
-                            className="cursor-pointer"
-                            asChild
+                        <Link
+                            href={project.githubUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`GitHub: ${displayTitle}`}
+                            className={framedButton}
                         >
-                            <Link href={project.githubUrl} aria-label={`GitHub: ${displayTitle}`} target="_blank">
-                                <Github size={14} />
-                            </Link>
-                        </Button>
+                            <Github size={16} />
+                            <span aria-hidden="true">GitHub</span>
+                        </Link>
                     )}
                     <StoreButtons
                         appStoreUrl={project.appStoreUrl}
                         googlePlayUrl={project.googlePlayUrl}
                         projectName={displayTitle}
                     />
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        className="ml-auto cursor-pointer text-primary hover:text-primary"
-                        asChild
+                    <LocaleLink
+                        href={`/projects/${project.slug}`}
+                        className="ml-auto font-mono text-[13px] font-bold text-primary hover:text-foreground"
                     >
-                        <LocaleLink href={`/projects/${project.slug}`}>
-                            {t("details")}
-                            <span className="sr-only"> {displayTitle}</span>
-                        </LocaleLink>
-                    </Button>
+                        {t("details")}
+                        <span className="sr-only"> {displayTitle}</span>
+                    </LocaleLink>
                 </div>
             </div>
-        </div>
+        </article>
     );
 }

@@ -38,19 +38,22 @@ export function ProjectGridSkeleton({ count = 3 }: { count?: number }) {
     );
 }
 
-// Mirrors the home page slider layout: 1 card (with a peek) on mobile, 2 on md, 3 on lg.
+// Mirrors the home page slider layout: heading with arrows, then 1 card (with a peek) on mobile, 2 from sm, 3 from lg.
 export function ProjectSliderSkeleton({ count = 3 }: { count?: number }) {
     return (
-        <div>
-            <div className="mb-4 flex justify-end gap-2">
-                <Skeleton className="size-8" />
-                <Skeleton className="size-8" />
+        <div className="flex flex-col gap-7">
+            <div className="flex items-end justify-between gap-5">
+                <Skeleton className="h-12 w-72 max-w-full" />
+                <div className="flex gap-3">
+                    <Skeleton className="size-11" />
+                    <Skeleton className="size-11" />
+                </div>
             </div>
-            <div className="flex gap-6 overflow-hidden">
+            <div className="flex gap-4 overflow-hidden pt-1 pb-2">
                 {Array.from({ length: count }).map((_, i) => (
                     <div
                         key={i}
-                        className="grid shrink-0 basis-[85%] md:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)]"
+                        className="grid shrink-0 basis-[calc(100%-56px)] sm:basis-[calc((100%-32px)/2+8px)] lg:basis-[calc((100%-56px)/3+8px)]"
                     >
                         <ProjectCardSkeleton />
                     </div>

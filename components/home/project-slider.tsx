@@ -1,8 +1,8 @@
 "use client";
 
 import { Children, useCallback, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowLeftIcon, ArrowRightIcon } from "@/components/pixel/icons";
+import SectionHeading from "@/components/pixel/section-heading";
 
 type SliderLabels = {
     region: string;
@@ -13,15 +13,26 @@ type SliderLabels = {
 };
 
 // Controls are hidden by breakpoint (not by measuring) so the layout does not shift on hydration.
-// Visible slides per breakpoint: 1 on mobile, 2 from md, 3 from lg.
-function controlsVisibilityClass(count: number) {
+// Visible slides per breakpoint: 1 on mobile, 2 from sm, 3 from lg.
+function dotsVisibilityClass(count: number) {
     if (count <= 1) return "hidden";
-    if (count <= 2) return "md:hidden";
+    if (count <= 2) return "sm:hidden";
     if (count <= 3) return "lg:hidden";
     return "";
 }
 
-export default function ProjectSlider({ children, labels }: { children: React.ReactNode; labels: SliderLabels }) {
+const arrowButton =
+    "frame-2 m-0.5 flex size-11 cursor-pointer items-center justify-center border-0 bg-card text-foreground hover:bg-btn-hover disabled:cursor-default disabled:bg-background disabled:text-muted-foreground disabled:[--frame:var(--pixel-line)] disabled:hover:bg-background";
+
+export default function ProjectSlider({
+    heading,
+    children,
+    labels,
+}: {
+    heading: string;
+    children: React.ReactNode;
+    labels: SliderLabels;
+}) {
     const slides = Children.toArray(children);
     const trackRef = useRef<HTMLDivElement>(null);
     const [state, setState] = useState({ active: 0, pages: slides.length, canPrev: false, canNext: true });
@@ -78,39 +89,36 @@ export default function ProjectSlider({ children, labels }: { children: React.Re
         track.scrollTo({ left: target.offsetLeft - items[0].offsetLeft, behavior: reduceMotion ? "auto" : "smooth" });
     };
 
-    const controlsClass = controlsVisibilityClass(slides.length);
-
     return (
-        <div role="region" aria-roledescription="carousel" aria-label={labels.region}>
-            <div className={`mb-4 flex justify-end gap-2 ${controlsClass}`}>
-                <Button
-                    type="button"
-                    size="icon"
-                    variant="outline"
-                    className="cursor-pointer"
-                    onClick={() => goTo(state.active - 1)}
-                    disabled={!state.canPrev}
-                    aria-label={labels.previous}
-                >
-                    <ChevronLeft />
-                </Button>
-                <Button
-                    type="button"
-                    size="icon"
-                    variant="outline"
-                    className="cursor-pointer"
-                    onClick={() => goTo(state.active + 1)}
-                    disabled={!state.canNext}
-                    aria-label={labels.next}
-                >
-                    <ChevronRight />
-                </Button>
+        <div role="region" aria-roledescription="carousel" aria-label={labels.region} className="flex flex-col gap-7">
+            <div className="flex flex-wrap items-end justify-between gap-5">
+                <SectionHeading>{heading}</SectionHeading>
+                <div className="flex gap-3">
+                    <button
+                        type="button"
+                        className={arrowButton}
+                        onClick={() => goTo(state.active - 1)}
+                        disabled={!state.canPrev}
+                        aria-label={labels.previous}
+                    >
+                        <ArrowLeftIcon />
+                    </button>
+                    <button
+                        type="button"
+                        className={arrowButton}
+                        onClick={() => goTo(state.active + 1)}
+                        disabled={!state.canNext}
+                        aria-label={labels.next}
+                    >
+                        <ArrowRightIcon />
+                    </button>
+                </div>
             </div>
 
             <div
                 ref={trackRef}
                 tabIndex={0}
-                className="relative flex snap-x snap-mandatory gap-6 overflow-x-auto pb-1 outline-none [scrollbar-width:none] focus-visible:ring-2 focus-visible:ring-primary/50 [&::-webkit-scrollbar]:hidden"
+                className="relative flex snap-x snap-mandatory gap-4 overflow-x-auto pt-1 pb-2 outline-none [scrollbar-width:none] focus-visible:shadow-[0_0_0_4px_var(--primary)] [&::-webkit-scrollbar]:hidden"
             >
                 {slides.map((slide, i) => (
                     <div
@@ -118,29 +126,29 @@ export default function ProjectSlider({ children, labels }: { children: React.Re
                         role="group"
                         aria-roledescription="slide"
                         aria-label={labels.slides[i]}
-                        className="grid shrink-0 basis-[85%] snap-start md:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)]"
+                        className="grid shrink-0 basis-[calc(100%-56px)] snap-start sm:basis-[calc((100%-32px)/2+8px)] lg:basis-[calc((100%-56px)/3+8px)]"
                     >
                         {slide}
                     </div>
                 ))}
             </div>
 
-            <div className={`mt-6 flex items-center justify-center ${controlsClass}`}>
+            <div className={`flex justify-center gap-1 ${dotsVisibilityClass(slides.length)}`}>
                 {Array.from({ length: state.pages }).map((_, i) => (
-                    // The button is a 24px touch target (WCAG 2.5.8); the inner span is the visible dot.
+                    // 24px touch target (WCAG 2.5.8); the inner span is the visible pip.
                     <button
                         key={i}
                         type="button"
                         onClick={() => goTo(i)}
                         aria-label={labels.slides[i]}
                         aria-current={i === state.active ? "true" : undefined}
-                        className="group flex h-6 min-w-6 cursor-pointer items-center justify-center"
+                        className="flex size-6 cursor-pointer items-center justify-center border-0 bg-transparent p-0"
                     >
                         <span
-                            className={`block h-1.5 rounded-full transition-all duration-200 ${
+                            className={`h-2 ${
                                 i === state.active
-                                    ? "w-6 bg-primary"
-                                    : "w-1.5 bg-border group-hover:bg-muted-foreground"
+                                    ? "w-5 bg-primary shadow-[inset_0_0_0_2px_var(--primary)]"
+                                    : "w-2 shadow-[inset_0_0_0_2px_var(--muted-foreground)]"
                             }`}
                         />
                     </button>

@@ -1,85 +1,127 @@
 "use client";
 
-import { useRef, useEffect, useActionState, useState } from "react";
+import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createContactFormAction } from "@/app/[locale]/(home)/actions";
-import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { ErrorMarkIcon } from "@/components/pixel/icons";
+import Pigeon from "./pigeon";
 
 type ActionState = { success?: boolean; errors?: Record<string, string[]> } | null;
+
+const MESSAGE_MAX = 500;
+
+const labelClass = "font-mono text-xs font-bold tracking-widest text-muted-foreground uppercase";
+const inputClass =
+    "frame-4 m-1 border-0 bg-input-bg px-3.5 font-sans text-base text-foreground outline-none [--frame:var(--input-frame)] focus:[--frame:var(--primary)] aria-invalid:[--frame:var(--error)] aria-invalid:focus:[--frame:var(--error)]";
+
+function FieldError({ id, message }: { id: string; message?: string }) {
+    if (!message) return null;
+    return (
+        <span id={id} role="alert" className="flex items-center gap-2 font-mono text-[13px] font-bold text-error">
+            <ErrorMarkIcon />
+            {message}
+        </span>
+    );
+}
 
 export default function ContactForm() {
     const t = useTranslations("contact_form");
     const [state, action, pending] = useActionState<ActionState, FormData>(createContactFormAction, null);
-    const formRef = useRef<HTMLFormElement>(null);
     const [messageLength, setMessageLength] = useState(0);
-    const MESSAGE_MAX = 500;
-
-    useEffect(() => {
-        if (state?.success) formRef.current?.reset();
-    }, [state?.success]);
+    // The action state object changes on every submit; remembering the one the user dismissed
+    // lets "write a new message" bring the form back without an effect.
+    const [dismissed, setDismissed] = useState<ActionState>(null);
 
     const err = (field: string) => state?.errors?.[field]?.[0];
+    const invalid = (field: string) =>
+        err(field) ? { "aria-invalid": true, "aria-describedby": `${field}-error` } : {};
+
+    if (state?.success && state !== dismissed) {
+        return (
+            <div
+                role="status"
+                className="frame-4 m-1 flex w-full max-w-180 flex-col gap-4 bg-card p-6 [--frame:var(--pixel-line)]"
+            >
+                <div className="h-24 bg-portrait-bg">
+                    <Pigeon />
+                </div>
+                <p className="m-0 text-[17px] leading-relaxed text-foreground">{t("success")}</p>
+                <button
+                    type="button"
+                    onClick={() => {
+                        setDismissed(state);
+                        setMessageLength(0);
+                    }}
+                    className="h-9 cursor-pointer self-start border-0 bg-transparent p-0 font-mono text-[13px] font-bold text-primary underline underline-offset-4"
+                >
+                    {t("new_message")}
+                </button>
+            </div>
+        );
+    }
 
     return (
-        <section id="contact" className="px-4 py-24">
-            <h2 className="mb-8 text-center font-mono text-2xl font-bold text-text md:text-3xl">{t("title")}</h2>
-
-            <div className="mx-auto w-full max-w-xl rounded border border-border bg-surface p-6">
-                {state?.success && (
-                    <div className="mb-4 rounded border border-primary/30 bg-primary/5 px-4 py-2 text-sm text-primary">
-                        {t("success")}
-                    </div>
-                )}
-
-                <form ref={formRef} action={action} onReset={() => setMessageLength(0)} className="flex flex-col gap-4">
-                    <FieldGroup>
-                        <Field data-invalid={!!err("name")}>
-                            <FieldLabel htmlFor="name">{t("name_label")}</FieldLabel>
-                            <Input id="name" name="name" placeholder={t("name_placeholder")} />
-                            <FieldError>{err("name")}</FieldError>
-                        </Field>
-
-                        <Field data-invalid={!!err("email")}>
-                            <FieldLabel htmlFor="email">{t("email_label")}</FieldLabel>
-                            <Input id="email" name="email" type="email" placeholder={t("email_placeholder")} />
-                            <FieldError>{err("email")}</FieldError>
-                        </Field>
-
-                        <Field data-invalid={!!err("subject")}>
-                            <FieldLabel htmlFor="subject">{t("subject_label")}</FieldLabel>
-                            <Input id="subject" name="subject" placeholder={t("subject_placeholder")} />
-                            <FieldError>{err("subject")}</FieldError>
-                        </Field>
-
-                        <Field data-invalid={!!err("message")}>
-                            <FieldLabel htmlFor="message">{t("message_label")}</FieldLabel>
-                            <Textarea
-                                id="message"
-                                name="message"
-                                rows={5}
-                                placeholder={t("message_placeholder")}
-                                maxLength={MESSAGE_MAX}
-                                onChange={(e) => setMessageLength(e.target.value.length)}
-                            />
-                            <div className="flex justify-between">
-                                <FieldError>{err("message")}</FieldError>
-                                <span
-                                    className={`ml-auto text-xs ${messageLength >= MESSAGE_MAX ? "text-destructive" : "text-muted-foreground"}`}
-                                >
-                                    {messageLength}/{MESSAGE_MAX}
-                                </span>
-                            </div>
-                        </Field>
-                    </FieldGroup>
-
-                    <Button type="submit" disabled={pending} className="self-end">
-                        {pending ? t("submitting") : t("submit")}
-                    </Button>
-                </form>
+        <form action={action} noValidate className="flex w-full max-w-180 flex-col gap-5">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                <label className="flex min-w-0 flex-col gap-2">
+                    <span className={labelClass}>{t("name_label")}</span>
+                    <input
+                        name="name"
+                        placeholder={t("name_placeholder")}
+                        className={`${inputClass} h-11`}
+                        {...invalid("name")}
+                    />
+                    <FieldError id="name-error" message={err("name")} />
+                </label>
+                <label className="flex min-w-0 flex-col gap-2">
+                    <span className={labelClass}>{t("email_label")}</span>
+                    <input
+                        name="email"
+                        type="email"
+                        placeholder={t("email_placeholder")}
+                        className={`${inputClass} h-11`}
+                        {...invalid("email")}
+                    />
+                    <FieldError id="email-error" message={err("email")} />
+                </label>
             </div>
-        </section>
+            <label className="flex min-w-0 flex-col gap-2">
+                <span className={labelClass}>{t("subject_label")}</span>
+                <input
+                    name="subject"
+                    placeholder={t("subject_placeholder")}
+                    className={`${inputClass} h-11`}
+                    {...invalid("subject")}
+                />
+                <FieldError id="subject-error" message={err("subject")} />
+            </label>
+            <label className="flex flex-col gap-2">
+                <span className={`${labelClass} flex justify-between`}>
+                    <span>{t("message_label")}</span>
+                    <span className={`tracking-normal ${messageLength >= MESSAGE_MAX ? "text-error" : ""}`}>
+                        {messageLength} / {MESSAGE_MAX}
+                    </span>
+                </span>
+                <textarea
+                    name="message"
+                    maxLength={MESSAGE_MAX}
+                    placeholder={t("message_placeholder")}
+                    onChange={(e) => setMessageLength(e.target.value.length)}
+                    className={`${inputClass} h-40 resize-y py-3 leading-[1.6]`}
+                    {...invalid("message")}
+                />
+                <FieldError id="message-error" message={err("message")} />
+            </label>
+
+            <FieldError id="form-error" message={err("_form")} />
+
+            <button
+                type="submit"
+                disabled={pending}
+                className="frame-4 m-1 h-12 cursor-pointer self-start border-0 bg-primary px-6 font-mono text-[15px] font-bold text-primary-foreground transition-transform [--frame:var(--primary)] hover:-translate-y-1 focus-visible:outline-4 focus-visible:outline-offset-[6px] focus-visible:outline-foreground active:translate-y-0 disabled:cursor-wait disabled:translate-y-0"
+            >
+                {pending ? t("submitting") : t("submit")}
+            </button>
+        </form>
     );
 }

@@ -14,8 +14,8 @@ export default function StoreButtons({ appStoreUrl, googlePlayUrl, size = "sm", 
 
     const cls =
         size === "sm"
-            ? "inline-flex items-center gap-1.5 whitespace-nowrap rounded border border-primary px-2.5 py-1 font-mono text-xs text-primary transition-colors duration-150 hover:bg-primary/10"
-            : "inline-flex items-center gap-1.5 whitespace-nowrap rounded border border-primary px-4 py-2 font-mono text-sm text-primary transition-colors duration-150 hover:bg-primary/10";
+            ? "frame-2 m-0.5 inline-flex h-8 items-center gap-1.5 whitespace-nowrap bg-card px-2.5 font-mono text-xs font-bold text-foreground hover:bg-btn-hover hover:text-foreground"
+            : "frame-2 m-0.5 inline-flex h-10 items-center gap-2 whitespace-nowrap bg-card px-4 font-mono text-sm font-bold text-foreground hover:bg-btn-hover hover:text-foreground";
 
     const iconSize = size === "sm" ? 11 : 13;
 

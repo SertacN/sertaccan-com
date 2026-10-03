@@ -1,7 +1,7 @@
 import { getFeaturedProjects } from "@/lib/server/projects";
 import { ProjectCardItem } from "../ui/project-card";
 import ProjectSlider from "./project-slider";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 
 // Cards beyond the first viewport are off-screen, so their images can load lazily.
@@ -12,24 +12,24 @@ export default async function Projects() {
     const projects = data ?? [];
     const t = await getTranslations("home_projects");
     return (
-        <section id="projects" className="px-4 py-24">
-            <h2 className="mb-12 text-center font-mono text-2xl font-bold text-text md:text-3xl">{t("title")}</h2>
-            <ProjectSlider
-                labels={{
-                    region: t("title"),
-                    previous: t("previous"),
-                    next: t("next"),
-                    slides: projects.map((_, i) => t("slide_label", { current: i + 1, total: projects.length })),
-                }}
-            >
-                {projects.map((project, i) => (
-                    <ProjectCardItem key={project.slug} project={project} eagerImage={i < EAGER_IMAGE_COUNT} />
-                ))}
-            </ProjectSlider>
-            <div className="mt-10 text-center">
+        <section id="projects" className="py-24">
+            <div className="flex flex-col gap-7">
+                <ProjectSlider
+                    heading={t("title")}
+                    labels={{
+                        region: t("title"),
+                        previous: t("previous"),
+                        next: t("next"),
+                        slides: projects.map((_, i) => t("slide_label", { current: i + 1, total: projects.length })),
+                    }}
+                >
+                    {projects.map((project, i) => (
+                        <ProjectCardItem key={project.slug} project={project} eagerImage={i < EAGER_IMAGE_COUNT} />
+                    ))}
+                </ProjectSlider>
                 <Link
                     href="/projects"
-                    className="font-mono text-s text-accent-foreground transition-colors duration-150 hover:underline"
+                    className="self-center font-mono text-sm font-bold text-primary hover:text-foreground"
                 >
                     {t("see_all")}
                 </Link>

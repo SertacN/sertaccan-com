@@ -1,6 +1,8 @@
 import { Tech, techstack } from "@/lib/tech-stack";
 import { getTechIcon } from "@/utils/tech-icon";
 import { getTranslations } from "next-intl/server";
+import SectionHeading from "@/components/pixel/section-heading";
+import TechIcon from "@/components/pixel/tech-icon";
 
 const categories = ["Frontend", "Backend", "Database", "DevOps", "Mobile"] as const;
 const grouped = categories.reduce(
@@ -10,55 +12,88 @@ const grouped = categories.reduce(
     },
     {} as Record<string, Tech[]>,
 );
-// Dark theme dims the text per level; in light theme dimmed green cannot reach 4.5:1 contrast,
-// so text stays solid there and levels differ only by background and border.
-const levelBg: Record<Tech["level"], string> = {
-    advanced: "bg-accent-foreground/8 border-accent-foreground/25 text-accent-foreground",
-    intermediate: "bg-accent-foreground/4 border-accent-foreground/15 text-accent-foreground/70 light:text-accent-foreground",
-    beginner: "bg-accent-foreground/2 border-accent-foreground/10 text-accent-foreground/60 light:text-accent-foreground",
-};
+
+const LEVELS: Tech["level"][] = ["advanced", "intermediate", "beginner"];
+const LEVEL_PIPS: Record<Tech["level"], number> = { advanced: 3, intermediate: 2, beginner: 1 };
+
+// Level shown as three pixel pips, so it does not rely on color or opacity alone.
+function Pips({ level }: { level: Tech["level"] }) {
+    return (
+        <span className="flex gap-0.5">
+            {[0, 1, 2].map((i) => (
+                <span
+                    key={i}
+                    className={`size-2 ${
+                        i < LEVEL_PIPS[level]
+                            ? "bg-primary shadow-[inset_0_0_0_2px_var(--primary)]"
+                            : "shadow-[inset_0_0_0_2px_var(--muted-foreground)]"
+                    }`}
+                />
+            ))}
+        </span>
+    );
+}
 
 export default async function TechStack() {
     const t = await getTranslations("tech_stack");
     return (
-        <section id="techstack" className="px-4 py-24">
-            <h2 className="mb-12 text-center font-mono text-2xl font-bold text-text md:text-3xl">{t("title")}</h2>
-
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {categories.map((category) => {
-                    const items = grouped[category];
-                    if (!items.length) return null;
-                    return (
-                        <div key={category} className="rounded-lg border border-border bg-surface/50 p-5">
-                            <h3 className="mb-4 font-mono text-xs tracking-widest text-text uppercase">{category}</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {items.map((tech) => {
-                                    const icon = getTechIcon(tech.name);
-                                    return (
-                                        <span
-                                            key={tech.name}
-                                            className={`inline-flex items-center gap-1.5 rounded border px-3 py-1.5 font-mono text-xs font-bold transition-all duration-200 hover:-translate-y-px hover:border-accent ${levelBg[tech.level]}`}
-                                        >
-                                            {icon && (
-                                                <svg
-                                                    role="img"
-                                                    viewBox="0 0 24 24"
-                                                    width={14}
-                                                    height={14}
-                                                    fill={`#${icon.hex}`}
-                                                    aria-label={icon.title}
-                                                >
-                                                    <path d={icon.path} />
-                                                </svg>
-                                            )}
-                                            {tech.name}
-                                        </span>
-                                    );
-                                })}
+        <section id="techstack" className="py-24">
+            <div className="flex flex-col gap-8">
+                <div className="flex flex-wrap items-end justify-between gap-5">
+                    <SectionHeading>{t("title")}</SectionHeading>
+                    <div className="flex flex-wrap gap-5">
+                        {LEVELS.map((level) => (
+                            <div key={level} className="flex items-center gap-2">
+                                <span aria-hidden="true">
+                                    <Pips level={level} />
+                                </span>
+                                <span className="font-mono text-xs font-bold text-muted-foreground">
+                                    {t(`level_${level}`)}
+                                </span>
                             </div>
-                        </div>
-                    );
-                })}
+                        ))}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-6">
+                    {categories.map((category) => {
+                        const items = grouped[category];
+                        if (!items.length) return null;
+                        return (
+                            <div
+                                key={category}
+                                className="frame-4 m-1 flex flex-col gap-4 bg-card p-5 [--frame:var(--pixel-line)]"
+                            >
+                                <h3
+                                    lang="en"
+                                    className="font-mono text-xs font-bold tracking-widest text-primary uppercase"
+                                >
+                                    {category}
+                                </h3>
+                                <ul className="flex flex-wrap gap-2">
+                                    {items.map((tech) => (
+                                        <li
+                                            key={tech.name}
+                                            className="frame-2 m-0.5 flex h-8.5 items-center gap-2 bg-background px-2.5 transition-transform [--frame:var(--pixel-line)] hover:-translate-y-0.5 hover:[--frame:var(--primary)]"
+                                        >
+                                            <TechIcon icon={getTechIcon(tech.name)} name={tech.name} size={14} />
+                                            <span className="font-mono text-[13px] font-bold text-foreground">
+                                                {tech.name}
+                                            </span>
+                                            <span
+                                                role="img"
+                                                aria-label={t(`level_${tech.level}`)}
+                                                title={t(`level_${tech.level}`)}
+                                            >
+                                                <Pips level={tech.level} />
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         </section>
     );
