@@ -5,12 +5,16 @@
 
 @custom-variant dark (&:not(.light *));
 @custom-variant light (&:is(.light *));
+/* Tall desktop screens (e.g. 27" QHD): the hero scales its pixel grid and text by 1.5x.
+   Keep in sync with TALL_SCREEN_QUERY in components/home/campfire-scene.tsx. */
+@custom-variant tall (@media (min-width: 768px) and (min-height: 1200px));
 
 @theme inline {
     /* fonts */
     --font-sans: var(--font-inter);
     --font-mono: "Menlo", "Cascadia Code", "Courier New", monospace;
     --font-heading: var(--font-inter);
+    --font-pixel: var(--font-jersey), var(--font-mono);
 
     /* shadcn standard */
     --color-background: var(--background);
@@ -52,6 +56,27 @@
     --color-dim: var(--muted-foreground);
     --color-green: var(--primary);
     --color-accent-dim: var(--accent);
+
+    /* content width shared by navbar, hero, page content and footer */
+    --container-site: 75rem;
+
+    /* pixel camp */
+    --color-pixel-line: var(--pixel-line);
+    --color-pixel-ctrl: var(--pixel-ctrl);
+    --color-btn-hover: var(--btn-hover);
+    --color-warn: var(--warn);
+    --color-error: var(--error);
+    --color-input-bg: var(--input-bg);
+    --color-input-frame: var(--input-frame);
+    --color-name: var(--name);
+    --color-name-shadow: var(--name-shadow);
+    --color-nav-bg: var(--nav-bg);
+    --color-nav-line: var(--nav-line);
+    --color-portrait-bg: var(--portrait-bg);
+    --color-foot-bg: var(--foot-bg);
+    --color-foot-fg: var(--foot-fg);
+    --color-foot-hi: var(--foot-hi);
+    --color-sky-top: var(--sky-top);
 
     /* radius */
     --radius-sm: calc(var(--radius) * 0.6);
@@ -97,6 +122,24 @@
     --sidebar-accent-foreground: #e8e8e8;
     --sidebar-border: #1e1e1e;
     --sidebar-ring: #00ff88;
+
+    /* pixel camp (night) */
+    --pixel-line: #2a2a2a;
+    --pixel-ctrl: #5a5a5a;
+    --btn-hover: #1e1e1e;
+    --warn: #facc15;
+    --error: #f87171;
+    --input-bg: #0a0a0a;
+    --input-frame: #3a3a3a;
+    --name: #f4f1e6;
+    --name-shadow: #05070f;
+    --nav-bg: rgb(10 10 10 / 0.72);
+    --nav-line: rgb(0 0 0 / 0.45);
+    --portrait-bg: #172050;
+    --foot-bg: #0f1b14;
+    --foot-fg: #a9b8ad;
+    --foot-hi: #00ff88;
+    --sky-top: #0b1026;
 }
 
 /* light */
@@ -112,7 +155,7 @@
     --secondary: #e0e0e0;
     --secondary-foreground: #1a1a1a;
     --muted: #e0e0e0;
-    --muted-foreground: #666666;
+    --muted-foreground: #555555;
     --accent: #007a3d22;
     --accent-foreground: #007a3d;
     --destructive: oklch(0.577 0.245 27.325);
@@ -132,6 +175,24 @@
     --sidebar-accent-foreground: #1a1a1a;
     --sidebar-border: #e0e0e0;
     --sidebar-ring: #007a3d;
+
+    /* pixel camp (day) */
+    --pixel-line: #e0e0e0;
+    --pixel-ctrl: #1a1a1a;
+    --btn-hover: #f0ece2;
+    --warn: #8a6400;
+    --error: #c62828;
+    --input-bg: #ffffff;
+    --input-frame: #bdbdbd;
+    --name: #1a1a1a;
+    --name-shadow: #ffffff;
+    --nav-bg: rgb(248 248 248 / 0.88);
+    --nav-line: rgb(26 26 26 / 0.12);
+    --portrait-bg: #b6e2f7;
+    --foot-bg: #2e6b40;
+    --foot-fg: #e8f2ea;
+    --foot-hi: #ffffff;
+    --sky-top: #56b4ec;
 }
 
 @layer base {
@@ -187,4 +248,57 @@
 
 ::view-transition-new(root) {
     animation: 200ms ease-out fade-in;
+}
+
+/* Pixel frames: four box-shadows leave the corners notched like 8-bit UI boxes.
+   The color comes from --frame (default: foreground), e.g. `frame-4 [--frame:var(--primary)]`.
+   --frame is never set here, so Tailwind variants like hover:[--frame:...] can change it. */
+/* Not inherited: a framed card must not pass its frame color to framed buttons inside it. */
+@property --frame {
+    syntax: "*";
+    inherits: false;
+}
+.frame-2 {
+    box-shadow:
+        0 -2px 0 0 var(--frame, var(--foreground)),
+        0 2px 0 0 var(--frame, var(--foreground)),
+        -2px 0 0 0 var(--frame, var(--foreground)),
+        2px 0 0 0 var(--frame, var(--foreground));
+}
+.frame-4 {
+    box-shadow:
+        0 -4px 0 0 var(--frame, var(--foreground)),
+        0 4px 0 0 var(--frame, var(--foreground)),
+        -4px 0 0 0 var(--frame, var(--foreground)),
+        4px 0 0 0 var(--frame, var(--foreground));
+}
+/* RPG dialog box: thick outer frame plus an inner rule. */
+.frame-dialog {
+    box-shadow:
+        0 -4px 0 0 var(--foreground),
+        0 4px 0 0 var(--foreground),
+        -4px 0 0 0 var(--foreground),
+        4px 0 0 0 var(--foreground),
+        inset 0 0 0 4px var(--card),
+        inset 0 0 0 6px var(--pixel-line);
+}
+
+@keyframes pixel-bounce {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(4px);
+    }
+}
+
+.pixel-bounce {
+    animation: pixel-bounce 0.8s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pixel-bounce {
+        animation: none;
+    }
 }
