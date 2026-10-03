@@ -11,10 +11,12 @@
         "all_projects": "Tüm Projeler",
         "change_theme": "Tema Değiştir",
         "logout": "Çıkış Yap",
-        "dashboard": "Panel"
+        "dashboard": "Panel",
+        "menu": "Menü"
     },
     "hero": {
-        "role": "Software Developer"
+        "role": "Software Developer",
+        "mail": "E-posta"
     },
     "footer": {
         "develop_tech": "NextJS İle Yapıldı"
@@ -25,10 +27,20 @@
         "about_p2": "Profesyonel olarak full-stack projeler geliştiriyorum. Ama işin güzel yanı, işi bitince ekranı kapatmıyorum — kendi projelerimde farklı şeyler keşfetmek, sıfırdan bir şeyler inşa etmek benim için ayrı bir tutku.",
         "about_p3": "Bu merakın arkasında basit bir his var: kafanda dönen soyut bir fikrin, zamanla çalışan bir ürüne dönüşmesini izlemek. Birisinin onu ilk kez açtığı anı hayal etmek. Bu his, beni her seferinde yeniden masaya oturtuyor.",
         "about_p4": "Kişisel projelerimde her şeyi baştan sona tek başıma yönetmek — her kararı kendin vermek, her hatayı kendin bulmak — bana yazılımın sadece kod yazmaktan ibaret olmadığını öğretti. Profesyonel hayatta ise iyi bir ekiple neler yapılabileceğini de yakından biliyorum.",
-        "about_p5": "Temeli sağlam atmak benim için çok önemli — iyi düşünülmüş bir mimari, ilerleyen süreçte her şeyi kolaylaştırıyor. Temiz, sürdürülebilir ve kullanıcısına saygı gösteren şeyler yapmak; her projede önceliğim bu."
+        "about_p5": "Temeli sağlam atmak benim için çok önemli — iyi düşünülmüş bir mimari, ilerleyen süreçte her şeyi kolaylaştırıyor. Temiz, sürdürülebilir ve kullanıcısına saygı gösteren şeyler yapmak; her projede önceliğim bu.",
+        "dialog_speaker": "Sertaç",
+        "dialog_next": "Devam",
+        "dialog_previous": "Geri",
+        "dialog_show_all": "Hepsini göster",
+        "dialog_show_dialog": "Diyaloğa dön",
+        "dialog_page": "{current} / {total}",
+        "dialog_advance": "Metni tamamla veya sonraki sayfaya geç"
     },
     "tech_stack": {
-        "title": "Teknolojiler"
+        "title": "Teknolojiler",
+        "level_advanced": "İleri",
+        "level_intermediate": "Orta",
+        "level_beginner": "Başlangıç"
     },
     "home_projects": {
         "title": "Öne Çıkan Projeler",
@@ -36,7 +48,8 @@
         "details": "Detay →",
         "previous": "Önceki proje",
         "next": "Sonraki proje",
-        "slide_label": "{current} / {total}"
+        "slide_label": "{current} / {total}",
+        "image_placeholder": "proje görseli"
     },
     "contact_form": {
         "title": "İletişim",
@@ -65,7 +78,8 @@
         "message": {
             "min": "Mesaj en az {min} karakter olmalı",
             "max": "Mesaj en fazla {max} karakter olabilir"
-        }
+        },
+        "new_message": "Yeni mesaj yaz"
     },
     "project_detail": {
         "back": "← Projelere Dön",
@@ -82,5 +96,10 @@
         "generic_desc": "Beklenmedik bir hata oluştu. Lütfen tekrar dene.",
         "back_home": "← Ana Sayfaya Dön",
         "try_again": "Tekrar Dene"
+    },
+    "project_status": {
+        "ACTIVE": "Tamamlandı",
+        "WIP": "Devam ediyor",
+        "ARCHIVED": "Arşiv"
     }
 }

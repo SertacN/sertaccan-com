@@ -58,11 +58,12 @@ export default async function LocaleLayout({ children }: { children: React.React
     return (
         <NextIntlClientProvider messages={messages}>
             <LocaleHtmlUpdater />
-            <div className="mx-auto max-w-7xl px-4 pt-20">
-                <Navbar />
+            <Navbar />
+            {/* The fixed navbar is 64px tall (60px bar + 4px rule). */}
+            <div className="mx-auto box-content max-w-site px-6 pt-16">
                 <main className="pb-4">{children}</main>
-                <Footer />
             </div>
+            <Footer />
         </NextIntlClientProvider>
     );
 }

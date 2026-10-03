@@ -11,10 +11,12 @@
         "all_projects": "All Projects",
         "change_theme": "Change Theme",
         "logout": "Logout",
-        "dashboard": "Dashboard"
+        "dashboard": "Dashboard",
+        "menu": "Menu"
     },
     "hero": {
-        "role": "Software Developer"
+        "role": "Software Developer",
+        "mail": "Email"
     },
     "footer": {
         "develop_tech": "Built with NextJS"
@@ -25,10 +27,20 @@
         "about_p2": "Professionally, I build full-stack projects. But the best part is, I don't close the screen when work is done — exploring new things through my own projects, building something from scratch, that's a passion of its own.",
         "about_p3": "Behind that curiosity is a simple feeling: watching an abstract idea in your head slowly turn into something that actually works. Imagining the moment someone opens it for the first time. That feeling is what keeps bringing me back to the desk.",
         "about_p4": "Managing everything from start to finish on my own projects — making every decision yourself, finding every bug yourself — taught me that software is about more than just writing code. Professionally, I know firsthand what a great team can accomplish together.",
-        "about_p5": "Getting the foundation right matters a lot to me — a well-thought-out architecture makes everything easier down the road. Building clean, sustainable things that respect both the code and the user; that's my priority in every project."
+        "about_p5": "Getting the foundation right matters a lot to me — a well-thought-out architecture makes everything easier down the road. Building clean, sustainable things that respect both the code and the user; that's my priority in every project.",
+        "dialog_speaker": "Sertaç",
+        "dialog_next": "Next",
+        "dialog_previous": "Back",
+        "dialog_show_all": "Show all",
+        "dialog_show_dialog": "Back to dialog",
+        "dialog_page": "{current} / {total}",
+        "dialog_advance": "Finish the line or go to the next page"
     },
     "tech_stack": {
-        "title": "Tech Stack"
+        "title": "Tech Stack",
+        "level_advanced": "Advanced",
+        "level_intermediate": "Intermediate",
+        "level_beginner": "Beginner"
     },
     "home_projects": {
         "title": "Featured Projects",
@@ -36,7 +48,8 @@
         "details": "Details →",
         "previous": "Previous project",
         "next": "Next project",
-        "slide_label": "{current} of {total}"
+        "slide_label": "{current} of {total}",
+        "image_placeholder": "project image"
     },
     "contact_form": {
         "title": "Contact",
@@ -65,7 +78,8 @@
         "message": {
             "min": "Message must be at least {min} characters",
             "max": "Message can be at most {max} characters"
-        }
+        },
+        "new_message": "Write a new message"
     },
     "project_detail": {
         "back": "← Back to Projects",
@@ -82,5 +96,10 @@
         "generic_desc": "An unexpected error occurred. Please try again.",
         "back_home": "← Back to Home",
         "try_again": "Try Again"
+    },
+    "project_status": {
+        "ACTIVE": "Completed",
+        "WIP": "In progress",
+        "ARCHIVED": "Archived"
     }
 }
