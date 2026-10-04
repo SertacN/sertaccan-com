@@ -92,6 +92,8 @@
     "error": {
         "not_found_title": "Page Not Found",
         "not_found_desc": "The page you're looking for doesn't exist or has been moved.",
+        "not_found_hint": "Looks like you wandered off the trail. The campfire is this way.",
+        "not_found_cta": "Back to Camp",
         "generic_title": "Something Went Wrong",
         "generic_desc": "An unexpected error occurred. Please try again.",
         "back_home": "← Back to Home",

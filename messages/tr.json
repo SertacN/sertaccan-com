@@ -92,6 +92,8 @@
     "error": {
         "not_found_title": "Sayfa Bulunamadı",
         "not_found_desc": "Aradığın sayfa mevcut değil veya taşınmış olabilir.",
+        "not_found_hint": "Patikadan sapmışsın gibi. Kamp ateşi bu tarafta.",
+        "not_found_cta": "Kampa Dön",
         "generic_title": "Bir Hata Oluştu",
         "generic_desc": "Beklenmedik bir hata oluştu. Lütfen tekrar dene.",
         "back_home": "← Ana Sayfaya Dön",

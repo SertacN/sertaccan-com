@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { getMessages, getTranslations } from "next-intl/server";
-import Footer from "@/components/layout/footer";
-import Navbar from "@/components/layout/navbar";
-import LocaleHtmlUpdater from "@/components/providers/locale-html-updater";
+import { hasLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import SiteShell from "@/components/layout/site-shell";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 
@@ -65,17 +63,5 @@ export default async function LocaleLayout({
     const { locale } = await params;
     if (!hasLocale(routing.locales, locale)) notFound();
 
-    const messages = await getMessages();
-
-    return (
-        <NextIntlClientProvider messages={messages}>
-            <LocaleHtmlUpdater />
-            <Navbar />
-            {/* The fixed navbar is 64px tall (60px bar + 4px rule). */}
-            <div className="mx-auto box-content max-w-site px-6 pt-16">
-                <main className="pb-4">{children}</main>
-            </div>
-            <Footer />
-        </NextIntlClientProvider>
-    );
+    return <SiteShell>{children}</SiteShell>;
 }
