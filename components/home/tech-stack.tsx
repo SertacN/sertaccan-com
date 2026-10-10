@@ -3,6 +3,7 @@ import { getTechIcon } from "@/utils/tech-icon";
 import { getTranslations } from "next-intl/server";
 import SectionHeading from "@/components/pixel/section-heading";
 import TechIcon from "@/components/pixel/tech-icon";
+import { MergeWire, SideCircuit } from "@/components/pixel/circuit-deco";
 
 const categories = ["Frontend", "Backend", "Database", "DevOps", "Mobile"] as const;
 const grouped = categories.reduce(
@@ -43,7 +44,8 @@ function Pips({ level }: { level: Tech["level"] }) {
 export default async function TechStack() {
     const t = await getTranslations("tech_stack");
     return (
-        <section id="techstack" className="py-24">
+        <section id="techstack" className="relative py-24">
+            <SideCircuit side="right" phase={3} />
             <div className="flex flex-col gap-8">
                 <div className="flex flex-wrap items-end justify-between gap-5">
                     <SectionHeading>{t("title")}</SectionHeading>
@@ -92,6 +94,8 @@ export default async function TechStack() {
                         ))}
                     </ul>
                 </div>
+
+                <MergeWire />
 
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-6">
                     {categories.map((category) => {

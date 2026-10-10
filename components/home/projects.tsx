@@ -3,6 +3,7 @@ import { ProjectCardItem } from "../ui/project-card";
 import ProjectSlider from "./project-slider";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import { SideCircuit } from "@/components/pixel/circuit-deco";
 
 // Cards beyond the first viewport are off-screen, so their images can load lazily.
 const EAGER_IMAGE_COUNT = 3;
@@ -12,7 +13,8 @@ export default async function Projects() {
     const projects = data ?? [];
     const t = await getTranslations("home_projects");
     return (
-        <section id="projects" className="py-24">
+        <section id="projects" className="relative py-24">
+            <SideCircuit side="left" phase={5} />
             <div className="flex flex-col gap-7">
                 <ProjectSlider
                     heading={t("title")}
