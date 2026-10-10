@@ -38,6 +38,9 @@
     },
     "tech_stack": {
         "title": "Tech Stack",
+        "main_gear": "Main gear",
+        "main_backend": "I write APIs and services on the backend with Node.js.",
+        "main_frontend": "I usually build interfaces with Next.js.",
         "level_advanced": "Advanced",
         "level_intermediate": "Intermediate",
         "level_beginner": "Beginner"

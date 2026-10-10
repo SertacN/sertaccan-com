@@ -38,6 +38,9 @@
     },
     "tech_stack": {
         "title": "Teknolojiler",
+        "main_gear": "Ana ekipman",
+        "main_backend": "Backend tarafında API ve servisleri Node.js ile yazıyorum.",
+        "main_frontend": "Arayüzleri genellikle Next.js ile kuruyorum.",
         "level_advanced": "İleri",
         "level_intermediate": "Orta",
         "level_beginner": "Başlangıç"

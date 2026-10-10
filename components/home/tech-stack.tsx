@@ -13,6 +13,12 @@ const grouped = categories.reduce(
     {} as Record<string, Tech[]>,
 );
 
+// Highlighted core tools; `name` must match a key known to getTechIcon.
+const MAIN_STACK = [
+    { name: "Node.js", label: "Node.js", category: "Backend", descKey: "main_backend" },
+    { name: "NextJS", label: "Next.js", category: "Frontend", descKey: "main_frontend" },
+] as const;
+
 const LEVELS: Tech["level"][] = ["advanced", "intermediate", "beginner"];
 const LEVEL_PIPS: Record<Tech["level"], number> = { advanced: 3, intermediate: 2, beginner: 1 };
 
@@ -53,6 +59,38 @@ export default async function TechStack() {
                             </div>
                         ))}
                     </div>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                    <h3 className="font-mono text-xs font-bold tracking-widest text-muted-foreground uppercase">
+                        {t("main_gear")}
+                    </h3>
+                    <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-6">
+                        {MAIN_STACK.map((item) => (
+                            <li
+                                key={item.name}
+                                className="frame-4 m-1 flex items-center gap-5 bg-card p-6 [--frame:var(--primary)]"
+                            >
+                                <div className="frame-2 m-0.5 flex size-18 shrink-0 items-center justify-center bg-background [--frame:var(--pixel-line)]">
+                                    <TechIcon icon={getTechIcon(item.name)} name={item.name} size={40} />
+                                </div>
+                                <div className="flex min-w-0 flex-col gap-2">
+                                    <span
+                                        lang="en"
+                                        className="font-mono text-xs font-bold tracking-widest text-primary uppercase"
+                                    >
+                                        {item.category}
+                                    </span>
+                                    <span className="font-pixel text-[44px] leading-[0.9] text-foreground">
+                                        {item.label}
+                                    </span>
+                                    <p className="text-sm leading-relaxed text-pretty text-muted-foreground">
+                                        {t(item.descKey)}
+                                    </p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
 
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,300px),1fr))] gap-6">
